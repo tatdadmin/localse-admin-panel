@@ -1,1 +1,1 @@
-export const API_BASE_URL = 'https://www.tatd.in/app-api/driver/';
+export const API_BASE_URL = "http://13.203.38.122:5001/api/";

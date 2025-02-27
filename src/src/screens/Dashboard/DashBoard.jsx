@@ -1,4 +1,6 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { setUserAuthStates } from "../../redux/slices/userAuthSlice";
 
 const SideBar = () => {
   return (
@@ -32,6 +34,30 @@ const SideBar = () => {
 };
 
 const Header = () => {
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(
+      setUserAuthStates({
+        key: "jwt",
+        value: null,
+      })
+    );
+
+    dispatch(
+      setUserAuthStates({
+        key: "refreshToken",
+        value: null,
+      })
+    );
+    dispatch(
+      setUserAuthStates({
+        key: "login",
+        value: false,
+      })
+    );
+  };
+
   return (
     <div style={styles.mainContainer}>
       {/* Header */}
@@ -41,6 +67,7 @@ const Header = () => {
           style={styles.logout}
           onMouseOver={(e) => (e.target.style.color = "darkred")}
           onMouseOut={(e) => (e.target.style.color = "red")}
+          onClick={handleLogout}
         >
           Logout
         </span>
