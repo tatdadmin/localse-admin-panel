@@ -103,8 +103,8 @@ axiosClient.interceptors.response.use(
 
 // ✅ General Fetch Function with Debugging Logs
 const _Fetch = async (method, path, body = {}, headers = {}) => {
-  // console.log(`_Fetch Called -> Method: ${method}, Path: ${path}, Body:`, body);
-  // console.log("Current Headers:", headers);
+  console.log(`_Fetch Called -> Method: ${method}, Path: ${path}, Body:`, body);
+  console.log("Current Headers:", headers);
 
   try {
     // console.log("Sending Request to API...");
@@ -117,7 +117,7 @@ const _Fetch = async (method, path, body = {}, headers = {}) => {
       redirect: "follow",
     });
 
-    // console.log("API Response Received:", response.data);
+    console.log("API Response Received:", response.data);
 
     if (response.data.status_code === 200) {
       console.log("API Call Successful:", response.data);

@@ -1,18 +1,12 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "../../screens/Login/Login";
-import Dashboard from "../../screens/Dashboard/DashBoard";
+import { Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const PrivateRoute = () => {
-  return (
-    <Router>
-      <Routes>
-        {/* <Route path="/login" element={<Login />} /> */}
-        {/* <Route path="/" element={<Login />} /> */}
-        <Route path="/DashBoard" element={<Dashboard />} />
-      </Routes>
-    </Router>
-  );
+const PrivateRoute = ({ Component }) => {
+  const isLogin = useSelector((state) => state.userAuth.login);
+  const jwt = useSelector((state) => state.userAuth.jwt);
+
+  return jwt && isLogin ? <Component /> : <Navigate to="/login" replace />;
 };
 
 export default PrivateRoute;
