@@ -1,0 +1,119 @@
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Body Styling */
+body {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Centered Login Container */
+.login-container {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 40px;
+  border-radius: 12px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  width: 600px;
+  transition: 0.3s ease-in-out;
+}
+
+.login-container:hover {
+  transform: scale(1.02);
+}
+
+/* Title Styling */
+.login-container h2 {
+  color: #ffffff;
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.login-container h3 {
+  color: red;
+  font-size: 22px;
+  margin-bottom: 18px;
+}
+
+/* Input Field Styling */
+.input-box {
+  width: 100%;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.input-box input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 16px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.input-box input:focus {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #ff4b5c;
+}
+
+.input-box input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+}
+
+/* Login Button Styling */
+.login-btn {
+  width: 100%;
+  padding: 14px;
+  background: #ff4b5c;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.login-btn:hover {
+  background: #e84352;
+  transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .login-container {
+    width: 90%;
+    padding: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    width: 95%;
+    padding: 25px;
+  }
+
+  .input-box input {
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  .login-btn {
+    font-size: 16px;
+    padding: 12px;
+  }
+}
