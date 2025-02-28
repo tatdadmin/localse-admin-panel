@@ -135,8 +135,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/slices/userAuthSlice";
-// import { data } from "react-router-dom";
-import { ADD_NOTICE, ADD_NOTIFICATION, GET_ALL_NOTICE } from "../../apis/Apis";
+import { ADD_NOTICE, ADD_NOTIFICATION } from "../../apis/Apis";
 import getNotices from "../../redux/apicalls/getNotices";
 
 const SideBar = ({ onSelect }) => {
@@ -189,10 +188,8 @@ const Header = () => {
 
 // Notice Component
 const NoticeList = ({ onOpen }) => {
-  const [notices, setNotices] = useState([]);
   const dispatch = useDispatch();
   useEffect(() => {
-    // getAllNotice();
     dispatch(getNotices());
   }, []);
   const noticeloader = useSelector((e) => e?.NoticeSlice?.loader);
@@ -202,20 +199,6 @@ const NoticeList = ({ onOpen }) => {
   const handleDelete = (id) => {
     //   setNotices(notices.filter((notice) => notice.id !== id));
   };
-
-  //   const getAllNotice = async () => {
-  //     try {
-  //       // Fetch update popup data
-  //       const response = await GET_ALL_NOTICE();
-
-  //       console.log(response, "res ponse all notice");
-  //       if (response?.status_code == 200) {
-  //         setNotices(response?.data);
-  //       }
-  //     } catch (error) {}
-  //   };
-
-  console.log(notices, "nonnnnnnnnn");
 
   return (
     <div style={styles.listContainer}>
@@ -243,20 +226,6 @@ const NoticeList = ({ onOpen }) => {
           + Add
         </button>
       </div>
-      {/* {notices.map((notice) => (
-        <div key={notice.id} style={styles.listItem}>
-          {notice.text}
-          <div>
-            <button style={styles.editButton}>Edit</button>
-            <button
-              style={styles.deleteButton}
-              onClick={() => handleDelete(notice.id)}
-            >
-              Delete
-            </button>
-          </div>
-        </div>
-      ))} */}
 
       {noticeData &&
         noticeData.map((notice) => (
@@ -332,83 +301,6 @@ const NotificationList = ({ onOpen }) => {
     </div>
   );
 };
-
-// const Modal = ({ isOpen, onClose, type, onSubmit }) => {
-//   const [formData, setFormData] = useState({
-//     mobile: "",
-//     subject: "",
-//     content: "",
-//   });
-
-//   if (!isOpen) return null;
-
-//   const handleChange = (e) => {
-//     setFormData({ ...formData, [e.target.name]: e.target.value });
-//   };
-
-//   const handleSubmit = () => {
-//     // Check if any field is empty
-//     if (
-//       !formData.mobile.trim() ||
-//       !formData.subject.trim() ||
-//       !formData.content.trim()
-//     ) {
-//       alert("All fields are required!");
-//       return;
-//     }
-
-//     onSubmit(formData);
-
-//     // Reset the form fields after submission
-//     setFormData({ mobile: "", subject: "", content: "" });
-
-//     onClose();
-//   };
-
-//   return (
-//     <div style={styles.modalOverlay}>
-//       <div style={styles.modalContent}>
-//         <h2 style={styles.modalTitle}>
-//           {type === "notice" ? "Add Notice" : "Add Notification"}
-//         </h2>
-//         <input
-//           type="text"
-//           name="mobile"
-//           placeholder="Mobile Number"
-//           value={formData.mobile}
-//           onChange={handleChange}
-//           style={styles.input}
-//           required
-//         />
-//         <input
-//           type="text"
-//           name="subject"
-//           placeholder="Subject"
-//           value={formData.subject}
-//           onChange={handleChange}
-//           style={styles.input}
-//           required
-//         />
-//         <textarea
-//           name="content"
-//           placeholder="Content"
-//           value={formData.content}
-//           onChange={handleChange}
-//           style={styles.textarea}
-//           required
-//         />
-//         <div style={styles.buttonContainer}>
-//           <button onClick={handleSubmit} style={styles.submitButton}>
-//             Submit
-//           </button>
-//           <button onClick={onClose} style={styles.closeButton}>
-//             Close
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
 
 const Modal = ({ isOpen, onClose, type, onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -605,16 +497,6 @@ const Dashboard = () => {
   };
   const dispatch = useDispatch();
   const handleSubmit = async (data) => {
-    // console.log(
-    //   {
-    //     subject: data?.subject,
-    //     content: data?.content,
-    //     to_all: "0",
-    //     service_provider_mobile_number: data?.mobile,
-    //   },
-    //   "===============000000"
-    // );
-
     try {
       let response;
       if (modalType === "notice") {
@@ -624,6 +506,10 @@ const Dashboard = () => {
           to_all: "1",
           service_provider_mobile_number: data?.mobile,
         });
+
+        if (response?.status_code == 200) {
+          dispatch(getNotices());
+        }
       } else {
         response = await ADD_NOTIFICATION({
           subject: data?.subject,
@@ -635,7 +521,6 @@ const Dashboard = () => {
 
       if (response?.status_code == 200) {
         alert(response?.message);
-        dispatch(getNotices());
       }
       console.log(response, "API Response");
     } catch (error) {
