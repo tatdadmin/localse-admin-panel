@@ -135,7 +135,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/slices/userAuthSlice";
-import { ADD_NOTICE, ADD_NOTIFICATION } from "../../apis/Apis";
+import { ADD_NOTICE, ADD_NOTIFICATION, DELETE_NOTICE } from "../../apis/Apis";
 import getNotices from "../../redux/apicalls/getNotices";
 
 const SideBar = ({ onSelect }) => {
@@ -196,7 +196,16 @@ const NoticeList = ({ onOpen }) => {
   const noticeData = useSelector((e) => e?.NoticeSlice?.data);
   console.log(noticeloader, "noticeloader");
 
-  const handleDelete = (id) => {
+  const handleDelete =async (id) => {
+    try {
+      const res = await DELETE_NOTICE({ id:id });
+      console.log(res);
+      dispatch(getNotices());
+      alert(res?.message);
+      
+    } catch (error) {
+      console.log(error);
+    }
     //   setNotices(notices.filter((notice) => notice.id !== id));
   };
 
@@ -235,7 +244,7 @@ const NoticeList = ({ onOpen }) => {
               {/* <button style={styles.editButton}>Edit</button> */}
               <button
                 style={styles.deleteButton}
-                onClick={() => handleDelete(notice.id)}
+                onClick={() => handleDelete(notice._id)}
               >
                 Delete
               </button>

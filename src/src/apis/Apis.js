@@ -24,4 +24,12 @@ export const GET_ALL_NOTICE = (body) => {
   return _Fetch("GET", "admin_panel/get-notice", body, {});
 };
 
+
+
+export const DELETE_NOTICE = (body) => {
+  console.log("GET_ALL_NOTICE Called with BODY:", body);
+  // return false;
+  return _Fetch("POST", "admin_panel/delete-notice",body, {});
+};
+
 // http://13.203.38.122:5001/api/admin_panel/get-notice
