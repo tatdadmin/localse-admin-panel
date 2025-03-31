@@ -262,9 +262,7 @@ const NotificationList = ({ onOpen }) => {
     { id: 2, text: "Notification 2" },
   ]);
 
-  const handleDelete = (id) => {
-    setNotifications(notifications.filter((notif) => notif.id !== id));
-  };
+
 
   return (
     <div style={styles.listContainer}>
