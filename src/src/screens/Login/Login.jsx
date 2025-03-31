@@ -28,7 +28,7 @@ const Login = () => {
 
       console.log(res, "]]]]]]]]");
 
-      if (res?.status_code == 200) {
+      if (res?.status_code === 200) {
         console.log("Status code is 200");
 
         if (res?.jwt) {

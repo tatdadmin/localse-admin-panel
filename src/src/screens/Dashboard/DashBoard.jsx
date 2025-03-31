@@ -191,7 +191,7 @@ const NoticeList = ({ onOpen }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getNotices());
-  }, []);
+  }, [dispatch]);
   const noticeloader = useSelector((e) => e?.NoticeSlice?.loader);
   const noticeData = useSelector((e) => e?.NoticeSlice?.data);
   console.log(noticeloader, "noticeloader");
