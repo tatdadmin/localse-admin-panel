@@ -516,7 +516,7 @@ const Dashboard = () => {
           service_provider_mobile_number: data?.mobile,
         });
 
-        if (response?.status_code == 200) {
+        if (response?.status_code === 200) {
           dispatch(getNotices());
         }
       } else {
@@ -528,7 +528,7 @@ const Dashboard = () => {
         });
       }
 
-      if (response?.status_code == 200) {
+      if (response?.status_code === 200) {
         alert(response?.message);
       }
       console.log(response, "API Response");
