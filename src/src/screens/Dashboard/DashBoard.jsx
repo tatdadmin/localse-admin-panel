@@ -3,27 +3,46 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/slices/userAuthSlice";
 import { ADD_NOTICE, ADD_NOTIFICATION, DELETE_NOTICE } from "../../apis/Apis";
 import getNotices from "../../redux/apicalls/getNotices";
+import DateWiseCount from "../reports/DateWiseCount";
 
-const SideBar = ({ onSelect }) => {
+const SideBar = ({ onSelect, selectedComponent }) => {
   return (
     <div style={styles.sidebar}>
       <h1 style={styles.sidebarTitle}>LOCALSE</h1>
       <div style={styles.menu}>
         <div
-          style={styles.menuItem}
+          style={{
+            ...styles.menuItem,
+            backgroundColor: selectedComponent === "notice" ? "#f8f9fa" : "white",
+          }}
           onClick={() => onSelect("notice")}
           onMouseOver={(e) => (e.target.style.background = "#ddd")}
-          onMouseOut={(e) => (e.target.style.background = "white")}
+          onMouseOut={(e) => (e.target.style.background = selectedComponent === "notice" ? "#f8f9fa" : "white")}
         >
           Notice
         </div>
         <div
-          style={styles.menuItem}
+          style={{
+            ...styles.menuItem,
+            backgroundColor: selectedComponent === "notification" ? "#f8f9fa" : "white",
+          }}
           onClick={() => onSelect("notification")}
           onMouseOver={(e) => (e.target.style.background = "#ddd")}
-          onMouseOut={(e) => (e.target.style.background = "white")}
+          onMouseOut={(e) => (e.target.style.background = selectedComponent === "notification" ? "#f8f9fa" : "white")}
         >
           Notification
+        </div>
+
+        <div
+          style={{
+            ...styles.menuItem,
+            backgroundColor: selectedComponent === "reports" ? "#f8f9fa" : "white",
+          }}
+          onClick={() => onSelect("reports")}
+          onMouseOver={(e) => (e.target.style.background = "#ddd")}
+          onMouseOut={(e) => (e.target.style.background = selectedComponent === "reports" ? "#f8f9fa" : "white")}
+        >
+          Reports
         </div>
       </div>
     </div>
@@ -60,7 +79,6 @@ const NoticeList = ({ onOpen }) => {
   }, [dispatch]);
   const noticeloader = useSelector((e) => e?.NoticeSlice?.loader);
   const noticeData = useSelector((e) => e?.NoticeSlice?.data);
-  console.log(noticeloader, "noticeloader");
 
   const handleDelete = async (id) => {
     try {
@@ -71,7 +89,6 @@ const NoticeList = ({ onOpen }) => {
     } catch (error) {
       console.log(error);
     }
-    //   setNotices(notices.filter((notice) => notice.id !== id));
   };
 
   return (
@@ -101,21 +118,22 @@ const NoticeList = ({ onOpen }) => {
         </button>
       </div>
 
-      {noticeData &&
-        noticeData.map((notice) => (
-          <div key={notice?._id} style={styles.listItem}>
-            {notice?.content}
-            <div>
-              {/* <button style={styles.editButton}>Edit</button> */}
-              <button
-                style={styles.deleteButton}
-                onClick={() => handleDelete(notice._id)}
-              >
-                Delete
-              </button>
+      <div style={{ maxHeight: "calc(100vh - 200px)", overflowY: "auto" }}>
+        {noticeData &&
+          noticeData.map((notice) => (
+            <div key={notice?._id} style={styles.listItem}>
+              {notice?.content}
+              <div>
+                <button
+                  style={styles.deleteButton}
+                  onClick={() => handleDelete(notice._id)}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+      </div>
     </div>
   );
 };
@@ -134,7 +152,6 @@ const NotificationList = ({ onOpen }) => {
       >
         <h2>Notifications</h2>
         <button
-          //   onClick={() => alert("Click Add Notification")}
           onClick={() => onOpen("Notification")}
           style={{
             marginRight: "10px",
@@ -149,20 +166,9 @@ const NotificationList = ({ onOpen }) => {
           + Add
         </button>
       </div>
-      {/* {notifications.map((notif) => (
-        <div key={notif.id} style={styles.listItem}>
-          {notif.text}
-          <div>
-            <button style={styles.editButton}>Edit</button>
-            <button
-              style={styles.deleteButton}
-              onClick={() => handleDelete(notif.id)}
-            >
-              Delete
-            </button>
-          </div>
-        </div>
-      ))} */}
+      <div style={{ maxHeight: "calc(100vh - 200px)", overflowY: "auto" }}>
+        {/* Notification list items would go here */}
+      </div>
     </div>
   );
 };
@@ -184,8 +190,6 @@ const Modal = ({ isOpen, onClose, type, onSubmit }) => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-
-    // Remove error message when user starts typing
     setErrors({ ...errors, [e.target.name]: "" });
   };
 
@@ -209,11 +213,8 @@ const Modal = ({ isOpen, onClose, type, onSubmit }) => {
     }
 
     onSubmit(formData);
-
-    // Reset form and errors after submission
     setFormData({ mobile: "", subject: "", content: "" });
     setErrors({ mobile: "", subject: "", content: "" });
-
     onClose();
   };
 
@@ -229,6 +230,7 @@ const Modal = ({ isOpen, onClose, type, onSubmit }) => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        zIndex: 1000,
       }}
     >
       <div
@@ -352,6 +354,7 @@ const Dashboard = () => {
   const [selectedComponent, setSelectedComponent] = useState("notice");
   const [modalOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState("notice");
+  
   const openModal = (type) => {
     setModalType(type);
     setModalOpen(true);
@@ -360,7 +363,9 @@ const Dashboard = () => {
   const closeModal = () => {
     setModalOpen(false);
   };
+  
   const dispatch = useDispatch();
+  
   const handleSubmit = async (data) => {
     try {
       let response;
@@ -387,7 +392,6 @@ const Dashboard = () => {
       if (response?.status_code === 200) {
         alert(response?.message);
       }
-      console.log(response, "API Response");
     } catch (error) {
       console.error("Error:", error);
     }
@@ -395,12 +399,14 @@ const Dashboard = () => {
 
   return (
     <div style={styles.container}>
-      <SideBar onSelect={setSelectedComponent} />
+      <SideBar onSelect={setSelectedComponent} selectedComponent={selectedComponent} />
       <div style={styles.mainContainer}>
         <Header />
         <div style={styles.content}>
           {selectedComponent === "notice" ? (
             <NoticeList onOpen={openModal} />
+          ) : selectedComponent === "reports" ? (
+            <DateWiseCount />
           ) : (
             <NotificationList onOpen={openModal} />
           )}
@@ -423,6 +429,7 @@ const styles = {
     height: "100vh",
     fontFamily: "'Poppins', sans-serif",
     backgroundColor: "#f4f4f4",
+    overflow: "hidden",
   },
   sidebar: {
     width: "250px",
@@ -469,16 +476,23 @@ const styles = {
     flex: 1,
     display: "flex",
     flexDirection: "column",
+    height: "100vh",
+    overflow: "hidden",
   },
   content: {
     flex: 1,
     padding: "20px",
+    overflowY: "auto",
+    height: "calc(100vh - 60px)",
   },
   listContainer: {
     background: "white",
     padding: "20px",
     borderRadius: "8px",
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
   },
   listItem: {
     display: "flex",
@@ -503,71 +517,6 @@ const styles = {
     border: "none",
     borderRadius: "4px",
     cursor: "pointer",
-  },
-  modalOverlay: {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    backgroundColor: "rgba(0,0,0,0.5)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContent: {
-    background: "white",
-    padding: "20px",
-    borderRadius: "8px",
-    textAlign: "center",
-    width: "350px",
-    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-  },
-  modalTitle: {
-    marginBottom: "15px",
-    fontSize: "20px",
-    fontWeight: "bold",
-  },
-  input: {
-    width: "100%",
-    padding: "10px",
-    marginBottom: "10px",
-    border: "1px solid #ccc",
-    borderRadius: "5px",
-    fontSize: "14px",
-  },
-  textarea: {
-    width: "100%",
-    height: "100px",
-    padding: "10px",
-    marginBottom: "10px",
-    border: "1px solid #ccc",
-    borderRadius: "5px",
-    fontSize: "14px",
-    resize: "none",
-  },
-  buttonContainer: {
-    display: "flex",
-    justifyContent: "space-between",
-    marginTop: "10px",
-  },
-  submitButton: {
-    background: "#007BFF",
-    color: "white",
-    padding: "10px 15px",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-    fontSize: "14px",
-  },
-  closeButton: {
-    background: "red",
-    color: "white",
-    padding: "10px 15px",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-    fontSize: "14px",
   },
 };
 

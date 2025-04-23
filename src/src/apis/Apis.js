@@ -31,5 +31,10 @@ export const DELETE_NOTICE = (body) => {
   // return false;
   return _Fetch("POST", "admin_panel/delete-notice",body, {});
 };
+export const DATE_WISE_REPORT = () => {
+  // console.log("GET_ALL_NOTICE Called with BODY:",);
+  // return false;
+  return _Fetch("GET", "admin_panel/payment-date-wise-count",{}, {});
+};
 
 // http://13.203.38.122:5001/api/admin_panel/get-notice
