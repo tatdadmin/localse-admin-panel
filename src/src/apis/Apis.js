@@ -24,17 +24,26 @@ export const GET_ALL_NOTICE = (body) => {
   return _Fetch("GET", "admin_panel/get-notice", body, {});
 };
 
-
-
 export const DELETE_NOTICE = (body) => {
   console.log("GET_ALL_NOTICE Called with BODY:", body);
   // return false;
-  return _Fetch("POST", "admin_panel/delete-notice",body, {});
+  return _Fetch("POST", "admin_panel/delete-notice", body, {});
 };
 export const DATE_WISE_REPORT = () => {
   // console.log("GET_ALL_NOTICE Called with BODY:",);
   // return false;
-  return _Fetch("GET", "admin_panel/payment-date-wise-count",{}, {});
+  return _Fetch("GET", "admin_panel/payment-date-wise-count", {}, {});
+};
+export const GET_SERVICES = () => {
+  // console.log("GET_ALL_NOTICE Called with BODY:",);
+  // return false;
+  return _Fetch("GET", "admin_panel/get-service", {}, {});
+};
+export const ADD_NEW_SERVICE = (body) => {
+  return _Fetch("POST", "admin_panel/add-service", body, {});
+};
+export const DELETE_SERVICE = (body) => {
+  return _Fetch("POST", "admin_panel/delete-service", body, {});
 };
 
 // http://13.203.38.122:5001/api/admin_panel/get-notice

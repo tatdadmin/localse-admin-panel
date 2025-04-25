@@ -4,6 +4,7 @@ import { logoutUser } from "../../redux/slices/userAuthSlice";
 import { ADD_NOTICE, ADD_NOTIFICATION, DELETE_NOTICE } from "../../apis/Apis";
 import getNotices from "../../redux/apicalls/getNotices";
 import DateWiseCount from "../reports/DateWiseCount";
+import AddServices from "../services/Services";
 
 const SideBar = ({ onSelect, selectedComponent }) => {
   return (
@@ -43,6 +44,17 @@ const SideBar = ({ onSelect, selectedComponent }) => {
           onMouseOut={(e) => (e.target.style.background = selectedComponent === "reports" ? "#f8f9fa" : "white")}
         >
           Reports
+        </div>
+        <div
+          style={{
+            ...styles.menuItem,
+            backgroundColor: selectedComponent === "reports" ? "#f8f9fa" : "white",
+          }}
+          onClick={() => onSelect("services")}
+          onMouseOver={(e) => (e.target.style.background = "#ddd")}
+          onMouseOut={(e) => (e.target.style.background = selectedComponent === "reports" ? "#f8f9fa" : "white")}
+        >
+          Services
         </div>
       </div>
     </div>
@@ -407,7 +419,7 @@ const Dashboard = () => {
             <NoticeList onOpen={openModal} />
           ) : selectedComponent === "reports" ? (
             <DateWiseCount />
-          ) : (
+          ) :selectedComponent=="services"? <AddServices/>: (
             <NotificationList onOpen={openModal} />
           )}
         </div>
