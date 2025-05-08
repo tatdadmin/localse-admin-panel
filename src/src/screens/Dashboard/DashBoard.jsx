@@ -6,17 +6,48 @@ import getNotices from "../../redux/apicalls/getNotices";
 import DateWiseCount from "../reports/DateWiseCount";
 import AddServices from "../services/Services";
 
-const SideBar = ({ onSelect, selectedComponent }) => {
+// Menu bar icon component
+const MenuIcon = ({ onClick }) => (
+  <div style={styles.menuIcon} onClick={onClick}>
+    <div style={styles.menuBar}></div>
+    <div style={styles.menuBar}></div>
+    <div style={styles.menuBar}></div>
+  </div>
+);
+
+const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
+  // Combine base sidebar styles with conditional mobile styles
+  const sidebarStyle = {
+    ...styles.sidebar,
+    ...(window.innerWidth <= 768 && {
+      position: "fixed",
+      transform: isOpen ? "translateX(0)" : "translateX(-100%)",
+      transition: "transform 0.3s ease-in-out",
+      zIndex: 999,
+      height: "100%",
+    }),
+  };
+
   return (
-    <div style={styles.sidebar}>
-      <h1 style={styles.sidebarTitle}>LOCALSE</h1>
+    <div style={sidebarStyle}>
+      <div style={styles.sidebarHeader}>
+        <h1 style={styles.sidebarTitle}>LOCALSE</h1>
+        {window.innerWidth <= 768 && (
+          <button style={styles.closeButton} onClick={onClose}>
+            ×
+          </button>
+        )}
+      </div>
       <div style={styles.menu}>
         <div
           style={{
             ...styles.menuItem,
             backgroundColor: selectedComponent === "notice" ? "#f8f9fa" : "white",
           }}
-          onClick={() => onSelect("notice")}
+          onClick={() => {
+            onSelect("notice");
+            if (window.innerWidth <= 768) onClose();
+          }}
           onMouseOver={(e) => (e.target.style.background = "#ddd")}
           onMouseOut={(e) => (e.target.style.background = selectedComponent === "notice" ? "#f8f9fa" : "white")}
         >
@@ -27,7 +58,10 @@ const SideBar = ({ onSelect, selectedComponent }) => {
             ...styles.menuItem,
             backgroundColor: selectedComponent === "notification" ? "#f8f9fa" : "white",
           }}
-          onClick={() => onSelect("notification")}
+          onClick={() => {
+            onSelect("notification");
+            if (window.innerWidth <= 768) onClose();
+          }}
           onMouseOver={(e) => (e.target.style.background = "#ddd")}
           onMouseOut={(e) => (e.target.style.background = selectedComponent === "notification" ? "#f8f9fa" : "white")}
         >
@@ -39,7 +73,10 @@ const SideBar = ({ onSelect, selectedComponent }) => {
             ...styles.menuItem,
             backgroundColor: selectedComponent === "reports" ? "#f8f9fa" : "white",
           }}
-          onClick={() => onSelect("reports")}
+          onClick={() => {
+            onSelect("reports");
+            if (window.innerWidth <= 768) onClose();
+          }}
           onMouseOver={(e) => (e.target.style.background = "#ddd")}
           onMouseOut={(e) => (e.target.style.background = selectedComponent === "reports" ? "#f8f9fa" : "white")}
         >
@@ -48,11 +85,14 @@ const SideBar = ({ onSelect, selectedComponent }) => {
         <div
           style={{
             ...styles.menuItem,
-            backgroundColor: selectedComponent === "reports" ? "#f8f9fa" : "white",
+            backgroundColor: selectedComponent === "services" ? "#f8f9fa" : "white",
           }}
-          onClick={() => onSelect("services")}
+          onClick={() => {
+            onSelect("services");
+            if (window.innerWidth <= 768) onClose();
+          }}
           onMouseOver={(e) => (e.target.style.background = "#ddd")}
-          onMouseOut={(e) => (e.target.style.background = selectedComponent === "reports" ? "#f8f9fa" : "white")}
+          onMouseOut={(e) => (e.target.style.background = selectedComponent === "services" ? "#f8f9fa" : "white")}
         >
           Services
         </div>
@@ -61,7 +101,7 @@ const SideBar = ({ onSelect, selectedComponent }) => {
   );
 };
 
-const Header = () => {
+const Header = ({ toggleSidebar }) => {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
@@ -70,6 +110,7 @@ const Header = () => {
 
   return (
     <div style={styles.header}>
+      {window.innerWidth <= 768 && <MenuIcon onClick={toggleSidebar} />}
       <span>Employee Name</span>
       <span
         style={styles.logout}
@@ -250,7 +291,7 @@ const Modal = ({ isOpen, onClose, type, onSubmit }) => {
           background: "#fff",
           padding: "20px",
           borderRadius: "8px",
-          width: "400px",
+          width: window.innerWidth <= 768 ? "90%" : "400px",
           textAlign: "center",
         }}
       >
@@ -366,6 +407,23 @@ const Dashboard = () => {
   const [selectedComponent, setSelectedComponent] = useState("notice");
   const [modalOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState("notice");
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  
+  // Handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+      setSidebarOpen(window.innerWidth > 768);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
   
   const openModal = (type) => {
     setModalType(type);
@@ -409,17 +467,36 @@ const Dashboard = () => {
     }
   };
 
+  // Overlay to close sidebar when clicking outside on mobile
+  const Overlay = ({ isOpen, onClose }) => {
+    if (!isOpen || windowWidth > 768) return null;
+    
+    return (
+      <div 
+        style={styles.overlay}
+        onClick={onClose}
+      />
+    );
+  };
+
   return (
     <div style={styles.container}>
-      <SideBar onSelect={setSelectedComponent} selectedComponent={selectedComponent} />
+      <SideBar 
+        onSelect={setSelectedComponent} 
+        selectedComponent={selectedComponent} 
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
+      <Overlay isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div style={styles.mainContainer}>
-        <Header />
+        <Header toggleSidebar={toggleSidebar} />
         <div style={styles.content}>
           {selectedComponent === "notice" ? (
             <NoticeList onOpen={openModal} />
           ) : selectedComponent === "reports" ? (
             <DateWiseCount />
-          ) :selectedComponent=="services"? <AddServices/>: (
+          ) : selectedComponent === "services" ? 
+            <AddServices /> : (
             <NotificationList onOpen={openModal} />
           )}
         </div>
@@ -442,6 +519,7 @@ const styles = {
     fontFamily: "'Poppins', sans-serif",
     backgroundColor: "#f4f4f4",
     overflow: "hidden",
+    position: "relative",
   },
   sidebar: {
     width: "250px",
@@ -451,9 +529,23 @@ const styles = {
     flexDirection: "column",
     padding: "20px",
   },
+  sidebarHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "20px",
+  },
   sidebarTitle: {
     fontSize: "24px",
-    marginBottom: "30px",
+    margin: 0,
+  },
+  closeButton: {
+    background: "none",
+    color: "white",
+    border: "none",
+    fontSize: "24px",
+    cursor: "pointer",
+    padding: "0 10px",
   },
   menu: {
     display: "flex",
@@ -530,6 +622,30 @@ const styles = {
     borderRadius: "4px",
     cursor: "pointer",
   },
+  menuIcon: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    width: "24px",
+    height: "20px",
+    cursor: "pointer",
+  },
+  menuBar: {
+    width: "100%",
+    height: "3px",
+    backgroundColor: "#333",
+    margin: "2px 0",
+    borderRadius: "2px",
+  },
+  overlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.3)",
+    zIndex: 998,
+  }
 };
 
 export default Dashboard;

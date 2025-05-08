@@ -79,11 +79,11 @@ const AddServices = () => {
     getServices();
   }, []);
 
-//   const handleDelete = (id) => {
-//     const updatedServices = services.filter((service) => service._id !== id);
-//     setServices(updatedServices);
-//     alert("Service deleted successfully");
-//   };
+  //   const handleDelete = (id) => {
+  //     const updatedServices = services.filter((service) => service._id !== id);
+  //     setServices(updatedServices);
+  //     alert("Service deleted successfully");
+  //   };
 
   // Filter services based on search query
   const filteredServices = services.filter(
@@ -102,8 +102,8 @@ const AddServices = () => {
       const res = await DELETE_SERVICE({
         id,
       });
-      console.log(res)
-      getServices()
+      console.log(res);
+      getServices();
     } catch (err) {
       console.log(err);
     }
@@ -170,7 +170,7 @@ const AddServices = () => {
       width: "100%",
       fontSize: "14px",
       backgroundColor: "white",
-      height: "41px", // Match input height
+      height: "41px",
     },
     buttonRow: {
       display: "flex",
