@@ -46,4 +46,38 @@ export const DELETE_SERVICE = (body) => {
   return _Fetch("POST", "admin_panel/delete-service", body, {});
 };
 
-// http://13.203.38.122:5001/api/admin_panel/get-notice
+export const GET_FREE_ONBOARDING_REGISTRATIONS = (body) => {
+  return _Fetch(
+    "GET",
+    "admin_panel/free-onboarding-active-inactive-status-datewise",
+    body,
+    {}
+  );
+};
+
+export const SHOW_INACTIVE_FREE_ONBOARDING_REGISTRATIONS = (body) => {
+  return _Fetch(
+    "POST",
+    "admin_panel/free-onboarding-inactive-status-details",
+    body,
+    {}
+  );
+};
+
+export const SHOW_ACTIVE_FREE_ONBOARDING_REGISTRATIONS = (body) => {
+  return _Fetch(
+    "POST",
+    "admin_panel/free-onboarding-active-status-details",
+    body,
+    {}
+  );
+};
+
+export const SHOW_ALL_INACTIVE_FREE_ONBOARDING_REGISTRATIONS = (body) => {
+  return _Fetch(
+    "POST",
+    "admin_panel/free-onboarding-active-inactive-status-all",
+    body,
+    {}
+  );
+};
