@@ -188,8 +188,11 @@ const FreeOnBoarding = () => {
   return (
     <div className="free-onboarding-container">
       {/* Modal rendering when isModalOpen is true */}
-      {isModalOpen && (
-        <div onClick={() => setIsModalOpen(false)} style={modalStyles.overlay}>
+      {/* {isModalOpen && (
+        <div
+          // onClick={() => setIsModalOpen(false)}
+          style={modalStyles.overlay}
+        >
           <div style={modalStyles.content}>
             <button
               style={modalStyles.closeBtn}
@@ -203,17 +206,64 @@ const FreeOnBoarding = () => {
             />
           </div>
         </div>
+      )} */}
+
+      {isModalOpen && (
+        <div
+          onClick={() => setIsModalOpen(false)} // Click on overlay closes modal
+          style={modalStyles.overlay}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()} // Prevent content click from closing modal
+            style={modalStyles.content}
+          >
+            <button
+              style={modalStyles.closeBtn}
+              onClick={() => setIsModalOpen(false)} // Close button
+            >
+              ×
+            </button>
+            <InactiveFreeOnBarding
+              data={inactiveData}
+              loading={inactiveLoading}
+            />
+          </div>
+        </div>
       )}
 
-      {isActiveModalOpen && (
+      {/* {isActiveModalOpen && (
         <div
           onClick={() => setIsActiveModalOpen(false)}
           style={modalStyles.overlay}
         >
-          <div style={modalStyles.content}>
+          <div
+          onClick={() => setIsActiveModalOpen(true)}
+          
+          style={modalStyles.content}>
             <button
               style={modalStyles.closeBtn}
               onClick={() => setIsActiveModalOpen(false)}
+            >
+              ×
+            </button>
+
+            <ActiveFreeOnBoarding data={activeData} loading={activeLoading} />
+          </div>
+        </div>
+      )} */}
+
+      {isActiveModalOpen && (
+        <div
+          onClick={() => setIsActiveModalOpen(false)} // Click on overlay closes modal
+          style={modalStyles.overlay}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()} // Prevent click inside modal from closing it
+            style={modalStyles.content}
+          >
+            <button
+              style={modalStyles.closeBtn}
+              onClick={() => setIsActiveModalOpen(false)} // Close button works as expected
             >
               ×
             </button>
@@ -310,10 +360,16 @@ const FreeOnBoarding = () => {
                   <td className="table-cell">
                     {calculateTotals().totalRegistrations}
                   </td>
-                  <td className="table-cell active-cell">
+                  <td
+                    onClick={() => fetchAllInactiveRegistration("active")}
+                    className="table-cell active-cell"
+                  >
                     {calculateTotals().active}
                   </td>
-                  <td className="table-cell inactive-cell">
+                  <td
+                    onClick={() => fetchAllInactiveRegistration("inactive")}
+                    className="table-cell inactive-cell"
+                  >
                     {calculateTotals().inActive}
                   </td>
                 </tr>
