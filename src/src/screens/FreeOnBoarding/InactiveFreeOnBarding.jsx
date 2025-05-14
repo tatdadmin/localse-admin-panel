@@ -99,6 +99,17 @@ const InactiveFreeOnBarding = ({ data }) => {
                     📱 Contact Number
                     {renderSortIcon("service_provider_mobile_number")}
                   </th>
+
+                  <th
+                    style={{
+                      padding: "14px",
+                      cursor: "pointer",
+                    }}
+                    // onClick={() => handleSort("service_provider_mobile_number")}
+                  >
+                    Service Type
+                    {/* {renderSortIcon("service_provider_mobile_number")} */}
+                  </th>
                   <th
                     style={{
                       padding: "14px",
@@ -147,6 +158,15 @@ const InactiveFreeOnBarding = ({ data }) => {
                         >
                           {provider.service_provider_mobile_number}
                         </a>
+                      </td>
+
+                      <td style={{ padding: "12px" ,color: "#2563eb", textDecoration: "none" }}>
+                        {/* <a
+                          href={`tel:${provider.service_provider_mobile_number}`}
+                          style={{ }}
+                        > */}
+                          {provider.service_type}
+                        {/* </a> */}
                       </td>
                       <td
                         style={{

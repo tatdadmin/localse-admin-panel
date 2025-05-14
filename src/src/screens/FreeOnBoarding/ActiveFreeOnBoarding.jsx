@@ -94,6 +94,13 @@ const ActiveFreeOnBoarding = ({ data }) => {
                   </th>
                   <th
                     style={{ padding: "14px", cursor: "pointer" }}
+                    // onClick={() => handleSort("service_provider_mobile_number")}
+                  >
+                    Service Type
+                    {/* {renderSortIcon("service_provider_mobile_number")} */}
+                  </th>
+                  <th
+                    style={{ padding: "14px", cursor: "pointer" }}
                     onClick={() => handleSort("business_address")}
                   >
                     📍 Address{renderSortIcon("business_address")}
@@ -132,6 +139,15 @@ const ActiveFreeOnBoarding = ({ data }) => {
                         >
                           {provider.service_provider_mobile_number}
                         </a>
+                      </td>
+                      <td
+                        style={{
+                          padding: "12px",
+                          color: "#2563eb",
+                          textDecoration: "none",
+                        }}
+                      >
+                        {provider.service_type}
                       </td>
                       <td
                         style={{
