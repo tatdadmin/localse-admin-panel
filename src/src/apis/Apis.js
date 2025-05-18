@@ -81,3 +81,80 @@ export const SHOW_ALL_INACTIVE_FREE_ONBOARDING_REGISTRATIONS = (body) => {
     {}
   );
 };
+
+export const GET_AGENTS_LIST_REPORT = () => {
+  return _Fetch("GET", "admin_panel/get-agent-refer-report-daywise", {}, {});
+};
+
+export const GET_AGENTS_LIST_AGENT_WISE = (BODY) => {
+  return _Fetch(
+    "POST",
+    "admin_panel/get-agent-refer-report-agentwise-for-specific-date",
+    BODY,
+    {}
+  );
+};
+
+export const GET_AGENTS_LIST_AGENT_WISE_WITHOUT_DATE = () => {
+  return _Fetch(
+    "GET",
+    "admin_panel/get-registered-service-provider-agent-conversion-report",
+    {},
+    {}
+  );
+};
+
+export const GET_AGENT_TOTEL_REGISTRATIONS = (BODY) => {
+  return _Fetch(
+    "POST",
+    "admin_panel/get-all-registered-service-provider-details",
+    BODY,
+    {}
+  );
+};
+
+
+
+export const GET_AGENT_TOTEL_REGISTRATIONS_WHEN_DATE_NOT_AVALAIBLE = (BODY) => {
+  return _Fetch(
+    "POST",
+    "admin_panel/get-agent-registration-data-by-mobile-no",
+    BODY,
+    {}
+  );
+};
+  
+
+export const GET_AGENT_CONVERSIONS_ENTRIES = () => {   //agent conversion report api without date
+  return _Fetch(
+    "GET",
+    "admin_panel/get-registered-service-provider-agent-conversion-report",
+    {},
+    {}
+  );
+};
+
+export const GET_AGENT_CONVERSIONS_ENTRIES_MOBILE_NUMBER = (BODY) => {
+  return _Fetch(
+    "POST",
+    "admin_panel/get-agent-conversion-data-by-mobile-no",
+    BODY,
+    {}
+  );
+};
+
+
+
+
+// get-agent-conversion-data-by-mobile-no          
+
+
+
+export const GET_AGENT_CONVERSIONS_ENTRIES_MOBILE_NUMBER_WITH_DATE = (BODY) => {
+  return _Fetch(
+    "POST",
+    "admin_panel/get-agent-conversion-details-by-date-and-agent-number",
+    BODY,
+    {}
+  );
+};
