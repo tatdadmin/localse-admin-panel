@@ -113,8 +113,6 @@ export const GET_AGENT_TOTEL_REGISTRATIONS = (BODY) => {
   );
 };
 
-
-
 export const GET_AGENT_TOTEL_REGISTRATIONS_WHEN_DATE_NOT_AVALAIBLE = (BODY) => {
   return _Fetch(
     "POST",
@@ -123,9 +121,9 @@ export const GET_AGENT_TOTEL_REGISTRATIONS_WHEN_DATE_NOT_AVALAIBLE = (BODY) => {
     {}
   );
 };
-  
 
-export const GET_AGENT_CONVERSIONS_ENTRIES = () => {   //agent conversion report api without date
+export const GET_AGENT_CONVERSIONS_ENTRIES = () => {
+  //agent conversion report api without date
   return _Fetch(
     "GET",
     "admin_panel/get-registered-service-provider-agent-conversion-report",
@@ -143,18 +141,31 @@ export const GET_AGENT_CONVERSIONS_ENTRIES_MOBILE_NUMBER = (BODY) => {
   );
 };
 
-
-
-
-// get-agent-conversion-data-by-mobile-no          
-
-
+// get-agent-conversion-data-by-mobile-no
 
 export const GET_AGENT_CONVERSIONS_ENTRIES_MOBILE_NUMBER_WITH_DATE = (BODY) => {
   return _Fetch(
     "POST",
     "admin_panel/get-agent-conversion-details-by-date-and-agent-number",
     BODY,
+    {}
+  );
+};
+
+export const GET_SERVICE_PROVIDER_CLICKS_DATA = () => {
+  return _Fetch(
+    "GET",
+    "admin_panel/get-customer-clicks-report-daywise",
+    {},
+    {}
+  );
+};
+
+export const GET_CUSTOMER_CLICKS_IN_SERVICEPROVIDERCLICK_SECTION = (body) => {
+  return _Fetch(
+    "POST",
+    "admin_panel/get-customer-clicks-report-by-day",
+    body,
     {}
   );
 };

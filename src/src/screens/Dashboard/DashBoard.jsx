@@ -8,6 +8,7 @@ import AddServices from "../services/Services";
 import FreeOnBoarding from "../FreeOnBoarding/FreeOnBoarding";
 import AgentReports from "../reports/AgentReports";
 import AgentConversionReport from "../reports/AgentConversionReports";
+import ServiceProviderClicks from "../reports/ServiceProviderClicks";
 
 // Menu bar icon component
 const MenuIcon = ({ onClick }) => (
@@ -153,24 +154,28 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
           Agent Reports
         </div>
 
-        {/* <div
+        <div
           style={{
             ...styles.menuItem,
             backgroundColor:
-              selectedComponent === "agentConversionReport" ? "#f8f9fa" : "white",
+              selectedComponent === "serviceProviderClicks"
+                ? "#f8f9fa"
+                : "white",
           }}
           onClick={() => {
-            onSelect("agentConversionReport");
+            onSelect("serviceProviderClicks");
             if (window.innerWidth <= 768) onClose();
           }}
           onMouseOver={(e) => (e.target.style.background = "#ddd")}
           onMouseOut={(e) =>
             (e.target.style.background =
-              selectedComponent === "agentConversionReport" ? "#f8f9fa" : "white")
+              selectedComponent === "serviceProviderClicks"
+                ? "#f8f9fa"
+                : "white")
           }
         >
-Agent conversion reports
-        </div> */}
+          Service Provider Clicks
+        </div>
       </div>
     </div>
   );
@@ -571,9 +576,9 @@ const Dashboard = () => {
             <FreeOnBoarding />
           ) : selectedComponent === "agentReports" ? (
             <AgentReports />
-          ) : selectedComponent === "agentConversionReport" ? (
-            <AgentConversionReport />
-          ) :(
+          ) : selectedComponent === "serviceProviderClicks" ? (
+            <ServiceProviderClicks />
+          ) : (
             <NotificationList onOpen={openModal} />
           )}
         </div>
