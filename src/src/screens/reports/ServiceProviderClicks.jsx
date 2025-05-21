@@ -197,8 +197,7 @@ const ServiceProviderClicks = () => {
       borderCollapse: "collapse",
     },
     modalTableHeader: {
-        background:
-        "linear-gradient(to right, rgb(31, 41, 55), rgb(239, 68, 68))",
+      backgroundColor: "#f3f4f6",
       padding: "12px",
       textAlign: "left",
       fontWeight: "bold",
