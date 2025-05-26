@@ -9,6 +9,7 @@ import FreeOnBoarding from "../FreeOnBoarding/FreeOnBoarding";
 import AgentReports from "../reports/AgentReports";
 import AgentConversionReport from "../reports/AgentConversionReports";
 import ServiceProviderClicks from "../reports/ServiceProviderClicks";
+import HourlyFreeOnboardReport from "../reports/FreeOnboardingHorulyReports";
 
 // Menu bar icon component
 const MenuIcon = ({ onClick }) => (
@@ -175,6 +176,30 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
           }
         >
           Service Provider Clicks
+        </div>
+
+
+        <div
+          style={{
+            ...styles.menuItem,
+            backgroundColor:
+              selectedComponent === "FreeOnboardingHourlyReport"
+                ? "#f8f9fa"
+                : "white",
+          }}
+          onClick={() => {
+            onSelect("FreeOnboardingHourlyReport");
+            if (window.innerWidth <= 768) onClose();
+          }}
+          onMouseOver={(e) => (e.target.style.background = "#ddd")}
+          onMouseOut={(e) =>
+            (e.target.style.background =
+              selectedComponent === "FreeOnboardingHourlyReport"
+                ? "#f8f9fa"
+                : "white")
+          }
+        >
+          Free Onboarding Hourly Reports
         </div>
       </div>
     </div>
@@ -578,7 +603,7 @@ const Dashboard = () => {
             <AgentReports />
           ) : selectedComponent === "serviceProviderClicks" ? (
             <ServiceProviderClicks />
-          ) : (
+          ) : selectedComponent == "FreeOnboardingHourlyReport"?<HourlyFreeOnboardReport/> :(
             <NotificationList onOpen={openModal} />
           )}
         </div>

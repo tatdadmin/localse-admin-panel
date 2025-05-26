@@ -169,3 +169,13 @@ export const GET_CUSTOMER_CLICKS_IN_SERVICEPROVIDERCLICK_SECTION = (body) => {
     {}
   );
 };
+
+
+export const GET_FREEONBOARDING_HOURLY_REPORTS = () => {
+  return _Fetch(
+    "get",
+    "admin_panel/get-hourly-report",
+    {},
+    {}
+  );
+};

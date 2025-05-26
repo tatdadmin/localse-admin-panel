@@ -19,7 +19,7 @@ axiosClient.interceptors.request.use(
   async (config) => {
     // console.log("Request Interceptor Triggered...");
     const token = store.getState().userAuth.jwt;
-    // console.log("Current JWT Token:", token);
+    console.log("Current JWT Token:", token);
 
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
@@ -106,6 +106,8 @@ const _Fetch = async (method, path, body = {}, headers = {}) => {
   console.log(`_Fetch Called -> Method: ${method}, Path: ${path}, Body:`, body);
   console.log("Current Headers:", headers);
 
+  // const token = store.getState().userAuth.jwt;
+  //   console.log("Current JWT Token:", token);
   try {
     // console.log("Sending Request to API...");
     const response = await axiosClient({
