@@ -602,7 +602,7 @@ const HourlyFreeOnboardReport = () => {
         borderBottom: "2px solid #e5e7eb",
         backgroundColor: "#f9fafb",
         position: "sticky",
-        top: 0,
+        top: "-150px",
         zIndex: 10,
       },
       
@@ -621,7 +621,7 @@ const HourlyFreeOnboardReport = () => {
       tableContainer: {
         overflowX: "auto",
         overflowY: "auto",
-        padding: "24px",
+        // padding: "24px",
         maxHeight: "70vh", // Optional: set max height for vertical scrolling
       },
     thFirst: {
