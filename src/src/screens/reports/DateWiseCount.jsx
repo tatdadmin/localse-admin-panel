@@ -5,9 +5,11 @@ const DateWiseCount = () => {
   const [counts, setCounts] = useState([]);
   const [sortField, setSortField] = useState("date");
   const [ascending, setAscending] = useState(false);
+  const [loading,setLoading]=useState(false)
 
   useEffect(() => {
     dateWiseReport();
+    setLoading(true)
   }, []);
 
   const dateWiseReport = async () => {
@@ -16,6 +18,9 @@ const DateWiseCount = () => {
       setCounts(res?.data);
     } catch (error) {
       console.log(error);
+    }
+    finally{
+      setLoading(false)
     }
   };
 
@@ -48,14 +53,122 @@ const DateWiseCount = () => {
     return "";
   };
 
+  // Calculate totals
+  const getTotals = () => {
+    return counts.reduce(
+      (totals, item) => ({
+        totalPayments: totals.totalPayments + (item.payment_mobile_count || 0),
+        totalRegistrations: totals.totalRegistrations + (item.registered_payment_count || 0),
+        totalRefunds: totals.totalRefunds + (item.refund_count || 0),
+        totalLoggedIn: totals.totalLoggedIn + (item.login_status_count || 0),
+      }),
+      {
+        totalPayments: 0,
+        totalRegistrations: 0,
+        totalRefunds: 0,
+        totalLoggedIn: 0,
+      }
+    );
+  };
+
+  const totals = getTotals();
+
   return (
     <div>
       <div style={{ padding: "30px", fontFamily: "Arial" }}>
         <h2
-          style={{ marginBottom: "20px", fontSize: "24px", color: "#1f2937" }}
+          style={{ marginBottom: "30px", fontSize: "24px", color: "#1f2937" }}
         >
           📊 Payment & Registration Summary
         </h2>
+
+        {/* Summary Cards */}
+
+
+        {
+          loading?<>
+          <div style={{ textAlign: "center", padding: "50px", fontSize: "18px" }}>
+            <span>⏳ Loading data, please wait...</span>
+          </div>
+          
+          </>: <>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+            gap: "20px",
+            marginBottom: "30px",
+          }}
+        >
+          <div
+            style={{
+              background: "linear-gradient(135deg, #3b82f6, #1e40af)",
+              borderRadius: "12px",
+              padding: "20px",
+              color: "white",
+              boxShadow: "0 4px 15px rgba(59, 130, 246, 0.3)",
+            }}
+          >
+            <div style={{ fontSize: "14px", opacity: "0.9", marginBottom: "5px" }}>
+              💰 Total Payments
+            </div>
+            <div style={{ fontSize: "32px", fontWeight: "bold" }}>
+              {totals.totalPayments}
+            </div>
+          </div>
+
+          <div
+            style={{
+              background: "linear-gradient(135deg, #10b981, #059669)",
+              borderRadius: "12px",
+              padding: "20px",
+              color: "white",
+              boxShadow: "0 4px 15px rgba(16, 185, 129, 0.3)",
+            }}
+          >
+            <div style={{ fontSize: "14px", opacity: "0.9", marginBottom: "5px" }}>
+              📝 Total Registrations
+            </div>
+            <div style={{ fontSize: "32px", fontWeight: "bold" }}>
+              {totals.totalRegistrations}
+            </div>
+          </div>
+
+          <div
+            style={{
+              background: "linear-gradient(135deg, #8b5cf6, #7c3aed)",
+              borderRadius: "12px",
+              padding: "20px",
+              color: "white",
+              boxShadow: "0 4px 15px rgba(139, 92, 246, 0.3)",
+            }}
+          >
+            <div style={{ fontSize: "14px", opacity: "0.9", marginBottom: "5px" }}>
+              ↩️ Total Refunds
+            </div>
+            <div style={{ fontSize: "32px", fontWeight: "bold" }}>
+              {totals.totalRefunds}
+            </div>
+          </div>
+
+          <div
+            style={{
+              background: "linear-gradient(135deg, #ef4444, #dc2626)",
+              borderRadius: "12px",
+              padding: "20px",
+              color: "white",
+              boxShadow: "0 4px 15px rgba(239, 68, 68, 0.3)",
+            }}
+          >
+            <div style={{ fontSize: "14px", opacity: "0.9", marginBottom: "5px" }}>
+              🔐 Total Logged In
+            </div>
+            <div style={{ fontSize: "32px", fontWeight: "bold" }}>
+              {totals.totalLoggedIn}
+            </div>
+          </div>
+        </div>
+
 
         <table
           style={{
@@ -66,7 +179,7 @@ const DateWiseCount = () => {
             overflow: "hidden",
           }}
         >
-          <thead >
+          <thead>
             <tr
               style={{
                 background:
@@ -91,9 +204,9 @@ const DateWiseCount = () => {
                   minWidth: "130px",
                   cursor: "pointer",
                 }}
-                onClick={() => handleSort("registered_payment_count")}
+                onClick={() => handleSort("payment_mobile_count")}
               >
-                💰 Payment{renderSortIcon("registered_payment_count")}
+                💰 Payment{renderSortIcon("payment_mobile_count")}
               </th>
               <th
                 style={{
@@ -101,9 +214,9 @@ const DateWiseCount = () => {
                   minWidth: "130px",
                   cursor: "pointer",
                 }}
-                onClick={() => handleSort("payment_mobile_count")}
+                onClick={() => handleSort("registered_payment_count")}
               >
-                📝 Registered{renderSortIcon("payment_mobile_count")}
+                📝 Registered{renderSortIcon("registered_payment_count")}
               </th>
               <th
                 style={{
@@ -160,6 +273,9 @@ const DateWiseCount = () => {
             )}
           </tbody>
         </table>
+        </>
+        }
+       
       </div>
     </div>
   );
