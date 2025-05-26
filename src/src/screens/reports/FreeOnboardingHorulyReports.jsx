@@ -81,12 +81,17 @@ const HourlyFreeOnboardReport = () => {
   };
   // Generate hour headers (24 hours)
   const hourHeaders = useMemo(() => {
+    if (apiData?.data && apiData.data.length > 0) {
+      return Object.keys(apiData.data[0].hours);
+    }
+    // Fallback for when data is not loaded yet
     const headers = [];
     for (let i = 0; i < 24; i++) {
-      headers.push(`${i}-${i + 1}`);
+      const nextHour = i + 1;
+      headers.push(`${i}-${nextHour}`);
     }
     return headers;
-  }, []);
+  }, [apiData]);
 
   // Calculate totals and statistics
   const statistics = useMemo(() => {
@@ -124,11 +129,17 @@ const HourlyFreeOnboardReport = () => {
   }, [apiData, hourHeaders]);
 
   const formatTime = (hourRange) => {
-    const [start] = hourRange.split("-");
-    const hour = parseInt(start);
-    const period = hour >= 12 ? "PM" : "AM";
-    const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
-    return `${displayHour}${period}`;
+    const [start, end] = hourRange.split("-");
+    const startHour = parseInt(start);
+    const endHour = parseInt(end);
+    
+    const formatHour = (hour) => {
+      const period = hour >= 12 ? "PM" : "AM";
+      const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+      return `${displayHour}${period}`;
+    };
+    
+    return `${formatHour(startHour)}-${formatHour(endHour)}`;
   };
 
   const getIntensityColor = (value, max) => {
@@ -469,7 +480,7 @@ const HourlyFreeOnboardReport = () => {
         '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
     },
     maxWidth: {
-      maxWidth: "1200px",
+      maxWidth: "95vw",
       margin: "0 auto",
     },
     card: {
@@ -588,16 +599,31 @@ const HourlyFreeOnboardReport = () => {
       fontSize: "14px",
     },
     tableHeader: {
-      borderBottom: "2px solid #e5e7eb",
-      backgroundColor: "#f9fafb",
-    },
-    th: {
-      padding: "12px 8px",
-      textAlign: "center",
-      fontWeight: "600",
-      color: "#374151",
-      fontSize: "12px",
-    },
+        borderBottom: "2px solid #e5e7eb",
+        backgroundColor: "#f9fafb",
+        position: "sticky",
+        top: 0,
+        zIndex: 10,
+      },
+      
+      th: {
+        padding: "12px 8px",
+        textAlign: "center",
+        fontWeight: "600",
+        color: "#374151",
+        fontSize: "12px",
+        backgroundColor: "#f9fafb", // Add background color to prevent transparency
+        position: "sticky",
+        top: 0,
+      },
+      
+      // Also update the table container to have a max height if you want:
+      tableContainer: {
+        overflowX: "auto",
+        overflowY: "auto",
+        padding: "24px",
+        maxHeight: "70vh", // Optional: set max height for vertical scrolling
+      },
     thFirst: {
       textAlign: "left",
       paddingLeft: "16px",
@@ -863,13 +889,30 @@ const HourlyFreeOnboardReport = () => {
         <div style={styles.card}>
           {selectedView === "table" ? (
             <div style={{ overflowX: "auto", padding: "24px" }}>
+                <div style={styles.tableContainer}>
               <table style={styles.table}>
-                <thead style={styles.tableHeader}>
+                {/* <thead style={styles.tableHeader}>
                   <tr>
                     <th style={{ ...styles.th, ...styles.thFirst }}>Date</th>
                     {hourHeaders.map((hour) => (
                       <th key={hour} style={styles.th}>
                         <div>{hour.split("-")[0]}</div>
+                        <div style={{ fontSize: "10px", color: "#6b7280" }}>
+                          {formatTime(hour)}
+                        </div>
+                      </th>
+                    ))}
+                    <th style={{ ...styles.th, backgroundColor: "#dbeafe" }}>
+                      Total
+                    </th>
+                  </tr>
+                </thead> */}
+                <thead style={styles.tableHeader}>
+                  <tr>
+                    <th style={{ ...styles.th, ...styles.thFirst }}>Date</th>
+                    {hourHeaders.map((hour) => (
+                      <th key={hour} style={styles.th}>
+                        <div>{hour}</div>
                         <div style={{ fontSize: "10px", color: "#6b7280" }}>
                           {formatTime(hour)}
                         </div>
@@ -985,6 +1028,7 @@ const HourlyFreeOnboardReport = () => {
                   </tr>
                 </tfoot>
               </table>
+              </div>
             </div>
           ) : (
             /* Heatmap View */
