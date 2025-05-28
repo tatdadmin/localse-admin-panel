@@ -10,6 +10,7 @@ import AgentReports from "../reports/AgentReports";
 import AgentConversionReport from "../reports/AgentConversionReports";
 import ServiceProviderClicks from "../reports/ServiceProviderClicks";
 import HourlyFreeOnboardReport from "../reports/FreeOnboardingHorulyReports";
+import AgentPanel from "../Agent Panel/AgentPanel";
 
 // Menu bar icon component
 const MenuIcon = ({ onClick }) => (
@@ -36,7 +37,7 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
   return (
     <div style={sidebarStyle}>
       <div style={styles.sidebarHeader}>
-        <h1 style={styles.sidebarTitle}>LOCALSE</h1>
+        <h1 style={styles.sidebarTitle}>LocalSe</h1>
         {window.innerWidth <= 768 && (
           <button style={styles.closeButton} onClick={onClose}>
             ×
@@ -75,7 +76,7 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
           onMouseOver={(e) => (e.target.style.background = "#ddd")}
           onMouseOut={(e) =>
             (e.target.style.background =
-              selectedComponent === "notification" ? "#f8f9fa" : "white")
+              selectedComponent === "notification" ? "#f2b4ae" : "white")
           }
         >
           Notification
@@ -85,7 +86,7 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
           style={{
             ...styles.menuItem,
             backgroundColor:
-              selectedComponent === "reports" ? "#f8f9fa" : "white",
+              selectedComponent === "reports" ? "#f2b4ae" : "white",
           }}
           onClick={() => {
             onSelect("reports");
@@ -94,7 +95,7 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
           onMouseOver={(e) => (e.target.style.background = "#ddd")}
           onMouseOut={(e) =>
             (e.target.style.background =
-              selectedComponent === "reports" ? "#f8f9fa" : "white")
+              selectedComponent === "reports" ? "#f2b4ae" : "white")
           }
         >
           Reports
@@ -103,7 +104,7 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
           style={{
             ...styles.menuItem,
             backgroundColor:
-              selectedComponent === "services" ? "#f8f9fa" : "white",
+              selectedComponent === "services" ? "#f2b4ae" : "white",
           }}
           onClick={() => {
             onSelect("services");
@@ -112,7 +113,7 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
           onMouseOver={(e) => (e.target.style.background = "#ddd")}
           onMouseOut={(e) =>
             (e.target.style.background =
-              selectedComponent === "services" ? "#f8f9fa" : "white")
+              selectedComponent === "services" ? "#f2b4ae" : "white")
           }
         >
           Services
@@ -121,7 +122,7 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
           style={{
             ...styles.menuItem,
             backgroundColor:
-              selectedComponent === "services" ? "#f8f9fa" : "white",
+              selectedComponent === "freeOnBoarding" ? "#f2b4ae" : "white",
           }}
           onClick={() => {
             onSelect("freeOnBoarding");
@@ -130,7 +131,7 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
           onMouseOver={(e) => (e.target.style.background = "#ddd")}
           onMouseOut={(e) =>
             (e.target.style.background =
-              selectedComponent === "freeOnBoarding" ? "#f8f9fa" : "white")
+              selectedComponent === "freeOnBoarding" ? "#f2b4ae" : "white")
           }
         >
           Free OnBoarding Report
@@ -140,7 +141,7 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
           style={{
             ...styles.menuItem,
             backgroundColor:
-              selectedComponent === "agentReports" ? "#f8f9fa" : "white",
+              selectedComponent === "agentReports" ? "#f2b4ae" : "white",
           }}
           onClick={() => {
             onSelect("agentReports");
@@ -149,7 +150,7 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
           onMouseOver={(e) => (e.target.style.background = "#ddd")}
           onMouseOut={(e) =>
             (e.target.style.background =
-              selectedComponent === "agentReports" ? "#f8f9fa" : "white")
+              selectedComponent === "agentReports" ? "#f2b4ae" : "white")
           }
         >
           Agent Reports
@@ -160,7 +161,7 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
             ...styles.menuItem,
             backgroundColor:
               selectedComponent === "serviceProviderClicks"
-                ? "#f8f9fa"
+                ? "#f2b4ae"
                 : "white",
           }}
           onClick={() => {
@@ -171,20 +172,19 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
           onMouseOut={(e) =>
             (e.target.style.background =
               selectedComponent === "serviceProviderClicks"
-                ? "#f8f9fa"
+                ? "#f2b4ae"
                 : "white")
           }
         >
           Service Provider Clicks
         </div>
 
-
         <div
           style={{
             ...styles.menuItem,
             backgroundColor:
               selectedComponent === "FreeOnboardingHourlyReport"
-                ? "#f8f9fa"
+                ? "#f2b4ae"
                 : "white",
           }}
           onClick={() => {
@@ -195,12 +195,31 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
           onMouseOut={(e) =>
             (e.target.style.background =
               selectedComponent === "FreeOnboardingHourlyReport"
-                ? "#f8f9fa"
+                ? "#f2b4ae"
                 : "white")
           }
         >
           Free Onboarding Hourly Reports
         </div>
+
+        {/* <div
+          style={{
+            ...styles.menuItem,
+            backgroundColor:
+              selectedComponent === "AgentPanel" ? "#f2b4ae" : "white",
+          }}
+          onClick={() => {
+            onSelect("AgentPanel");
+            if (window.innerWidth <= 768) onClose();
+          }}
+          onMouseOver={(e) => (e.target.style.background = "#ddd")}
+          onMouseOut={(e) =>
+            (e.target.style.background =
+              selectedComponent === "AgentPanel" ? "#f2b4ae" : "white")
+          }
+        >
+          Agent Panel
+        </div> */}
       </div>
     </div>
   );
@@ -603,7 +622,11 @@ const Dashboard = () => {
             <AgentReports />
           ) : selectedComponent === "serviceProviderClicks" ? (
             <ServiceProviderClicks />
-          ) : selectedComponent == "FreeOnboardingHourlyReport"?<HourlyFreeOnboardReport/> :(
+          ) : selectedComponent == "FreeOnboardingHourlyReport" ? (
+            <HourlyFreeOnboardReport />
+          ) : selectedComponent == "AgentPanel" ? (
+            <AgentPanel />
+          ) : (
             <NotificationList onOpen={openModal} />
           )}
         </div>

@@ -85,6 +85,13 @@ const ActiveFreeOnBoarding = ({ data }) => {
                   >
                     🏪 Business Name{renderSortIcon("business_name")}
                   </th>
+
+                  <th
+                    style={{ padding: "14px", cursor: "pointer" }}
+                    onClick={() => handleSort("business_name")}
+                  >
+                    🏪 Business Image
+                  </th>
                   <th
                     style={{ padding: "14px", cursor: "pointer" }}
                     onClick={() => handleSort("service_provider_mobile_number")}
@@ -130,7 +137,35 @@ const ActiveFreeOnBoarding = ({ data }) => {
                       }}
                     >
                       <td style={{ padding: "12px", fontWeight: "500" }}>
-                        {provider.business_name}
+                        {provider.business_name?.toUpperCase()}
+                      </td>
+
+                      <td style={{ padding: "12px", fontWeight: "500" }}>
+                        <img
+                          style={{
+                            height: "100px",
+                            width: "100px",
+                            objectFit: "fit",
+                            borderRadius: "10px",
+                            transition: "transform 0.3s ease-in-out",
+                            cursor: "pointer",
+                            zIndex: 1,
+                            position: "relative", // or 'absolute' if it suits your layout
+                          }}
+                          onClick={(e) => {
+                            e.currentTarget.style.transform = "scale(5.2)";
+                            e.currentTarget.style.zIndex = "100";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = "scale(1)";
+                            e.currentTarget.style.zIndex = "1";
+                          }}
+                          src={
+                            provider?.service_provider_image ||
+                            "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM="
+                          }
+                          alt="provider"
+                        />
                       </td>
                       <td style={{ padding: "12px" }}>
                         <a

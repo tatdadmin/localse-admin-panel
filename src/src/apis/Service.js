@@ -45,9 +45,10 @@ axiosClient.interceptors.response.use(
     // console.error("Response Interceptor Error:", error);
     const originalRequest = error.config;
     // console.log("Original Request:", originalRequest);
-
+    return false;
     if (
       error.response?.status === 401 ||
+      error.response?.status == 403 ||
       error.response?.data?.message === "Token has expired"
     ) {
       console.warn("Token Expired. Attempting to Refresh...");
@@ -61,7 +62,7 @@ axiosClient.interceptors.response.use(
         try {
           // Call Refresh Token API
           // console.log("Calling Refresh Token API...");
-          const res = await axios.post(`${API_BASE_URL}/auth/refresh`, {
+          const res = await axios.post(`${API_BASE_URL}auth/refresh`, {
             refresh_token: refreshToken,
           });
           // console.log("Refresh Token API Response:", res.data);
@@ -130,6 +131,12 @@ const _Fetch = async (method, path, body = {}, headers = {}) => {
     }
   } catch (error) {
     console.error("API Fetch Error:", error);
+    if (error?.response?.status == 403) {
+      store.dispatch(setUserAuthStates({ key: "jwt", value: null }));
+      store.dispatch(setUserAuthStates({ key: "login", value: false }));
+      console.log("User Logged Out.");
+    }
+
     throw error.response ? error.response.data : error.message;
   }
 };

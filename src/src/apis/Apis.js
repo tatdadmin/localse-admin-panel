@@ -179,3 +179,44 @@ export const GET_FREEONBOARDING_HOURLY_REPORTS = () => {
     {}
   );
 };
+
+export const GET_AGENT_PANEL_DETAILS =()=>{
+  return _Fetch(
+    "GET",
+    "customer/service_provider/agent_panel/get-agent-info",
+    {},
+    {}
+  );
+}
+
+export const ADD_NEW_PROVIDER = body => {
+  return _Fetch(
+    'POST',
+    'customer/service_provider/agent_panel/add-lead',
+    body,
+    {},
+  );
+};
+
+
+export const SERVICES_TYPE_LIST_SERVICE_PROVIDER = () => {
+  return _Fetch(
+    'GET',
+    'customer/service_provider/registration/get_service_type_api',
+    {},
+    {},
+  );
+};
+
+
+
+export const SHARE_LOCATION_OF_PROVIDER = body => {
+console.log(body)
+return false
+  return _Fetch(
+    'POST',
+    'customer/service_provider/agent_panel/service-provider/save-lat-long',
+    body,
+    {},
+  );
+};
