@@ -220,3 +220,13 @@ return false
     {},
   );
 };
+
+export const SERVICES_TYPE_GET_MAP_DATA = () => {
+  return _Fetch(
+    'GET',
+    'admin_panel/get-service-provider-map-data',
+    {},
+    {},
+  );
+};
+

@@ -11,6 +11,7 @@ import AgentConversionReport from "../reports/AgentConversionReports";
 import ServiceProviderClicks from "../reports/ServiceProviderClicks";
 import HourlyFreeOnboardReport from "../reports/FreeOnboardingHorulyReports";
 import AgentPanel from "../Agent Panel/AgentPanel";
+import ServiceProvidersMap from "../service providers map/ServiceProvidersMap";
 
 // Menu bar icon component
 const MenuIcon = ({ onClick }) => (
@@ -200,6 +201,29 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
           }
         >
           Free Onboarding Hourly Reports
+        </div>
+
+        <div
+          style={{
+            ...styles.menuItem,
+            backgroundColor:
+              selectedComponent === "serviceProvidersMap"
+                ? "#f2b4ae"
+                : "white",
+          }}
+          onClick={() => {
+            onSelect("serviceProvidersMap");
+            if (window.innerWidth <= 768) onClose();
+          }}
+          onMouseOver={(e) => (e.target.style.background = "#ddd")}
+          onMouseOut={(e) =>
+            (e.target.style.background =
+              selectedComponent === "serviceProvidersMap"
+                ? "#f2b4ae"
+                : "white")
+          }
+        >
+          Service Providers Map
         </div>
 
         {/* <div
@@ -624,8 +648,8 @@ const Dashboard = () => {
             <ServiceProviderClicks />
           ) : selectedComponent == "FreeOnboardingHourlyReport" ? (
             <HourlyFreeOnboardReport />
-          ) : selectedComponent == "AgentPanel" ? (
-            <AgentPanel />
+          ) : selectedComponent == "serviceProvidersMap" ? (
+            <ServiceProvidersMap/>
           ) : (
             <NotificationList onOpen={openModal} />
           )}
