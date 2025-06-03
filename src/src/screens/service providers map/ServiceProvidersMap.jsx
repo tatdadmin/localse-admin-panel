@@ -370,13 +370,8 @@ const ServiceProvidersMap = () => {
   const serviceCounts = getServiceTypeCount();
 
   return (
-    <div className="container-fluid p-0">
-      <link
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
-        rel="stylesheet"
-      />
-      
-      <div className="row g-0" style={{ height: '100vh' }}>
+    <div className="container-fluid p-0" style={{ height: '80vh' }}>
+      <div className="row g-0">
         {/* Sidebar */}
         <div className="col-md-4 col-lg-3 bg-light border-end overflow-auto">
           <div className="p-3">
@@ -435,7 +430,7 @@ const ServiceProvidersMap = () => {
                 
 
                 {/* Service Providers List */}
-                <h6 className="text-muted mb-3">
+                {/* <h6 className="text-muted mb-3">
                   {selectedCategory === 'all' ? 'All Providers' : selectedCategory} ({filteredProviders.length})
                 </h6>
                 {filteredProviders.length === 0 ? (
@@ -477,7 +472,7 @@ const ServiceProvidersMap = () => {
                       </div>
                     </div>
                   ))
-                )}
+                )} */}
               </>
             )}
           </div>
@@ -497,7 +492,7 @@ const ServiceProvidersMap = () => {
           <button
             className={`btn btn-primary position-absolute ${locationLoading ? 'disabled' : ''}`}
             style={{ 
-              bottom: '20px', 
+              bottom: '150px', 
               right: '20px', 
               zIndex: 1000,
               width: '50px',
