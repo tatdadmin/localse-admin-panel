@@ -122,7 +122,7 @@ const _Fetch = async (method, path, body = {}, headers = {}) => {
 
     console.log("API Response Received:", response);
 
-    if (response.data.status_code === 200) {
+    if (response.data.status_code == 200) {
       console.log("API Call Successful:", response.data);
       return response.data;
     } else {

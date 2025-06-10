@@ -1,5 +1,6 @@
 // import axios from "axios";
 import _Fetch from "./Service";
+import fetchService from "./Service2";
 
 export const ADMIN_LOGIN = (body) => {
   console.log("ADMIN_LOGIN Called with Credentials:", body);
@@ -190,7 +191,7 @@ export const GET_AGENT_PANEL_DETAILS =()=>{
 }
 
 export const ADD_NEW_PROVIDER = body => {
-  return _Fetch(
+  return fetchService(
     'POST',
     'customer/service_provider/agent_panel/add-lead',
     body,
@@ -212,10 +213,18 @@ export const SERVICES_TYPE_LIST_SERVICE_PROVIDER = () => {
 
 export const SHARE_LOCATION_OF_PROVIDER = body => {
 console.log(body)
-return false
   return _Fetch(
     'POST',
     'customer/service_provider/agent_panel/service-provider/save-lat-long',
+    body,
+    {},
+  );
+};
+
+export const GET_KEYWORDS_BY_SERVICE_TYPE = body => {
+  return _Fetch(
+    'POST',
+    'customer/service_provider/agent_panel/get-synonyms-for-registration',
     body,
     {},
   );
@@ -230,3 +239,13 @@ export const SERVICES_TYPE_GET_MAP_DATA = () => {
   );
 };
 
+export const REGISTER_FREE_ONBOARDING_SERVICE_PROVIDER = BODY => {
+  return fetchService(
+    'POST',
+    'customer/service_provider/agent_panel/service-provider-free-onboarding-registration',
+    BODY,
+    {
+      'Content-Type': 'multipart/form-data',
+    },
+  );
+};

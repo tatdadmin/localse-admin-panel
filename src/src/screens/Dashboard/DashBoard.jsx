@@ -12,6 +12,7 @@ import ServiceProviderClicks from "../reports/ServiceProviderClicks";
 import HourlyFreeOnboardReport from "../reports/FreeOnboardingHorulyReports";
 import AgentPanel from "../Agent Panel/AgentPanel";
 import ServiceProvidersMap from "../service providers map/ServiceProvidersMap";
+import RegistrationFromAdmin from "../Agent Panel/RegistrationFromAdmin";
 
 // Menu bar icon component
 const MenuIcon = ({ onClick }) => (
@@ -207,9 +208,7 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
           style={{
             ...styles.menuItem,
             backgroundColor:
-              selectedComponent === "serviceProvidersMap"
-                ? "#f2b4ae"
-                : "white",
+              selectedComponent === "serviceProvidersMap" ? "#f2b4ae" : "white",
           }}
           onClick={() => {
             onSelect("serviceProvidersMap");
@@ -218,32 +217,34 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
           onMouseOver={(e) => (e.target.style.background = "#ddd")}
           onMouseOut={(e) =>
             (e.target.style.background =
-              selectedComponent === "serviceProvidersMap"
-                ? "#f2b4ae"
-                : "white")
+              selectedComponent === "serviceProvidersMap" ? "#f2b4ae" : "white")
           }
         >
           Service Providers Map
         </div>
 
-        {/* <div
+        <div
           style={{
             ...styles.menuItem,
             backgroundColor:
-              selectedComponent === "AgentPanel" ? "#f2b4ae" : "white",
+              selectedComponent === "RegistrationFromAdmin"
+                ? "#f2b4ae"
+                : "white",
           }}
           onClick={() => {
-            onSelect("AgentPanel");
+            onSelect("RegistrationFromAdmin");
             if (window.innerWidth <= 768) onClose();
           }}
           onMouseOver={(e) => (e.target.style.background = "#ddd")}
           onMouseOut={(e) =>
             (e.target.style.background =
-              selectedComponent === "AgentPanel" ? "#f2b4ae" : "white")
+              selectedComponent === "RegistrationFromAdmin"
+                ? "#f2b4ae"
+                : "white")
           }
         >
-          Agent Panel
-        </div> */}
+          Registration From Admin
+        </div>
       </div>
     </div>
   );
@@ -649,7 +650,9 @@ const Dashboard = () => {
           ) : selectedComponent == "FreeOnboardingHourlyReport" ? (
             <HourlyFreeOnboardReport />
           ) : selectedComponent == "serviceProvidersMap" ? (
-            <ServiceProvidersMap/>
+            <ServiceProvidersMap />
+          ) : selectedComponent == "RegistrationFromAdmin" ? (
+            <RegistrationFromAdmin />
           ) : (
             <NotificationList onOpen={openModal} />
           )}
