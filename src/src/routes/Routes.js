@@ -13,7 +13,7 @@ const NavRoutes = () => {
       <Routes>
         <Route path="*" element={<PublicRoute Component={Login} />} />
         <Route
-          path="/localSELandingPage"
+          path="/whatsapp"
           element={<PublicRoute Component={LocalSELandingPage} />}
         />
         <Route
