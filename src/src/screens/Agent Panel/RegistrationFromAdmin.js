@@ -523,7 +523,7 @@ const RegistrationFromAdmin = () => {
                   </div>
                   <div className="card-body">
                     <div className="row">
-                      <div className="col-md-8">
+                      {/* <div className="col-md-8">
                         <div className="mb-3">
                           <label className="form-label">
                             Lat/Long Coordinates *
@@ -545,7 +545,7 @@ const RegistrationFromAdmin = () => {
                             </div>
                           )}
                         </div>
-                      </div>
+                      </div> */}
                       <div className="col-md-4">
                         <label className="form-label">&nbsp;</label>
                         <button
