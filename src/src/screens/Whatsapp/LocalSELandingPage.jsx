@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
+import { API_BASE_URL } from "../../constant/path";
 
 export default function LocalSELandingPage() {
   const [downloadClicked, setDownloadClicked] = useState(false);
@@ -14,7 +15,9 @@ export default function LocalSELandingPage() {
   const instantApi = async () => {
     try {
       const res = await axios({
-        url: "http://api.localse.in:5001/api/trigger/whatsapp-campaign/link-click",
+        // url: "http://api.localse.in:5001/api/trigger/whatsapp-campaign/link-click",
+        url: `${API_BASE_URL}trigger/whatsapp-campaign/link-click`,
+
         method: "POST",
         data: {
           campaign_id: referrer,
