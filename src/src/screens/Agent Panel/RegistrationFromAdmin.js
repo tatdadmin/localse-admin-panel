@@ -138,9 +138,9 @@ const RegistrationFromAdmin = () => {
 
   const validateLocation = () => {
     const newErrors = {};
-    if (!formData.latlong.trim()) {
-      newErrors.latlong = "Location coordinates are required";
-    }
+    // if (!formData.latlong.trim()) {
+    //   newErrors.latlong = "Location coordinates are required";
+    // }
     if (!formData.latitude.trim()) {
       newErrors.latitude = "Latitude is required";
     } else if (isNaN(formData.latitude) || Math.abs(formData.latitude) > 90) {
@@ -239,6 +239,7 @@ const RegistrationFromAdmin = () => {
 
   // Step 2: Share Location
   const handleShareLocation = async () => {
+    // alert("p")
     if (!completedSteps.addLead) {
       alert("Please add lead first");
       return;
