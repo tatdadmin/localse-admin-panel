@@ -9,6 +9,25 @@ export default function LocalSELandingPage() {
   useEffect(() => {
     instantApi();
   }, []);
+
+  useEffect(() => {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+    const androidLink = "https://play.google.com/store/apps/details?id=com.localse";
+    const iosLink = "https://apps.apple.com/in/app/localse/id6743470526";
+
+    if (/android/i.test(userAgent)) {
+      window.location.href = androidLink;
+    } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+      window.location.href = iosLink;
+    } else {
+      const msgElement = document.getElementById("message");
+      if (msgElement) {
+        msgElement.innerText = "Unsupported device. Please open this link on your Android or iOS device.";
+      }
+    }
+  }, []);
+
   const [searchParams] = useSearchParams();
   const referrer = searchParams.get("referrer");
   console.log(referrer, "oitfdvb");
@@ -46,7 +65,10 @@ export default function LocalSELandingPage() {
         "https://apps.apple.com/in/app/localse/id6743470526";
     }
   };
-
+return <>
+ <div style={{ padding: "2rem", textAlign: "center" }}>
+      <p style={{color:"white"}} id="message">Redirecting...</p>
+    </div></>
   return (
     <div style={styles.container}>
       <style>{`

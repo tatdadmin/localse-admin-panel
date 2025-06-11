@@ -19,6 +19,7 @@ const userAuth = createSlice({
     logoutUser: (state) => {
       state.jwt = null;
       state.refreshToken = null;
+      state.userAllData=null
       state.login = false;
       localStorage.removeItem("jwt");
       localStorage.removeItem("refreshToken");
