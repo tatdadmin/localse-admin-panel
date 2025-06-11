@@ -155,6 +155,7 @@ const FreeOnBoarding = () => {
 
   const handleSort = (field) => {
     if (sortField === field) {
+// console.log(field)
       setAscending(!ascending);
     } else {
       setSortField(field);
@@ -166,6 +167,17 @@ const FreeOnBoarding = () => {
     return [...counts].sort((a, b) => {
       const valA = a[sortField];
       const valB = b[sortField];
+      
+      // Special handling for date field
+      if (sortField === "date") {
+        // Convert DD/MM/YY format to Date objects for proper comparison
+        const dateA = new Date(formatDate(valA));
+        const dateB = new Date(formatDate(valB));
+        
+        return ascending ? dateA - dateB : dateB - dateA;
+      }
+      
+      // Handle other fields (string or number)
       if (typeof valA === "string") {
         return ascending ? valA.localeCompare(valB) : valB.localeCompare(valA);
       } else {
@@ -173,6 +185,32 @@ const FreeOnBoarding = () => {
       }
     });
   };
+
+  // const parseDate = (dateString) => {
+  //   const [day, month, year] = dateString.split("/");
+  //   // Assuming YY format represents 20YY (2000s)
+  //   const fullYear = year.length === 2 ? `20${year}` : year;
+  //   return new Date(fullYear, month - 1, day); // month is 0-indexed in Date constructor
+  // };
+  // const getSortedDataAlternative = () => {
+  //   return [...counts].sort((a, b) => {
+  //     const valA = a[sortField];
+  //     const valB = b[sortField];
+      
+  //     if (sortField === "date") {
+  //       const dateA = parseDate(valA);
+  //       const dateB = parseDate(valB);
+        
+  //       return ascending ? dateA - dateB : dateB - dateA;
+  //     }
+      
+  //     if (typeof valA === "string") {
+  //       return ascending ? valA.localeCompare(valB) : valB.localeCompare(valA);
+  //     } else {
+  //       return ascending ? valA - valB : valB - valA;
+  //     }
+  //   });
+  // };
 
   const calculateTotals = () => {
     return counts.reduce(

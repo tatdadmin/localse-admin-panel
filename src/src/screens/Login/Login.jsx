@@ -25,7 +25,7 @@ const Login = () => {
     try {
       const res = await ADMIN_LOGIN(credentials);
       console.log("API Response:", res);
-
+// return false
       console.log(res, "]]]]]]]]");
 
       if (res?.status_code === 200) {
@@ -43,6 +43,13 @@ const Login = () => {
               value: res?.refresh_token,
             })
           );
+          dispatch(
+            setUserAuthStates({
+              key: "userAllData",
+              value: res?.admin_details,
+            })
+          );
+          
           console.log("Refresh token set in state:", res?.refresh_token);
 
           dispatch(setUserAuthStates({ key: "login", value: true }));

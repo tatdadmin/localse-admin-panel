@@ -256,11 +256,12 @@ const Header = ({ toggleSidebar }) => {
   const handleLogout = () => {
     dispatch(logoutUser());
   };
-
+  const user = useSelector((e) => e?.userAuth?.userAllData);
+  console.log(user, "ferwf");
   return (
     <div style={styles.header}>
       {window.innerWidth <= 768 && <MenuIcon onClick={toggleSidebar} />}
-      <span>Employee Name</span>
+      <span>{user?.admin_name}</span>
       <span
         style={styles.logout}
         onMouseOver={(e) => (e.target.style.color = "darkred")}
@@ -682,8 +683,8 @@ const styles = {
     width: "250px",
     backgroundColor: "#121212",
     color: "white",
-    height:"100vh",
-    overflowY:"scroll",
+    height: "100vh",
+    overflowY: "scroll",
     display: "flex",
     flexDirection: "column",
     padding: "20px",

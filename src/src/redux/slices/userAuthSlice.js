@@ -4,6 +4,7 @@ const initialState = {
   jwt: localStorage.getItem("jwt") || null,
   refreshToken: localStorage.getItem("refreshToken") || null,
   login: localStorage.getItem("jwt") ? true : false,
+  userAllData:null
 };
 
 const userAuth = createSlice({
