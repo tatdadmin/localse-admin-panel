@@ -20,22 +20,22 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Login form submitted");
+    // console.log("Login form submitted");
 
     try {
       const res = await ADMIN_LOGIN(credentials);
-      console.log("API Response:", res);
+      // console.log("API Response:", res);
 // return false
-      console.log(res, "]]]]]]]]");
+      // console.log(res, "]]]]]]]]");
 
       if (res?.status_code === 200) {
-        console.log("Status code is 200");
+        // console.log("Status code is 200");
 
         if (res?.jwt) {
-          console.log("JWT exists, setting auth states");
+          // console.log("JWT exists, setting auth states");
 
           dispatch(setUserAuthStates({ key: "jwt", value: res?.jwt }));
-          console.log("JWT set in state:", res?.jwt);
+          // console.log("JWT set in state:", res?.jwt);
 
           dispatch(
             setUserAuthStates({
@@ -50,19 +50,19 @@ const Login = () => {
             })
           );
           
-          console.log("Refresh token set in state:", res?.refresh_token);
+          // console.log("Refresh token set in state:", res?.refresh_token);
 
           dispatch(setUserAuthStates({ key: "login", value: true }));
-          console.log("User login state set to true");
+          // console.log("User login state set to true");
 
           navigate("/dashboard");
           setTimeout(() => {
             alert(res?.message);
           }, 100);
 
-          console.log("Navigating to /dashboard");
+          // console.log("Navigating to /dashboard");
         } else {
-          console.log("JWT not found in response");
+          // console.log("JWT not found in response");
           alert("Invalid credentials, please try again.");
         }
       } else {

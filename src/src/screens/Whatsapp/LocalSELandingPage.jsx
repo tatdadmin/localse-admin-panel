@@ -30,7 +30,7 @@ export default function LocalSELandingPage() {
 
   const [searchParams] = useSearchParams();
   const referrer = searchParams.get("referrer");
-  console.log(referrer, "oitfdvb");
+  // console.log(referrer, "oitfdvb");
   const instantApi = async () => {
     try {
       const res = await axios({
@@ -42,7 +42,7 @@ export default function LocalSELandingPage() {
           campaign_id: referrer,
         },
       });
-      console.log(res);
+      // console.log(res);
     } catch (err) {
       console.log(err);
     }

@@ -9,7 +9,7 @@ const RegisterFreeOnboardingBusiness = () => {
   // State management
 
   const location = useParams();
-  console.log(location,"poiuytrewsdfg")
+  // console.log(location,"poiuytrewsdfg")
   const { phoneNumber, type } = location || {};
   const [formData, setFormData] = useState({
     phoneNumber: phoneNumber,   
@@ -56,7 +56,7 @@ const RegisterFreeOnboardingBusiness = () => {
   const getServices = async () => {
     try {
       const res = await SERVICES_TYPE_LIST_SERVICE_PROVIDER();
-      console.log(res, "SERVICES_TYPE_LIST_SERVICE_PROVIDER");
+      // console.log(res, "SERVICES_TYPE_LIST_SERVICE_PROVIDER");
       setservices(res?.data);
     } catch (err) {
       console.log(err);

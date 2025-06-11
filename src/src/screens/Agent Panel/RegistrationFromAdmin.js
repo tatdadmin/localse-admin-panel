@@ -55,7 +55,7 @@ const RegistrationFromAdmin = () => {
   const getServices = async () => {
     try {
       const res = await SERVICES_TYPE_LIST_SERVICE_PROVIDER();
-      console.log(res, "SERVICES_TYPE_LIST_SERVICE_PROVIDER");
+      // console.log(res, "SERVICES_TYPE_LIST_SERVICE_PROVIDER");
       setServiceTypes(res?.data);
     } catch (err) {
       console.log(err);
@@ -190,14 +190,14 @@ const RegistrationFromAdmin = () => {
       const response = await GET_KEYWORDS_BY_SERVICE_TYPE({
         service_type: type,
       });
-      console.log(response, "keywords from service type");
+      // console.log(response, "keywords from service type");
 
       if (response && response.data) {
         const keywordsArray = response.data
           .split(",")
           .map((keyword) => keyword.trim())
           .filter((keyword) => keyword !== "");
-        console.log(keywordsArray);
+        // console.log(keywordsArray);
         setKeywords(keywordsArray);
       }
     } catch (error) {
@@ -218,7 +218,7 @@ const RegistrationFromAdmin = () => {
         service_provider_mobile_number: formData.mobileNumber,
         service_provider_type: "Free_Onboarding_Business",
       });
-      console.log(res);
+      // console.log(res);
 
       if (res?.msg_type == "error" && res?.status_code == "200") {
         alert(res?.message);
@@ -258,7 +258,7 @@ const RegistrationFromAdmin = () => {
         service_provider_mobile_number: formData.mobileNumber,
       });
 
-      console.log("Location shared:", response);
+      // console.log("Location shared:", response);
       setCompletedSteps((prev) => ({ ...prev, shareLocation: true }));
       alert("✅ Location shared successfully!");
     } catch (error) {

@@ -13,6 +13,7 @@ import HourlyFreeOnboardReport from "../reports/FreeOnboardingHorulyReports";
 import AgentPanel from "../Agent Panel/AgentPanel";
 import ServiceProvidersMap from "../service providers map/ServiceProvidersMap";
 import RegistrationFromAdmin from "../Agent Panel/RegistrationFromAdmin";
+import Campaign_reports from "../reports/camaignReports";
 
 // Menu bar icon component
 const MenuIcon = ({ onClick }) => (
@@ -245,6 +246,31 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
         >
           Registration From Admin
         </div>
+
+
+
+        <div
+          style={{
+            ...styles.menuItem,
+            backgroundColor: 
+              selectedComponent === "Campaign_reports"
+                ? "#f2b4ae"
+                : "white",
+          }}
+          onClick={() => {
+            onSelect("Campaign_reports");
+            if (window.innerWidth <= 768) onClose();
+          }}
+          onMouseOver={(e) => (e.target.style.background = "#ddd")}
+          onMouseOut={(e) =>
+            (e.target.style.background =
+              selectedComponent === "Campaign_reports"
+                ? "#f2b4ae"
+                : "white")
+          }
+        >
+Campaign Reports
+        </div>
       </div>
     </div>
   );
@@ -257,7 +283,7 @@ const Header = ({ toggleSidebar }) => {
     dispatch(logoutUser());
   };
   const user = useSelector((e) => e?.userAuth?.userAllData);
-  console.log(user, "ferwf");
+  // console.log(user, "ferwf");
   return (
     <div style={styles.header}>
       {window.innerWidth <= 768 && <MenuIcon onClick={toggleSidebar} />}
@@ -286,7 +312,7 @@ const NoticeList = ({ onOpen }) => {
   const handleDelete = async (id) => {
     try {
       const res = await DELETE_NOTICE({ id: id });
-      console.log(res);
+      // console.log(res);
       dispatch(getNotices());
       alert(res?.message);
     } catch (error) {
@@ -654,6 +680,8 @@ const Dashboard = () => {
             <ServiceProvidersMap />
           ) : selectedComponent == "RegistrationFromAdmin" ? (
             <RegistrationFromAdmin />
+          ) : selectedComponent == "Campaign_reports" ? (
+            <Campaign_reports />
           ) : (
             <NotificationList onOpen={openModal} />
           )}

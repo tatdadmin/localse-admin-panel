@@ -19,7 +19,7 @@ axiosClient.interceptors.request.use(
   async (config) => {
     // console.log("Request Interceptor Triggered...");
     const token = store.getState().userAuth.jwt;
-    console.log("Current JWT Token:", token);
+    // console.log("Current JWT Token:", token);
 
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
@@ -104,8 +104,8 @@ axiosClient.interceptors.response.use(
 
 // ✅ General Fetch Function with Debugging Logs
 const _Fetch = async (method, path, body = {}, headers = {}) => {
-  console.log(`_Fetch Called -> Method: ${method}, Path: ${path}, Body:`, body);
-  console.log("Current Headers:", headers);
+  // console.log(`_Fetch Called -> Method: ${method}, Path: ${path}, Body:`, body);
+  // console.log("Current Headers:", headers);
 
   // const token = store.getState().userAuth.jwt;
   //   console.log("Current JWT Token:", token);
@@ -120,10 +120,10 @@ const _Fetch = async (method, path, body = {}, headers = {}) => {
       redirect: "follow",
     });
 
-    console.log("API Response Received:", response);
+    // console.log("API Response Received:", response);
 
     if (response.data.status_code == 200) {
-      console.log("API Call Successful:", response.data);
+      // console.log("API Call Successful:", response.data);
       return response.data;
     } else {
       // console.warn("API Call Failed:", response.data.message);

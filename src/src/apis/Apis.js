@@ -8,25 +8,25 @@ export const ADMIN_LOGIN = (body) => {
 };
 
 export const ADD_NOTIFICATION = (body) => {
-  console.log("ADD_NOTIFICATION Called with BODY:", body);
+  // console.log("ADD_NOTIFICATION Called with BODY:", body);
   // return false;
   return _Fetch("POST", "admin_panel/create-notification", body, {});
 };
 
 export const ADD_NOTICE = (body) => {
-  console.log("ADD_NOTICE Called with BODY:", body);
+  // console.log("ADD_NOTICE Called with BODY:", body);
   // return false;
   return _Fetch("POST", "admin_panel/create-notice", body, {});
 };
 
 export const GET_ALL_NOTICE = (body) => {
-  console.log("GET_ALL_NOTICE Called with BODY:", body);
+  // console.log("GET_ALL_NOTICE Called with BODY:", body);
   // return false;
   return _Fetch("GET", "admin_panel/get-notice", body, {});
 };
 
 export const DELETE_NOTICE = (body) => {
-  console.log("GET_ALL_NOTICE Called with BODY:", body);
+  // console.log("GET_ALL_NOTICE Called with BODY:", body);
   // return false;
   return _Fetch("POST", "admin_panel/delete-notice", body, {});
 };
@@ -171,81 +171,84 @@ export const GET_CUSTOMER_CLICKS_IN_SERVICEPROVIDERCLICK_SECTION = (body) => {
   );
 };
 
-
 export const GET_FREEONBOARDING_HOURLY_REPORTS = () => {
-  return _Fetch(
-    "get",
-    "admin_panel/get-hourly-report",
-    {},
-    {}
-  );
+  return _Fetch("get", "admin_panel/get-hourly-report", {}, {});
 };
 
-export const GET_AGENT_PANEL_DETAILS =()=>{
+export const GET_AGENT_PANEL_DETAILS = () => {
   return _Fetch(
     "GET",
     "customer/service_provider/agent_panel/get-agent-info",
     {},
     {}
   );
-}
-
-export const ADD_NEW_PROVIDER = body => {
-  return fetchService(
-    'POST',
-    'customer/service_provider/agent_panel/add-lead',
-    body,
-    {},
-  );
 };
 
+export const ADD_NEW_PROVIDER = (body) => {
+  return fetchService(
+    "POST",
+    "customer/service_provider/agent_panel/add-lead",
+    body,
+    {}
+  );
+};
 
 export const SERVICES_TYPE_LIST_SERVICE_PROVIDER = () => {
   return _Fetch(
-    'GET',
-    'customer/service_provider/registration/get_service_type_api',
+    "GET",
+    "customer/service_provider/registration/get_service_type_api",
     {},
-    {},
+    {}
   );
 };
 
-
-
-export const SHARE_LOCATION_OF_PROVIDER = body => {
-console.log(body)
+export const SHARE_LOCATION_OF_PROVIDER = (body) => {
+  console.log(body);
   return _Fetch(
-    'POST',
-    'customer/service_provider/agent_panel/service-provider/save-lat-long',
+    "POST",
+    "customer/service_provider/agent_panel/service-provider/save-lat-long",
     body,
-    {},
+    {}
   );
 };
 
-export const GET_KEYWORDS_BY_SERVICE_TYPE = body => {
+export const GET_KEYWORDS_BY_SERVICE_TYPE = (body) => {
   return _Fetch(
-    'POST',
-    'customer/service_provider/agent_panel/get-synonyms-for-registration',
+    "POST",
+    "customer/service_provider/agent_panel/get-synonyms-for-registration",
     body,
-    {},
+    {}
   );
 };
 
 export const SERVICES_TYPE_GET_MAP_DATA = () => {
-  return _Fetch(
-    'GET',
-    'admin_panel/get-service-provider-map-data',
-    {},
-    {},
+  return _Fetch("GET", "admin_panel/get-service-provider-map-data", {}, {});
+};
+
+export const REGISTER_FREE_ONBOARDING_SERVICE_PROVIDER = (BODY) => {
+  return fetchService(
+    "POST",
+    "customer/service_provider/agent_panel/service-provider-free-onboarding-registration",
+    BODY,
+    {
+      "Content-Type": "multipart/form-data",
+    }
   );
 };
 
-export const REGISTER_FREE_ONBOARDING_SERVICE_PROVIDER = BODY => {
+export const GET_CAMPAGIAN_DROPDOWN_VALUES = (BODY) => {
   return fetchService(
-    'POST',
-    'customer/service_provider/agent_panel/service-provider-free-onboarding-registration',
+    "GET",
+    "admin_panel/get-whatsapp-campaign-list",
     BODY,
-    {
-      'Content-Type': 'multipart/form-data',
-    },
+    {}
+  );
+};
+export const GET_CAMPAIGN_DATA = (BODY) => {
+  return fetchService(
+    "POST",
+    "admin_panel/get-whatsapp-campaign-tracking-info-datewise",
+    BODY,
+    {}
   );
 };

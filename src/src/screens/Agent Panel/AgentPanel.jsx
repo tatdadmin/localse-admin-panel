@@ -83,7 +83,7 @@ const AgentPanel = () => {
   const getAgentDetails = useCallback(async () => {
     try {
       const res = await GET_AGENT_PANEL_DETAILS();
-      console.log(res);
+      // console.log(res);
       setAgentDetails((prev) => ({ ...prev, ...res?.data }));
     } catch (error) {
       console.error("Error fetching agent details:", error);
@@ -93,7 +93,7 @@ const AgentPanel = () => {
   const fetchRecentLeads = async () => {
     try {
       const res = await Fetch_ALL_LEADS({ data_limit: "5" });
-      console.log(res, "recent leads");
+      // console.log(res, "recent leads");
       setLeads(res?.data || []);
     } catch (error) {
       console.log(error);
@@ -103,7 +103,7 @@ const AgentPanel = () => {
   const getServiceProviderDetails = useCallback(async () => {
     try {
       const response = await GET_SERVICE_PROVIDER_DATA();
-      console.log(response, "GET_SERVICE_PROVIDER_DATA");
+      // console.log(response, "GET_SERVICE_PROVIDER_DATA");
       setProviderData(response?.data || {});
     } catch (error) {
       console.log(error, "error getServiceProviderDetails");
