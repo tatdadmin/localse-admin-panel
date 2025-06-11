@@ -1,7 +1,7 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { API_BASE_URL } from "../../constant/path";
+import axios from "axios";
 
 export default function LocalSELandingPage() {
   const [downloadClicked, setDownloadClicked] = useState(false);
@@ -59,10 +59,9 @@ export default function LocalSELandingPage() {
         }
         
         body {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-          line-height: 1.6;
-          color: #1a1a1a;
-          overflow-x: hidden;
+          height: 100%;
+          overflow-y: auto;
+          font-family: 'Inter', sans-serif;
         }
         
         .floating-animation {
@@ -112,8 +111,7 @@ export default function LocalSELandingPage() {
         }
         
         .gradient-text {
-        background: linear-gradient(135deg, #d32f2f, #e53935, #f44336);
-
+          background: linear-gradient(135deg, #d32f2f, #e53935, #f44336);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
@@ -132,6 +130,27 @@ export default function LocalSELandingPage() {
         @keyframes morphing {
           0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
           50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+        }
+
+        /* Mobile-specific animations */
+        @media (max-width: 768px) {
+          .floating-animation {
+            animation: mobileFloat 4s ease-in-out infinite;
+          }
+          
+          @keyframes mobileFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+          }
+          
+          .slide-in-left, .slide-in-right {
+            animation: fadeIn 0.6s ease-out;
+          }
+          
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
         }
       `}</style>
 
@@ -161,12 +180,16 @@ export default function LocalSELandingPage() {
               style={styles.androidButton}
               className="pulse-animation"
               onClick={() => handleDownload("android")}
-              onMouseEnter={(e) =>
-                (e.target.style.transform = "scale(1.1) translateY(-5px)")
-              }
-              onMouseLeave={(e) =>
-                (e.target.style.transform = "scale(1) translateY(0)")
-              }
+              onMouseEnter={(e) => {
+                if (window.innerWidth > 768) {
+                  e.target.style.transform = "scale(1.1) translateY(-5px)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (window.innerWidth > 768) {
+                  e.target.style.transform = "scale(1) translateY(0)";
+                }
+              }}
             >
               <span style={styles.downloadIcon}>📱</span>
               <div style={styles.buttonText}>
@@ -179,12 +202,16 @@ export default function LocalSELandingPage() {
               style={styles.iosButton}
               className="pulse-animation"
               onClick={() => handleDownload("ios")}
-              onMouseEnter={(e) =>
-                (e.target.style.transform = "scale(1.1) translateY(-5px)")
-              }
-              onMouseLeave={(e) =>
-                (e.target.style.transform = "scale(1) translateY(0)")
-              }
+              onMouseEnter={(e) => {
+                if (window.innerWidth > 768) {
+                  e.target.style.transform = "scale(1.1) translateY(-5px)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (window.innerWidth > 768) {
+                  e.target.style.transform = "scale(1) translateY(0)";
+                }
+              }}
             >
               <span style={styles.downloadIcon}>🍎</span>
               <div style={styles.buttonText}>
@@ -262,12 +289,16 @@ export default function LocalSELandingPage() {
               }}
               className="floating-animation"
               onMouseEnter={(e) => {
-                e.target.style.transform = "translateY(-10px) scale(1.05)";
-                e.target.style.boxShadow = "0 20px 40px rgba(0,0,0,0.15)";
+                if (window.innerWidth > 768) {
+                  e.target.style.transform = "translateY(-10px) scale(1.05)";
+                  e.target.style.boxShadow = "0 20px 40px rgba(0,0,0,0.15)";
+                }
               }}
               onMouseLeave={(e) => {
-                e.target.style.transform = "translateY(0) scale(1)";
-                e.target.style.boxShadow = "0 10px 30px rgba(0,0,0,0.1)";
+                if (window.innerWidth > 768) {
+                  e.target.style.transform = "translateY(0) scale(1)";
+                  e.target.style.boxShadow = "0 10px 30px rgba(0,0,0,0.1)";
+                }
               }}
             >
               <div
@@ -379,106 +410,56 @@ export default function LocalSELandingPage() {
           ))}
         </div>
       </section>
-
-      {/* CTA Section */}
-      {/* <section style={styles.ctaSection}>
-        <div style={styles.ctaContent}>
-          <h2 style={styles.ctaTitle} className="gradient-text">अभी Download करें!</h2>
-          <p style={styles.ctaSubtitle}>हजारों customers पहले से ही LocalSe use कर रहे हैं</p>
-          
-          <button 
-            style={styles.ctaButton}
-            className="pulse-animation"
-            onClick={() => handleDownload('android')}
-            onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
-            onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
-          >
-            📱 अभी Download करें
-          </button>
-        </div>
-      </section> */}
-
-      {/* Footer */}
-      {/* <footer style={styles.footer}>
-        <div style={styles.footerContent}>
-          <div style={styles.footerBrand}>
-            <div style={styles.footerLogo}>
-              <span style={styles.footerIcon}>🔧</span>
-              <span style={styles.footerBrandName}>LocalSe</span>
-            </div>
-            <p style={styles.footerDescription}>
-              आपके आस-पास के बेहतरीन service providers से connect करने का सबसे आसान तरीका।
-            </p>
-          </div>
-          
-          <div style={styles.footerLinks}>
-            <div style={styles.footerColumn}>
-              <h4 style={styles.footerHeading}>Services</h4>
-              <ul style={styles.footerList}>
-                <li>Electrician</li>
-                <li>Plumber</li>
-                <li>Carpenter</li>
-                <li>AC Repair</li>
-              </ul>
-            </div>
-            
-            <div style={styles.footerColumn}>
-              <h4 style={styles.footerHeading}>Support</h4>
-              <ul style={styles.footerList}>
-                <li><a href="#" style={styles.footerLink}>Help Center</a></li>
-                <li><a href="#" style={styles.footerLink}>Contact Us</a></li>
-                <li><a href="#" style={styles.footerLink}>Terms & Conditions</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        
-        <div style={styles.footerBottom}>
-          <p>&copy; 2025 LocalSe. All rights reserved.</p>
-        </div>
-      </footer> */}
     </div>
   );
 }
 
 const styles = {
-
-  
   container: {
-    minHeight: "100vh",
+    overflowY: "auto",
     background:
       "linear-gradient(135deg, #e3f2fd 0%, #ffffff 50%, #e8f5e8 100%)",
+    fontFamily: "'Inter', sans-serif",
   },
 
   // Header Styles
   header: {
     background: "linear-gradient(135deg, #1976d2 0%, #388e3c 100%)",
     color: "white",
-    padding: "100px 0",
+    padding: "60px 0",
     position: "relative",
     overflow: "hidden",
+    "@media (min-width: 768px)": {
+      padding: "100px 0",
+    },
   },
 
   headerBackground: {
     position: "absolute",
-    top: "-50%",
-    right: "-50%",
-    width: "100%",
-    height: "100%",
+    top: "-25%",
+    right: "-25%",
+    width: "50%",
+    height: "50%",
     background:
       "radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)",
     borderRadius: "50%",
+    "@media (max-width: 768px)": {
+      display: "none",
+    },
   },
 
   headerBackground2: {
     position: "absolute",
-    bottom: "-50%",
-    left: "-50%",
-    width: "100%",
-    height: "100%",
+    bottom: "-25%",
+    left: "-25%",
+    width: "50%",
+    height: "50%",
     background:
       "radial-gradient(circle, rgba(76,175,80,0.2) 0%, transparent 70%)",
     borderRadius: "50%",
+    "@media (max-width: 768px)": {
+      display: "none",
+    },
   },
 
   headerContent: {
@@ -487,244 +468,382 @@ const styles = {
     zIndex: 2,
     maxWidth: "1200px",
     margin: "0 auto",
-    padding: "0 20px",
+    padding: "0 15px",
+    "@media (min-width: 768px)": {
+      padding: "0 20px",
+    },
   },
 
   logoIcon: {
-    width: "100px",
-    height: "100px",
+    width: "60px",
+    height: "60px",
     background: "rgba(255,255,255,0.2)",
     borderRadius: "50%",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    margin: "0 auto 40px",
-    fontSize: "50px",
+    margin: "0 auto 20px",
+    fontSize: "30px",
     backdropFilter: "blur(10px)",
     border: "2px solid rgba(255,255,255,0.3)",
+    "@media (min-width: 768px)": {
+      width: "100px",
+      height: "100px",
+      margin: "0 auto 40px",
+      fontSize: "50px",
+    },
   },
 
   mainTitle: {
-    fontSize: "clamp(3rem, 8vw, 6rem)",
+    fontSize: "clamp(2.5rem, 8vw, 6rem)",
     fontWeight: "800",
-    marginBottom: "30px",
+    marginBottom: "20px",
     textShadow: "0 4px 20px rgba(0,0,0,0.3)",
-    letterSpacing: "-2px",
+    letterSpacing: "-1px",
+    "@media (min-width: 768px)": {
+      marginBottom: "30px",
+      letterSpacing: "-2px",
+    },
   },
 
   subtitle: {
-    fontSize: "clamp(1.2rem, 4vw, 2rem)",
-    marginBottom: "20px",
+    fontSize: "clamp(1rem, 4vw, 2rem)",
+    marginBottom: "15px",
     color: "rgba(255,255,255,0.9)",
     fontWeight: "500",
+    padding: "0 10px",
+    "@media (min-width: 768px)": {
+      marginBottom: "20px",
+      padding: "0",
+    },
   },
 
   description: {
-    fontSize: "clamp(1rem, 3vw, 1.2rem)",
-    marginBottom: "50px",
+    fontSize: "clamp(0.9rem, 3vw, 1.2rem)",
+    marginBottom: "40px",
     color: "rgba(255,255,255,0.8)",
     maxWidth: "600px",
-    margin: "0 auto 50px",
+    margin: "0 auto 40px",
+    padding: "0 15px",
+    lineHeight: "1.4",
+    "@media (min-width: 768px)": {
+      marginBottom: "50px",
+      padding: "0",
+      lineHeight: "1.6",
+    },
   },
 
   downloadButtons: {
     display: "flex",
-    flexDirection: "row",
-    gap: "30px",
+    flexDirection: "column",
+    gap: "20px",
     justifyContent: "center",
     alignItems: "center",
-    flexWrap: "wrap",
+    padding: "0 15px",
+    "@media (min-width: 768px)": {
+      flexDirection: "row",
+      gap: "30px",
+      padding: "0",
+    },
   },
 
   androidButton: {
     background: "linear-gradient(135deg, #000000, #434343)",
     color: "white",
     border: "none",
-    padding: "20px 40px",
-    borderRadius: "20px",
-    fontSize: "18px",
+    padding: "15px 25px",
+    borderRadius: "15px",
+    fontSize: "16px",
     fontWeight: "600",
     cursor: "pointer",
     display: "flex",
     alignItems: "center",
-    gap: "15px",
-    minWidth: "220px",
+    gap: "12px",
+    width: "100%",
+    maxWidth: "280px",
     transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
+    boxShadow: "0 8px 25px rgba(0,0,0,0.3)",
+    "@media (min-width: 768px)": {
+      padding: "20px 40px",
+      borderRadius: "20px",
+      fontSize: "18px",
+      gap: "15px",
+      minWidth: "220px",
+      width: "auto",
+      maxWidth: "none",
+      boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
+    },
   },
 
   iosButton: {
     background: "linear-gradient(135deg, #667eea, #764ba2)",
     color: "white",
     border: "none",
-    padding: "20px 40px",
-    borderRadius: "20px",
-    fontSize: "18px",
+    padding: "15px 25px",
+    borderRadius: "15px",
+    fontSize: "16px",
     fontWeight: "600",
     cursor: "pointer",
     display: "flex",
     alignItems: "center",
-    gap: "15px",
-    minWidth: "220px",
+    gap: "12px",
+    width: "100%",
+    maxWidth: "280px",
     transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-    boxShadow: "0 10px 30px rgba(102, 126, 234, 0.4)",
+    boxShadow: "0 8px 25px rgba(102, 126, 234, 0.4)",
+    "@media (min-width: 768px)": {
+      padding: "20px 40px",
+      borderRadius: "20px",
+      fontSize: "18px",
+      gap: "15px",
+      minWidth: "220px",
+      width: "auto",
+      maxWidth: "none",
+      boxShadow: "0 10px 30px rgba(102, 126, 234, 0.4)",
+    },
   },
 
   downloadIcon: {
-    fontSize: "30px",
+    fontSize: "24px",
+    "@media (min-width: 768px)": {
+      fontSize: "30px",
+    },
   },
 
   buttonText: {
     textAlign: "left",
+    flex: 1,
   },
 
   buttonSubtext: {
-    fontSize: "14px",
+    fontSize: "12px",
     opacity: "0.8",
+    "@media (min-width: 768px)": {
+      fontSize: "14px",
+    },
   },
 
   buttonMaintext: {
-    fontSize: "20px",
+    fontSize: "16px",
     fontWeight: "700",
+    "@media (min-width: 768px)": {
+      fontSize: "20px",
+    },
   },
 
   successMessage: {
-    marginTop: "30px",
-    padding: "20px",
+    marginTop: "25px",
+    padding: "15px",
     background: "rgba(76, 175, 80, 0.2)",
-    borderRadius: "15px",
+    borderRadius: "12px",
     backdropFilter: "blur(10px)",
     border: "1px solid rgba(76, 175, 80, 0.3)",
     color: "#e8f5e8",
-    fontSize: "18px",
+    fontSize: "14px",
     fontWeight: "600",
+    margin: "25px 15px 0",
+    "@media (min-width: 768px)": {
+      marginTop: "30px",
+      padding: "20px",
+      borderRadius: "15px",
+      fontSize: "18px",
+      margin: "30px 0 0",
+    },
   },
 
   // Services Section
   servicesSection: {
-    padding: "100px 0",
+    padding: "60px 0",
     maxWidth: "1200px",
     margin: "0 auto",
+    "@media (min-width: 768px)": {
+      padding: "100px 0",
+    },
   },
 
   sectionHeader: {
     textAlign: "center",
-    marginBottom: "80px",
+    marginBottom: "50px",
+    padding: "0 15px",
+    "@media (min-width: 768px)": {
+      marginBottom: "80px",
+      padding: "0",
+    },
   },
 
   sectionTitle: {
-    fontSize: "clamp(2rem, 5vw, 3.5rem)",
+    fontSize: "clamp(1.8rem, 5vw, 3.5rem)",
     fontWeight: "700",
-    marginBottom: "20px",
+    marginBottom: "15px",
     color: "#1a1a1a",
+    "@media (min-width: 768px)": {
+      marginBottom: "20px",
+    },
   },
 
   sectionSubtitle: {
-    fontSize: "1.2rem",
+    fontSize: "clamp(1rem, 3vw, 1.2rem)",
     color: "#666",
     maxWidth: "600px",
     margin: "0 auto",
+    lineHeight: "1.5",
   },
 
   servicesGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-    gap: "30px",
-    padding: "0 20px",
+    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+    gap: "20px",
+    padding: "0 15px",
+    "@media (min-width: 768px)": {
+      gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+      gap: "30px",
+      padding: "0 20px",
+    },
   },
 
   serviceCard: {
     background: "rgba(255, 255, 255, 0.9)",
     backdropFilter: "blur(20px)",
     border: "1px solid rgba(255, 255, 255, 0.3)",
-    borderRadius: "25px",
-    padding: "40px 30px",
+    borderRadius: "20px",
+    padding: "25px 20px",
     textAlign: "center",
     transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
+    boxShadow: "0 8px 25px rgba(0,0,0,0.1)",
+    "@media (min-width: 768px)": {
+      borderRadius: "25px",
+      padding: "40px 30px",
+      boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
+    },
   },
 
   serviceIcon: {
-    width: "80px",
-    height: "80px",
-    borderRadius: "25px",
+    width: "60px",
+    height: "60px",
+    borderRadius: "20px",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    fontSize: "35px",
-    margin: "0 auto 25px",
+    fontSize: "28px",
+    margin: "0 auto 20px",
     transition: "all 0.3s ease",
+    "@media (min-width: 768px)": {
+      width: "80px",
+      height: "80px",
+      borderRadius: "25px",
+      fontSize: "35px",
+      margin: "0 auto 25px",
+    },
   },
 
   serviceName: {
-    fontSize: "1.1rem",
+    fontSize: "1rem",
     fontWeight: "600",
     color: "#1a1a1a",
+    "@media (min-width: 768px)": {
+      fontSize: "1.1rem",
+    },
   },
 
   // Features Section
   featuresSection: {
-    padding: "100px 0",
+    padding: "60px 0",
     background: "rgba(248, 250, 252, 0.8)",
     backdropFilter: "blur(20px)",
+    "@media (min-width: 768px)": {
+      padding: "100px 0",
+    },
   },
 
   featuresGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
-    gap: "40px",
+    gridTemplateColumns: "1fr",
+    gap: "30px",
     maxWidth: "1200px",
     margin: "0 auto",
-    padding: "0 20px",
+    padding: "0 15px",
+    "@media (min-width: 768px)": {
+      gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
+      gap: "40px",
+      padding: "0 20px",
+    },
   },
 
   featureCard: {
     background: "rgba(255, 255, 255, 0.9)",
     backdropFilter: "blur(20px)",
     border: "1px solid rgba(255, 255, 255, 0.3)",
-    borderRadius: "25px",
-    padding: "50px 40px",
+    borderRadius: "20px",
+    padding: "30px 25px",
     textAlign: "center",
     transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-    boxShadow: "0 15px 35px rgba(0,0,0,0.1)",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
+    "@media (min-width: 768px)": {
+      borderRadius: "25px",
+      padding: "50px 40px",
+      boxShadow: "0 15px 35px rgba(0,0,0,0.1)",
+    },
   },
 
   featureIcon: {
-    width: "80px",
-    height: "80px",
-    borderRadius: "25px",
+    width: "60px",
+    height: "60px",
+    borderRadius: "20px",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    fontSize: "35px",
-    margin: "0 auto 30px",
+    fontSize: "28px",
+    margin: "0 auto 20px",
+    "@media (min-width: 768px)": {
+      width: "80px",
+      height: "80px",
+      borderRadius: "25px",
+      fontSize: "35px",
+      margin: "0 auto 30px",
+    },
   },
 
   featureTitle: {
-    fontSize: "1.4rem",
+    fontSize: "1.2rem",
     fontWeight: "700",
-    marginBottom: "20px",
+    marginBottom: "15px",
     color: "#1a1a1a",
+    "@media (min-width: 768px)": {
+      fontSize: "1.4rem",
+      marginBottom: "20px",
+    },
   },
 
   featureDescription: {
-    fontSize: "1rem",
+    fontSize: "0.95rem",
     color: "#666",
-    lineHeight: "1.6",
+    lineHeight: "1.5",
+    "@media (min-width: 768px)": {
+      fontSize: "1rem",
+      lineHeight: "1.6",
+    },
   },
 
   // How it Works Section
   howItWorksSection: {
-    padding: "100px 0",
+    padding: "60px 0",
     maxWidth: "1200px",
     margin: "0 auto",
+    "@media (min-width: 768px)": {
+      padding: "100px 0",
+    },
   },
 
   stepsGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-    gap: "50px",
-    padding: "0 20px",
+    gridTemplateColumns: "1fr",
+    gap: "40px",
+    padding: "0 15px",
+    "@media (min-width: 768px)": {
+      gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+      gap: "50px",
+      padding: "0 20px",
+    },
   },
 
   stepCard: {
@@ -732,150 +851,44 @@ const styles = {
   },
 
   stepNumber: {
-    width: "80px",
-    height: "80px",
+    width: "60px",
+    height: "60px",
     background: "linear-gradient(135deg, #1976d2, #388e3c)",
     borderRadius: "50%",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     color: "white",
-    fontSize: "32px",
+    fontSize: "24px",
     fontWeight: "700",
-    margin: "0 auto 30px",
-    boxShadow: "0 10px 30px rgba(25, 118, 210, 0.3)",
+    margin: "0 auto 20px",
+    boxShadow: "0 8px 25px rgba(25, 118, 210, 0.3)",
+    "@media (min-width: 768px)": {
+      width: "80px",
+      height: "80px",
+      fontSize: "32px",
+      margin: "0 auto 30px",
+      boxShadow: "0 10px 30px rgba(25, 118, 210, 0.3)",
+    },
   },
 
   stepTitle: {
-    fontSize: "1.3rem",
+    fontSize: "1.1rem",
     fontWeight: "700",
-    marginBottom: "15px",
+    marginBottom: "12px",
     color: "#1a1a1a",
+    "@media (min-width: 768px)": {
+      fontSize: "1.3rem",
+      marginBottom: "15px",
+    },
   },
 
   stepDescription: {
-    fontSize: "1rem",
-    color: "#666",
-  },
-
-  // CTA Section
-  ctaSection: {
-    padding: "100px 0",
-    background: "linear-gradient(135deg, #1976d2 0%, #388e3c 100%)",
-    color: "white",
-    textAlign: "center",
-  },
-
-  ctaContent: {
-    maxWidth: "800px",
-    margin: "0 auto",
-    padding: "0 20px",
-  },
-
-  ctaTitle: {
-    fontSize: "clamp(2.5rem, 6vw, 4rem)",
-    fontWeight: "800",
-    marginBottom: "30px",
-  },
-
-  ctaSubtitle: {
-    fontSize: "1.3rem",
-    marginBottom: "50px",
-    color: "rgba(255,255,255,0.9)",
-  },
-
-  ctaButton: {
-    background: "rgba(255, 255, 255, 0.9)",
-    color: "#1976d2",
-    border: "none",
-    padding: "20px 50px",
-    borderRadius: "50px",
-    fontSize: "1.2rem",
-    fontWeight: "700",
-    cursor: "pointer",
-    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
-    backdropFilter: "blur(10px)",
-  },
-
-  // Footer
-  footer: {
-    background: "linear-gradient(135deg, #263238, #37474f)",
-    color: "white",
-    padding: "80px 0 30px",
-  },
-
-  footerContent: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-    gap: "50px",
-    maxWidth: "1200px",
-    margin: "0 auto",
-    padding: "0 20px",
-  },
-
-  footerBrand: {
-    gridColumn: "span 2",
-  },
-
-  footerLogo: {
-    display: "flex",
-    alignItems: "center",
-    gap: "15px",
-    marginBottom: "25px",
-  },
-
-  footerIcon: {
-    fontSize: "35px",
-  },
-
-  footerBrandName: {
-    fontSize: "2rem",
-    fontWeight: "700",
-  },
-
-  footerDescription: {
-    fontSize: "1rem",
-    color: "rgba(255,255,255,0.7)",
-    lineHeight: "1.6",
-    maxWidth: "400px",
-  },
-
-  footerLinks: {
-    display: "flex",
-    gap: "80px",
-  },
-
-  footerColumn: {
-    minWidth: "150px",
-  },
-
-  footerHeading: {
-    fontSize: "1.2rem",
-    fontWeight: "600",
-    marginBottom: "25px",
-  },
-
-  footerList: {
-    listStyle: "none",
     fontSize: "0.95rem",
-    color: "rgba(255,255,255,0.7)",
-  },
-
-  footerLink: {
-    color: "rgba(255,255,255,0.7)",
-    textDecoration: "none",
-    transition: "color 0.3s ease",
-  },
-
-  footerBottom: {
-    borderTop: "1px solid rgba(255,255,255,0.1)",
-    marginTop: "60px",
-    paddingTop: "30px",
-    textAlign: "center",
-    color: "rgba(255,255,255,0.6)",
-    maxWidth: "1200px",
-    margin: "60px auto 0",
-    padding: "30px 20px 0",
+    color: "#666",
+    lineHeight: "1.5",
+    "@media (min-width: 768px)": {
+      fontSize: "1rem",
+    },
   },
 };
