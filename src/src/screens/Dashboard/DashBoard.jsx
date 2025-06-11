@@ -682,6 +682,8 @@ const styles = {
     width: "250px",
     backgroundColor: "#121212",
     color: "white",
+    height:"100vh",
+    overflowY:"scroll",
     display: "flex",
     flexDirection: "column",
     padding: "20px",
