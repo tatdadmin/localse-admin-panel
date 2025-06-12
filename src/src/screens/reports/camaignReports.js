@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import {
   GET_CAMPAGIAN_DROPDOWN_VALUES,
   GET_CAMPAIGN_DATA,
@@ -10,14 +11,13 @@ const Campaign_reports = () => {
   const [tableData, setTableData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
-  
+
   // Filter states
   const [sortOrder, setSortOrder] = useState("desc"); // "asc" or "desc"
 
   useEffect(() => {
     getDropdownValues();
     setLoading(true);
-
   }, []);
 
   useEffect(() => {
@@ -42,14 +42,37 @@ const Campaign_reports = () => {
 
   const getTableValues = async (campaignSlug = selectedCampaign) => {
     if (!campaignSlug) return;
-    
+
     setLoading(true);
     try {
       const res = await GET_CAMPAIGN_DATA({
         campaign_slug: campaignSlug,
+        target_area_code:'1'
       });
       if (res.status_code === 200) {
-        setTableData(res.data);
+        // Transform the nested API response structure
+        const transformedData = [];
+        
+        // Handle the API response format: array of campaigns with nested data
+        res.data.forEach(campaign => {
+          const totalCount = campaign.total_count;
+          
+          // Check if data array exists and has items
+          if (campaign.data && Array.isArray(campaign.data)) {
+            campaign.data.forEach(dayData => {
+              transformedData.push({
+                date: dayData.date,
+                clicked_count: dayData.clicked_count || 0,
+                delivery_count: dayData.delivery_count || 0,
+                seen_count: dayData.seen_count || 0,
+                total_count: totalCount // Use the total_count from the parent campaign object
+              });
+            });
+          }
+        });
+        
+        console.log("Transformed data:", transformedData); // Debug log
+        setTableData(transformedData);
       }
     } catch (err) {
       console.log("Error fetching campaign data:", err);
@@ -75,7 +98,7 @@ const Campaign_reports = () => {
     sorted.sort((a, b) => {
       const dateA = new Date(a.date);
       const dateB = new Date(b.date);
-      
+
       if (sortOrder === "asc") {
         return dateA - dateB;
       } else {
@@ -90,25 +113,31 @@ const Campaign_reports = () => {
     setSortOrder(e.target.value);
   };
 
-  const calculateClickRate = (clicked, total) => {
-    return total > 0 ? ((clicked / total) * 100).toFixed(2) : 0;
+  const calculateClickRate = (clicked, delivered) => {
+    return delivered > 0 ? ((clicked / delivered) * 100).toFixed(2) : 0;
+  };
+
+  const calculateSeenRate = (seen, delivered) => {
+    return delivered > 0 ? ((seen / delivered) * 100).toFixed(2) : 0;
   };
 
   const getTotalStats = () => {
     const data = filteredData.length > 0 ? filteredData : tableData;
-    const totalClicks = data.reduce((sum, item) => sum + item.clicked_count, 0);
-    const totalCount = data.reduce((sum, item) => sum + item.total_count, 0);
-    return { totalClicks, totalCount };
+    const totalClicks = data.reduce((sum, item) => sum + (item.clicked_count || 0), 0);
+    const totalDelivery = data.reduce((sum, item) => sum + (item.delivery_count || 0), 0);
+    const totalSeen = data.reduce((sum, item) => sum + (item.seen_count || 0), 0);
+    const totalCount = data.length > 0 ? data[0].total_count : 0; // Assuming same total_count for all entries
+    return { totalClicks, totalDelivery, totalSeen, totalCount };
   };
 
-  const { totalClicks, totalCount } = getTotalStats();
+  const { totalClicks, totalDelivery, totalSeen, totalCount } = getTotalStats();
 
   return (
     <div className="container-fluid p-4">
       <div className="row">
         <div className="col-12">
           <h1 className="mb-4 text-primary">Campaign Reports</h1>
-          
+
           {/* Campaign Dropdown */}
           <div className="mb-4">
             <label className="form-label fw-bold">Select Campaign</label>
@@ -116,7 +145,7 @@ const Campaign_reports = () => {
               value={selectedCampaign}
               onChange={handleCampaignChange}
               className="form-select"
-              style={{ maxWidth: '400px' }}
+              style={{ maxWidth: "400px" }}
             >
               <option value="">Select a campaign...</option>
               {campaigns.map((campaign, index) => (
@@ -154,29 +183,71 @@ const Campaign_reports = () => {
           {/* Summary Stats */}
           {tableData.length > 0 && (
             <div className="row mb-4">
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <div className="card border-primary">
                   <div className="card-body text-center">
-                    <h5 className="card-title text-primary">Total Messages</h5>
-                    <h2 className="card-text text-primary fw-bold">{totalCount}</h2>
+                    <h6 className="card-title text-primary">Total Campaign Count</h6>
+                    <h3 className="card-text text-primary fw-bold">
+                      {totalCount}
+                    </h3>
                   </div>
                 </div>
               </div>
-              <div className="col-md-4">
-                <div className="card border-success">
-                  <div className="card-body text-center">
-                    <h5 className="card-title text-success">Total Clicks</h5>
-                    <h2 className="card-text text-success fw-bold">{totalClicks}</h2>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <div className="card border-info">
                   <div className="card-body text-center">
-                    <h5 className="card-title text-info">Click Rate</h5>
-                    <h2 className="card-text text-info fw-bold">
-                      {calculateClickRate(totalClicks, totalCount)}%
-                    </h2>
+                    <h6 className="card-title text-info">Total Delivered</h6>
+                    <h3 className="card-text text-info fw-bold">
+                      {totalDelivery}
+                    </h3>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-3">
+                <div className="card border-warning">
+                  <div className="card-body text-center">
+                    <h6 className="card-title text-warning">Total Seen</h6>
+                    <h3 className="card-text text-warning fw-bold">
+                      {totalSeen}
+                    </h3>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-3">
+                <div className="card border-success">
+                  <div className="card-body text-center">
+                    <h6 className="card-title text-success">Total Clicks</h6>
+                    <h3 className="card-text text-success fw-bold">
+                      {totalClicks}
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Additional Stats Row */}
+          {tableData.length > 0 && (
+            <div className="row mb-4">
+              <div className="col-md-6">
+                <div className="card border-success">
+                  <div className="card-body text-center">
+                    <h6 className="card-title text-success">Overall Click Rate</h6>
+                    <h3 className="card-text text-success fw-bold">
+                      {calculateClickRate(totalClicks, totalDelivery)}%
+                    </h3>
+                    <small className="text-muted">Clicks / Delivered</small>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div className="card border-warning">
+                  <div className="card-body text-center">
+                    <h6 className="card-title text-warning">Overall Seen Rate</h6>
+                    <h3 className="card-text text-warning fw-bold">
+                      {calculateSeenRate(totalSeen, totalDelivery)}%
+                    </h3>
+                    <small className="text-muted">Seen / Delivered</small>
                   </div>
                 </div>
               </div>
@@ -197,7 +268,7 @@ const Campaign_reports = () => {
           {!loading && (filteredData.length > 0 || tableData.length > 0) && (
             <div className="card">
               <div className="card-header">
-                <h5 className="card-title mb-0">Campaign Data</h5>
+                <h5 className="card-title mb-0">Campaign Data - All Metrics</h5>
               </div>
               <div className="card-body p-0">
                 <div className="table-responsive">
@@ -205,48 +276,112 @@ const Campaign_reports = () => {
                     <thead className="table-dark">
                       <tr>
                         <th scope="col">Date</th>
-                        <th scope="col">Total Messages Sent</th>
-                        <th scope="col">Messages Url Clicks</th>
+                        {/* <th scope="col">Total Count</th> */}
+                        <th scope="col">Delivered</th>
+                        <th scope="col">Seen</th>
+                        <th scope="col">Clicked</th>
                         <th scope="col">Click Rate</th>
+                        <th scope="col">Seen Rate</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {(filteredData.length > 0 ? filteredData : tableData).map((item, index) => (
-                        <tr key={index}>
-                          <td className="fw-medium">
-                            {new Date(item.date).toLocaleDateString()}
-                          </td>
-                          <td>
-                            <span className="badge bg-primary fs-6">
-                              {item.total_count}
-                            </span>
-                          </td>
-                          <td>
-                            <span className="badge bg-success fs-6">
-                              {item.clicked_count}
-                            </span>
-                          </td>
-                          <td>
-                            <div className="d-flex align-items-center">
-                              <div className="progress me-2" style={{ width: '100px', height: '8px' }}>
+                      {(filteredData.length > 0 ? filteredData : tableData).map(
+                        (item, index) => (
+                          <tr key={index}>
+                            <td className="fw-medium">
+                              {new Date(item.date).toLocaleDateString()}
+                            </td>
+                            {/* <td>
+                              <span className="badge bg-primary fs-6">
+                                {item.total_count || 0}
+                              </span>
+                            </td> */}
+                            <td>
+                              <span className="badge bg-info fs-6">
+                                {item.delivery_count || 0}
+                              </span>
+                            </td>
+                            <td>
+                              <span className="badge bg-warning fs-6">
+                                {item.seen_count || 0}
+                              </span>
+                            </td>
+                            <td>
+                              <span className="badge bg-success fs-6">
+                                {item.clicked_count || 0}
+                              </span>
+                            </td>
+                            <td>
+                              <div className="d-flex align-items-center">
                                 <div
-                                  className="progress-bar bg-info"
-                                  role="progressbar"
-                                  style={{
-                                    width: `${Math.min(calculateClickRate(item.clicked_count, item.total_count), 100)}%`
-                                  }}
-                                  aria-valuenow={calculateClickRate(item.clicked_count, item.total_count)}
-                                  aria-valuemin="0"
-                                  aria-valuemax="100"
-                                ></div>
+                                  className="progress me-2"
+                                  style={{ width: "80px", height: "8px" }}
+                                >
+                                  <div
+                                    className="progress-bar bg-success"
+                                    role="progressbar"
+                                    style={{
+                                      width: `${Math.min(
+                                        calculateClickRate(
+                                          item.clicked_count,
+                                          item.delivery_count
+                                        ),
+                                        100
+                                      )}%`,
+                                    }}
+                                    aria-valuenow={calculateClickRate(
+                                      item.clicked_count,
+                                      item.delivery_count
+                                    )}
+                                    aria-valuemin="0"
+                                    aria-valuemax="100"
+                                  ></div>
+                                </div>
+                                <small className="fw-medium">
+                                  {calculateClickRate(
+                                    item.clicked_count,
+                                    item.delivery_count
+                                  )}%
+                                </small>
                               </div>
-                              <small className="fw-medium">
-                                {calculateClickRate(item.clicked_count, item.total_count)}%
-                              </small>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
+                            </td>
+                            <td>
+                              <div className="d-flex align-items-center">
+                                <div
+                                  className="progress me-2"
+                                  style={{ width: "80px", height: "8px" }}
+                                >
+                                  <div
+                                    className="progress-bar bg-warning"
+                                    role="progressbar"
+                                    style={{
+                                      width: `${Math.min(
+                                        calculateSeenRate(
+                                          item.seen_count,
+                                          item.delivery_count
+                                        ),
+                                        100
+                                      )}%`,
+                                    }}
+                                    aria-valuenow={calculateSeenRate(
+                                      item.seen_count,
+                                      item.delivery_count
+                                    )}
+                                    aria-valuemin="0"
+                                    aria-valuemax="100"
+                                  ></div>
+                                </div>
+                                <small className="fw-medium">
+                                  {calculateSeenRate(
+                                    item.seen_count,
+                                    item.delivery_count
+                                  )}%
+                                </small>
+                              </div>
+                            </td>
+                          </tr>
+                        )
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -258,7 +393,9 @@ const Campaign_reports = () => {
           {!loading && selectedCampaign && tableData.length === 0 && (
             <div className="alert alert-info text-center" role="alert">
               <h5 className="alert-heading">No Data Available</h5>
-              <p className="mb-0">No data available for the selected campaign</p>
+              <p className="mb-0">
+                No data available for the selected campaign
+              </p>
             </div>
           )}
 
@@ -282,7 +419,8 @@ const Campaign_reports = () => {
           {tableData.length > 0 && (
             <div className="mt-3">
               <small className="text-muted">
-                Showing {filteredData.length} records sorted by date ({sortOrder === "desc" ? "newest first" : "oldest first"})
+                Showing {filteredData.length} records sorted by date (
+                {sortOrder === "desc" ? "newest first" : "oldest first"})
               </small>
             </div>
           )}
