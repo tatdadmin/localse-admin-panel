@@ -14,6 +14,7 @@ import AgentPanel from "../Agent Panel/AgentPanel";
 import ServiceProvidersMap from "../service providers map/ServiceProvidersMap";
 import RegistrationFromAdmin from "../Agent Panel/RegistrationFromAdmin";
 import Campaign_reports from "../reports/camaignReports";
+import BlogPanel from "../Blogs/BlogPanel";
 
 // Menu bar icon component
 const MenuIcon = ({ onClick }) => (
@@ -247,15 +248,11 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
           Registration From Admin
         </div>
 
-
-
         <div
           style={{
             ...styles.menuItem,
-            backgroundColor: 
-              selectedComponent === "Campaign_reports"
-                ? "#f2b4ae"
-                : "white",
+            backgroundColor:
+              selectedComponent === "Campaign_reports" ? "#f2b4ae" : "white",
           }}
           onClick={() => {
             onSelect("Campaign_reports");
@@ -264,12 +261,28 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
           onMouseOver={(e) => (e.target.style.background = "#ddd")}
           onMouseOut={(e) =>
             (e.target.style.background =
-              selectedComponent === "Campaign_reports"
-                ? "#f2b4ae"
-                : "white")
+              selectedComponent === "Campaign_reports" ? "#f2b4ae" : "white")
           }
         >
-Campaign Reports
+          Campaign Reports
+        </div>
+        <div
+          style={{
+            ...styles.menuItem,
+            backgroundColor:
+              selectedComponent === "BlogPanel" ? "#f2b4ae" : "white",
+          }}
+          onClick={() => {
+            onSelect("BlogPanel");
+            if (window.innerWidth <= 768) onClose();
+          }}
+          onMouseOver={(e) => (e.target.style.background = "#ddd")}
+          onMouseOut={(e) =>
+            (e.target.style.background =
+              selectedComponent === "BlogPanel" ? "#f2b4ae" : "white")
+          }
+        >
+          Blog Panel
         </div>
       </div>
     </div>
@@ -682,6 +695,8 @@ const Dashboard = () => {
             <RegistrationFromAdmin />
           ) : selectedComponent == "Campaign_reports" ? (
             <Campaign_reports />
+          ) : selectedComponent == "BlogPanel" ? (
+            <BlogPanel />
           ) : (
             <NotificationList onOpen={openModal} />
           )}

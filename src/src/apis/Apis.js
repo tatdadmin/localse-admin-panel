@@ -252,3 +252,19 @@ export const GET_CAMPAIGN_DATA = (BODY) => {
     {}
   );
 };
+export const GET_BLOGS = () => {
+  return fetchService("GET", "blog/get-all-blogs", {}, {});
+};
+
+export const CREATE_BLOG = (BODY) => {
+  return fetchService("POST", "blog/create-blog",BODY, {});
+};
+
+export const DELETE_BLOG = (id) => {
+  return fetchService("DELETE", `blog/delete-blog-by-id/${id}`,{}, {});
+};
+
+export const UPDATE_BLOG = (id,BODY) => {
+  return fetchService("PUT", `blog/update-blog/${id}`,BODY, {});
+};
+

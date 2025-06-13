@@ -79,8 +79,8 @@ const fetchService = async (method, path, body = {}, headers = {}) => {
           ...(isFormData ? {} : { "Content-Type": "application/json" }),
         },
       });
-  
-      if (response?.data?.status_code === 200) {
+  // console.log(response,"API")
+      if (response?.status == 200 || response?.status == 201) {
         return response.data;
       } else {
         throw new Error(response.data?.message || "Request failed.");
