@@ -157,8 +157,8 @@ const BlogPanel = () => {
       year: "numeric",
       month: "short",
       day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
+    //   hour: "2-digit",
+    //   minute: "2-digit",
       hour12: false, // <--- forces 24-hour time
     });
   };
