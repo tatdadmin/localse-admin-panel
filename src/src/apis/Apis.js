@@ -268,3 +268,7 @@ export const UPDATE_BLOG = (id,BODY) => {
   return fetchService("PUT", `blog/update-blog/${id}`,BODY, {});
 };
 
+
+export const INSTALLATION_REPORTS = (BODY) => {
+  return fetchService("POST", `admin_panel/Person-onboarding-report`,BODY, {});
+};

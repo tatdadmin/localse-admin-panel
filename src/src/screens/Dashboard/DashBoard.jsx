@@ -15,6 +15,7 @@ import ServiceProvidersMap from "../service providers map/ServiceProvidersMap";
 import RegistrationFromAdmin from "../Agent Panel/RegistrationFromAdmin";
 import Campaign_reports from "../reports/camaignReports";
 import BlogPanel from "../Blogs/BlogPanel";
+import InstallationReport from "../reports/InstallationReport";
 
 // Menu bar icon component
 const MenuIcon = ({ onClick }) => (
@@ -283,6 +284,24 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
           }
         >
           Blog Panel
+        </div>
+        <div
+          style={{
+            ...styles.menuItem,
+            backgroundColor:
+              selectedComponent === "installationReport" ? "#f2b4ae" : "white",
+          }}
+          onClick={() => {
+            onSelect("installationReport");
+            if (window.innerWidth <= 768) onClose();
+          }}
+          onMouseOver={(e) => (e.target.style.background = "#ddd")}
+          onMouseOut={(e) =>
+            (e.target.style.background =
+              selectedComponent === "installationReport" ? "#f2b4ae" : "white")
+          }
+        >
+          Installation Report
         </div>
       </div>
     </div>
@@ -697,7 +716,7 @@ const Dashboard = () => {
             <Campaign_reports />
           ) : selectedComponent == "BlogPanel" ? (
             <BlogPanel />
-          ) : (
+          ) : selectedComponent=="installationReport"?<InstallationReport/>:(
             <NotificationList onOpen={openModal} />
           )}
         </div>
