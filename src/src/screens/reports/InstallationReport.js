@@ -12,7 +12,7 @@ const InstallationReport = () => {
       const res = await INSTALLATION_REPORTS({
         target_area_code: areaCode,
       });
-      
+
       if (res.status_code === 200 && res.data) {
         setReportData(res.data);
       }
@@ -38,7 +38,46 @@ const InstallationReport = () => {
       <div className="row">
         <div className="col-12">
           <h3 className="mb-3">Installation Report</h3>
-          
+          {reportData.length > 0 && (
+            <div className="row mt-4">
+              <div className="col-md-4">
+                <div className="card text-center">
+                  <div className="card-body">
+                    <h5 className="card-title">Total Onboarding</h5>
+                    <h2 className="text-primary">
+                      {reportData.reduce(
+                        (sum, item) => sum + item.onboarding,
+                        0
+                      )}
+                    </h2>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="card text-center">
+                  <div className="card-body">
+                    <h5 className="card-title">Total Installations</h5>
+                    <h2 className="text-success">
+                      {reportData.reduce(
+                        (sum, item) => sum + item.installation,
+                        0
+                      )}
+                    </h2>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="card text-center">
+                  <div className="card-body">
+                    <h5 className="card-title">Total Clicks</h5>
+                    <h2 className="text-info">
+                      {reportData.reduce((sum, item) => sum + item.clicks, 0)}
+                    </h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
           {/* Dropdown for Target Area */}
           <div className="mb-3">
             <label htmlFor="targetAreaSelect" className="form-label">
@@ -52,7 +91,7 @@ const InstallationReport = () => {
               style={{ width: "200px" }}
             >
               <option value="1">Target Area 1</option>
-              <option value="">None</option>
+              <option value="None">None</option>
             </select>
           </div>
 
@@ -93,9 +132,7 @@ const InstallationReport = () => {
                           </span>
                         </td>
                         <td>
-                          <span className="badge bg-info">
-                            {item.clicks}
-                          </span>
+                          <span className="badge bg-info">{item.clicks}</span>
                         </td>
                       </tr>
                     ))
@@ -112,40 +149,7 @@ const InstallationReport = () => {
           )}
 
           {/* Summary Cards */}
-          {reportData.length > 0 && (
-            <div className="row mt-4">
-              <div className="col-md-4">
-                <div className="card text-center">
-                  <div className="card-body">
-                    <h5 className="card-title">Total Onboarding</h5>
-                    <h2 className="text-primary">
-                      {reportData.reduce((sum, item) => sum + item.onboarding, 0)}
-                    </h2>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="card text-center">
-                  <div className="card-body">
-                    <h5 className="card-title">Total Installations</h5>
-                    <h2 className="text-success">
-                      {reportData.reduce((sum, item) => sum + item.installation, 0)}
-                    </h2>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="card text-center">
-                  <div className="card-body">
-                    <h5 className="card-title">Total Clicks</h5>
-                    <h2 className="text-info">
-                      {reportData.reduce((sum, item) => sum + item.clicks, 0)}
-                    </h2>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+         
         </div>
       </div>
     </div>
