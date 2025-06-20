@@ -16,6 +16,7 @@ import RegistrationFromAdmin from "../Agent Panel/RegistrationFromAdmin";
 import Campaign_reports from "../reports/camaignReports";
 import BlogPanel from "../Blogs/BlogPanel";
 import InstallationReport from "../reports/InstallationReport";
+import Videos from "../Videos/Videos";
 
 // Menu bar icon component
 const MenuIcon = ({ onClick }) => (
@@ -26,8 +27,7 @@ const MenuIcon = ({ onClick }) => (
   </div>
 );
 
-const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
-  // Combine base sidebar styles with conditional mobile styles
+const SideBar = ({ onSelect, selectedComponent, isOpen, onClose, access = {} }) => {
   const sidebarStyle = {
     ...styles.sidebar,
     ...(window.innerWidth <= 768 && {
@@ -38,6 +38,23 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
       height: "100%",
     }),
   };
+
+  const menuItems = [
+    { key: "notice", label: "Notice" },
+    { key: "notification", label: "Notification" },
+    { key: "reports", label: "Reports" },
+    { key: "services", label: "Services" },
+    { key: "free_onboarding_report", label: "Free OnBoarding Report" },
+    { key: "agent_reports", label: "Agent Reports" },
+    { key: "service_provider_clicks", label: "Service Provider Clicks" },
+    { key: "free_onboarding_hourly_reports", label: "Free Onboarding Hourly Reports" },
+    { key: "service_providers_map", label: "Service Providers Map" },
+    { key: "registration_from_admin", label: "Registration From Admin" },
+    { key: "campaign_reports", label: "Campaign Reports" },
+    { key: "blog_panel", label: "Blog Panel" },
+    { key: "installation_report", label: "Installation Report" },
+    { key: "video_panel", label: "Video Panel" },
+  ];
 
   return (
     <div style={sidebarStyle}>
@@ -50,259 +67,32 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose }) => {
         )}
       </div>
       <div style={styles.menu}>
-        <div
-          style={{
-            ...styles.menuItem,
-            backgroundColor:
-              selectedComponent === "notice" ? "#f8f9fa" : "white",
-          }}
-          onClick={() => {
-            onSelect("notice");
-            if (window.innerWidth <= 768) onClose();
-          }}
-          onMouseOver={(e) => (e.target.style.background = "#ddd")}
-          onMouseOut={(e) =>
-            (e.target.style.background =
-              selectedComponent === "notice" ? "#f8f9fa" : "white")
-          }
-        >
-          Notice
-        </div>
-        <div
-          style={{
-            ...styles.menuItem,
-            backgroundColor:
-              selectedComponent === "notification" ? "#f8f9fa" : "white",
-          }}
-          onClick={() => {
-            onSelect("notification");
-            if (window.innerWidth <= 768) onClose();
-          }}
-          onMouseOver={(e) => (e.target.style.background = "#ddd")}
-          onMouseOut={(e) =>
-            (e.target.style.background =
-              selectedComponent === "notification" ? "#f2b4ae" : "white")
-          }
-        >
-          Notification
-        </div>
+        {menuItems.map(({ key, label }) => {
+          // Only show if access is granted
+          if (access[key] !== "1") return null;
 
-        <div
-          style={{
-            ...styles.menuItem,
-            backgroundColor:
-              selectedComponent === "reports" ? "#f2b4ae" : "white",
-          }}
-          onClick={() => {
-            onSelect("reports");
-            if (window.innerWidth <= 768) onClose();
-          }}
-          onMouseOver={(e) => (e.target.style.background = "#ddd")}
-          onMouseOut={(e) =>
-            (e.target.style.background =
-              selectedComponent === "reports" ? "#f2b4ae" : "white")
-          }
-        >
-          Reports
-        </div>
-        <div
-          style={{
-            ...styles.menuItem,
-            backgroundColor:
-              selectedComponent === "services" ? "#f2b4ae" : "white",
-          }}
-          onClick={() => {
-            onSelect("services");
-            if (window.innerWidth <= 768) onClose();
-          }}
-          onMouseOver={(e) => (e.target.style.background = "#ddd")}
-          onMouseOut={(e) =>
-            (e.target.style.background =
-              selectedComponent === "services" ? "#f2b4ae" : "white")
-          }
-        >
-          Services
-        </div>
-        <div
-          style={{
-            ...styles.menuItem,
-            backgroundColor:
-              selectedComponent === "freeOnBoarding" ? "#f2b4ae" : "white",
-          }}
-          onClick={() => {
-            onSelect("freeOnBoarding");
-            if (window.innerWidth <= 768) onClose();
-          }}
-          onMouseOver={(e) => (e.target.style.background = "#ddd")}
-          onMouseOut={(e) =>
-            (e.target.style.background =
-              selectedComponent === "freeOnBoarding" ? "#f2b4ae" : "white")
-          }
-        >
-          Free OnBoarding Report
-        </div>
+          const isSelected = selectedComponent === key;
 
-        <div
-          style={{
-            ...styles.menuItem,
-            backgroundColor:
-              selectedComponent === "agentReports" ? "#f2b4ae" : "white",
-          }}
-          onClick={() => {
-            onSelect("agentReports");
-            if (window.innerWidth <= 768) onClose();
-          }}
-          onMouseOver={(e) => (e.target.style.background = "#ddd")}
-          onMouseOut={(e) =>
-            (e.target.style.background =
-              selectedComponent === "agentReports" ? "#f2b4ae" : "white")
-          }
-        >
-          Agent Reports
-        </div>
-
-        <div
-          style={{
-            ...styles.menuItem,
-            backgroundColor:
-              selectedComponent === "serviceProviderClicks"
-                ? "#f2b4ae"
-                : "white",
-          }}
-          onClick={() => {
-            onSelect("serviceProviderClicks");
-            if (window.innerWidth <= 768) onClose();
-          }}
-          onMouseOver={(e) => (e.target.style.background = "#ddd")}
-          onMouseOut={(e) =>
-            (e.target.style.background =
-              selectedComponent === "serviceProviderClicks"
-                ? "#f2b4ae"
-                : "white")
-          }
-        >
-          Service Provider Clicks
-        </div>
-
-        <div
-          style={{
-            ...styles.menuItem,
-            backgroundColor:
-              selectedComponent === "FreeOnboardingHourlyReport"
-                ? "#f2b4ae"
-                : "white",
-          }}
-          onClick={() => {
-            onSelect("FreeOnboardingHourlyReport");
-            if (window.innerWidth <= 768) onClose();
-          }}
-          onMouseOver={(e) => (e.target.style.background = "#ddd")}
-          onMouseOut={(e) =>
-            (e.target.style.background =
-              selectedComponent === "FreeOnboardingHourlyReport"
-                ? "#f2b4ae"
-                : "white")
-          }
-        >
-          Free Onboarding Hourly Reports
-        </div>
-
-        <div
-          style={{
-            ...styles.menuItem,
-            backgroundColor:
-              selectedComponent === "serviceProvidersMap" ? "#f2b4ae" : "white",
-          }}
-          onClick={() => {
-            onSelect("serviceProvidersMap");
-            if (window.innerWidth <= 768) onClose();
-          }}
-          onMouseOver={(e) => (e.target.style.background = "#ddd")}
-          onMouseOut={(e) =>
-            (e.target.style.background =
-              selectedComponent === "serviceProvidersMap" ? "#f2b4ae" : "white")
-          }
-        >
-          Service Providers Map
-        </div>
-
-        <div
-          style={{
-            ...styles.menuItem,
-            backgroundColor:
-              selectedComponent === "RegistrationFromAdmin"
-                ? "#f2b4ae"
-                : "white",
-          }}
-          onClick={() => {
-            onSelect("RegistrationFromAdmin");
-            if (window.innerWidth <= 768) onClose();
-          }}
-          onMouseOver={(e) => (e.target.style.background = "#ddd")}
-          onMouseOut={(e) =>
-            (e.target.style.background =
-              selectedComponent === "RegistrationFromAdmin"
-                ? "#f2b4ae"
-                : "white")
-          }
-        >
-          Registration From Admin
-        </div>
-
-        <div
-          style={{
-            ...styles.menuItem,
-            backgroundColor:
-              selectedComponent === "Campaign_reports" ? "#f2b4ae" : "white",
-          }}
-          onClick={() => {
-            onSelect("Campaign_reports");
-            if (window.innerWidth <= 768) onClose();
-          }}
-          onMouseOver={(e) => (e.target.style.background = "#ddd")}
-          onMouseOut={(e) =>
-            (e.target.style.background =
-              selectedComponent === "Campaign_reports" ? "#f2b4ae" : "white")
-          }
-        >
-          Campaign Reports
-        </div>
-        <div
-          style={{
-            ...styles.menuItem,
-            backgroundColor:
-              selectedComponent === "BlogPanel" ? "#f2b4ae" : "white",
-          }}
-          onClick={() => {
-            onSelect("BlogPanel");
-            if (window.innerWidth <= 768) onClose();
-          }}
-          onMouseOver={(e) => (e.target.style.background = "#ddd")}
-          onMouseOut={(e) =>
-            (e.target.style.background =
-              selectedComponent === "BlogPanel" ? "#f2b4ae" : "white")
-          }
-        >
-          Blog Panel
-        </div>
-        <div
-          style={{
-            ...styles.menuItem,
-            backgroundColor:
-              selectedComponent === "installationReport" ? "#f2b4ae" : "white",
-          }}
-          onClick={() => {
-            onSelect("installationReport");
-            if (window.innerWidth <= 768) onClose();
-          }}
-          onMouseOver={(e) => (e.target.style.background = "#ddd")}
-          onMouseOut={(e) =>
-            (e.target.style.background =
-              selectedComponent === "installationReport" ? "#f2b4ae" : "white")
-          }
-        >
-          Installation Report
-        </div>
+          return (
+            <div
+              key={key}
+              style={{
+                ...styles.menuItem,
+                backgroundColor: isSelected ? "#f2b4ae" : "white",
+              }}
+              onClick={() => {
+                onSelect(key);
+                if (window.innerWidth <= 768) onClose();
+              }}
+              onMouseOver={(e) => (e.target.style.background = "#ddd")}
+              onMouseOut={(e) =>
+                (e.target.style.background = isSelected ? "#f2b4ae" : "white")
+              }
+            >
+              {label}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -315,7 +105,7 @@ const Header = ({ toggleSidebar }) => {
     dispatch(logoutUser());
   };
   const user = useSelector((e) => e?.userAuth?.userAllData);
-  // console.log(user, "ferwf");
+  console.log(user, "ferwf");
   return (
     <div style={styles.header}>
       {window.innerWidth <= 768 && <MenuIcon onClick={toggleSidebar} />}
@@ -682,12 +472,30 @@ const Dashboard = () => {
     return <div style={styles.overlay} onClick={onClose} />;
   };
 
+  const user = useSelector((e) => e?.userAuth?.userAllData);
+  console.log(user?.access,"storedaatat")
+  const componentMap = {
+    notice: <NoticeList onOpen={openModal} />,
+    reports: <DateWiseCount />,
+    services: <AddServices />,
+    freeOnBoarding: <FreeOnBoarding />,
+    agentReports: <AgentReports />,
+    serviceProviderClicks: <ServiceProviderClicks />,
+    FreeOnboardingHourlyReport: <HourlyFreeOnboardReport />,
+    serviceProvidersMap: <ServiceProvidersMap />,
+    RegistrationFromAdmin: <RegistrationFromAdmin />,
+    Campaign_reports: <Campaign_reports />,
+    BlogPanel: <BlogPanel />,
+    installationReport: <InstallationReport />,
+    VideoPanel: <Videos />,
+  };
   return (
     <div style={styles.container}>
       <SideBar
         onSelect={setSelectedComponent}
         selectedComponent={selectedComponent}
         isOpen={sidebarOpen}
+        access={user?.access}
         onClose={() => setSidebarOpen(false)}
       />
       <Overlay isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -700,24 +508,28 @@ const Dashboard = () => {
             <DateWiseCount />
           ) : selectedComponent === "services" ? (
             <AddServices />
-          ) : selectedComponent === "freeOnBoarding" ? (
+          ) : selectedComponent === "free_onboarding_report" ? (
             <FreeOnBoarding />
-          ) : selectedComponent === "agentReports" ? (
+          ) : selectedComponent === "agent_reports" ? (
             <AgentReports />
-          ) : selectedComponent === "serviceProviderClicks" ? (
+          ) : selectedComponent === "service_provider_clicks" ? (
             <ServiceProviderClicks />
-          ) : selectedComponent == "FreeOnboardingHourlyReport" ? (
+          ) : selectedComponent == "free_onboarding_hourly_reports" ? (
             <HourlyFreeOnboardReport />
-          ) : selectedComponent == "serviceProvidersMap" ? (
+          ) : selectedComponent == "service_providers_map" ? (
             <ServiceProvidersMap />
-          ) : selectedComponent == "RegistrationFromAdmin" ? (
+          ) : selectedComponent == "registration_from_admin" ? (
             <RegistrationFromAdmin />
-          ) : selectedComponent == "Campaign_reports" ? (
+          ) : selectedComponent == "campaign_reports" ? (
             <Campaign_reports />
-          ) : selectedComponent == "BlogPanel" ? (
+          ) : selectedComponent == "blog_panel" ? (
             <BlogPanel />
-          ) : selectedComponent=="installationReport"?<InstallationReport/>:(
-            <NotificationList onOpen={openModal} />
+          ) : selectedComponent == "installation_report" ? (
+            <InstallationReport />
+          ) : selectedComponent == "video_panel" ? (
+            <Videos />
+          ) : selectedComponent=="notification"?<NotificationList/>:(
+            <></>
           )}
         </div>
       </div>

@@ -272,3 +272,30 @@ export const UPDATE_BLOG = (id,BODY) => {
 export const INSTALLATION_REPORTS = (BODY) => {
   return fetchService("POST", `admin_panel/Person-onboarding-report`,BODY, {});
 };
+
+export const ADD_VIDEO_IN_ADMIN_PANEL = (BODY) => {
+  return fetchService("POST", `admin_panel/add-video-in-customer-page`,BODY, {});
+};
+
+
+export const GET_ALL_VIDEOS = () => {
+  return fetchService("GET", `admin_panel/get-all-video-in-customer-section`,{}, {});
+};
+
+
+export const UPDATE_VIDEO = (body) => {
+  console.log(body,"UPDATE_VIDEO")
+  return fetchService("POST", `admin_panel/add-video-in-customer-page`,body, {});
+};
+
+export const DELETE_VIDEO = (body) => {
+  return fetchService("POST", `admin_panel/delete-video-customer-section`,body, {});
+};
+
+
+
+
+
+
+
+
