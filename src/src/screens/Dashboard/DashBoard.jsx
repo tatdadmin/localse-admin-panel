@@ -402,11 +402,20 @@ const Modal = ({ isOpen, onClose, type, onSubmit }) => {
 };
 
 const Dashboard = () => {
-  const [selectedComponent, setSelectedComponent] = useState("notice");
+  const [selectedComponent, setSelectedComponent] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState("notice");
   const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const user = useSelector((e) => e?.userAuth?.userAllData);
+  console.log(user,"userrr")
+  useEffect(()=>{
+const userAccess = Object.entries(user?.access)
+
+const firstKeyWithValue1 = Object.keys(user?.access).find(key => user?.access[key] === "1");
+// console.log(firstKeyWithValue1)
+setSelectedComponent(firstKeyWithValue1)
+  },[])
 
   // Handle window resize
   useEffect(() => {
@@ -472,7 +481,7 @@ const Dashboard = () => {
     return <div style={styles.overlay} onClick={onClose} />;
   };
 
-  const user = useSelector((e) => e?.userAuth?.userAllData);
+  // const user = useSelector((e) => e?.userAuth?.userAllData);
   console.log(user?.access,"storedaatat")
   const componentMap = {
     notice: <NoticeList onOpen={openModal} />,
