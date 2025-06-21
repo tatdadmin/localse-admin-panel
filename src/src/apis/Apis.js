@@ -295,6 +295,9 @@ export const INSTALLATION_REPORTS_BY_USER = (body) => {
   return fetchService("POST", `admin_panel/Person-onboarding-report-for-given-date`,body, {});
 };
 
+export const CHANGE_SERVICE_PROVIDER_NUMBER = (body) => {
+  return fetchService("POST", `admin_panel/update-service-provider-mobile-number`,body, {});
+};
 
 
 
