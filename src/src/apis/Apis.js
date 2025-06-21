@@ -291,6 +291,10 @@ export const UPDATE_VIDEO = (body) => {
 export const DELETE_VIDEO = (body) => {
   return fetchService("POST", `admin_panel/delete-video-customer-section`,body, {});
 };
+export const INSTALLATION_REPORTS_BY_USER = (body) => {
+  return fetchService("POST", `admin_panel/Person-onboarding-report-for-given-date`,body, {});
+};
+
 
 
 
