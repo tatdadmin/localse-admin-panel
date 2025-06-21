@@ -22,6 +22,7 @@ const InstallationReport = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [verifiedFilter, setVerifiedFilter] = useState("all");
   const [installedFilter, setInstalledFilter] = useState("all");
+  const[allData,setAllData]=useState({})
 
   const getReport = async (areaCode) => {
     setLoading(true);
@@ -32,6 +33,8 @@ const InstallationReport = () => {
 
       if (res.status_code === 200 && res.data) {
         setReportData(res.data);
+        setAllData(res)
+
       }
       console.log(res);
     } catch (error) {
@@ -187,10 +190,10 @@ const InstallationReport = () => {
           {/* Summary Cards */}
           {reportData.length > 0 && (
             <div className="row mt-4">
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <div className="card text-center">
                   <div className="card-body">
-                    <h5 className="card-title">Total Onboarding</h5>
+                    <h5 className="card-title">Last 20 Days Onboardings</h5>
                     <h2 className="text-primary">
                       {reportData.reduce(
                         (sum, item) => sum + item.onboarding,
@@ -200,15 +203,41 @@ const InstallationReport = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <div className="card text-center">
                   <div className="card-body">
-                    <h5 className="card-title">Total Installations</h5>
+                    <h5 className="card-title">Last 20 Days Total Installations</h5>
                     <h2 className="text-success">
                       {reportData.reduce(
                         (sum, item) => sum + item.installation,
                         0
                       )}
+                    </h2>
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-md-3">
+                <div className="card text-center">
+                  <div className="card-body">
+                    <h5 className="card-title">Total OnBoardings</h5>
+                    <h2 className="text-success">
+                      {
+                        allData?.total_count_onboarding_till_date
+                      }
+                    </h2>
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-md-3">
+                <div className="card text-center">
+                  <div className="card-body">
+                    <h5 className="card-title">Total Onboarding Count By Target Area Code</h5>
+                    <h2 className="text-success">
+                      {
+                        allData?.total_count_onboarding_by_target_area_code
+                      }
                     </h2>
                   </div>
                 </div>
