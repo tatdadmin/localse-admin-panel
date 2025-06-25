@@ -18,6 +18,7 @@ import BlogPanel from "../Blogs/BlogPanel";
 import InstallationReport from "../reports/InstallationReport";
 import Videos from "../Videos/Videos";
 import MasterAdmin from "../reports/MasterAdmin";
+import AppUpdate from "../reports/AppUpdate";
 
 // Menu bar icon component
 const MenuIcon = ({ onClick }) => (
@@ -56,6 +57,7 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose, access = {} }) 
     { key: "installation_report", label: "Installation Report" },
     { key: "video_panel", label: "Video Panel" },
     { key: "master_admin", label: "Master Admin" },
+    { key: "app_details", label: "App Update" },
   ];
 
   return (
@@ -540,7 +542,8 @@ setSelectedComponent(firstKeyWithValue1)
           ) : selectedComponent == "video_panel" ? (
             <Videos />
           ) : selectedComponent=="notification"?<NotificationList/>:
-          selectedComponent=="master_admin"?<MasterAdmin/>:(
+          selectedComponent=="master_admin"?<MasterAdmin/>:
+          selectedComponent=="app_details"?<AppUpdate/>:(
             <></>
           )}
         </div>

@@ -299,6 +299,11 @@ export const CHANGE_SERVICE_PROVIDER_NUMBER = (body) => {
   return fetchService("POST", `admin_panel/update-service-provider-mobile-number`,body, {});
 };
 
+export const APP_UPDATE = (body) => {
+  return fetchService("POST", `admin_panel/force-update-app-version`,body, {});
+};
+
+
 
 
 
