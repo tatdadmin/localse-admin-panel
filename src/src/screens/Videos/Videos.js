@@ -1,11 +1,24 @@
 import { useEffect, useState } from "react";
-import { Plus, Edit, Trash2, Eye, EyeOff, Youtube, Facebook, Instagram, Linkedin, X, Check } from "lucide-react";
+import {
+  Plus,
+  Edit,
+  Trash2,
+  Eye,
+  EyeOff,
+  Youtube,
+  Facebook,
+  Instagram,
+  Linkedin,
+  X,
+  Check,
+} from "lucide-react";
 
 // Import your actual API functions
 import {
   ADD_VIDEO_IN_ADMIN_PANEL,
   DELETE_VIDEO,
   GET_ALL_VIDEOS,
+  SERVICES_TYPE_LIST_SERVICE_PROVIDER,
   UPDATE_VIDEO,
 } from "../../apis/Apis";
 
@@ -23,6 +36,7 @@ const Videos = () => {
     social_links_instagram: "",
     social_links_linkedin: "",
     social_links_facebook: "",
+    service_type: "",
   });
 
   const getAllVideos = async () => {
@@ -30,6 +44,7 @@ const Videos = () => {
       setLoading(true);
       const res = await GET_ALL_VIDEOS();
       if (res.status_code === 200) {
+        console.log(res?.data);
         setVideos(res.data || []);
       }
     } catch (error) {
@@ -45,17 +60,17 @@ const Videos = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleTargetAreaChange = (e) => {
     const { value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      target_area_code: [value]
+      target_area_code: [value],
     }));
   };
 
@@ -76,16 +91,16 @@ const Videos = () => {
         await UPDATE_VIDEO({
           action: "update",
           _id: editingVideo._id,
-          ...formData
+          ...formData,
         });
       } else {
         // Create new video
         await ADD_VIDEO_IN_ADMIN_PANEL({
           action: "create",
-          ...formData
+          ...formData,
         });
       }
-      
+
       // Reset form and refresh videos
       resetForm();
       getAllVideos();
@@ -97,6 +112,7 @@ const Videos = () => {
 
   const handleEdit = (video) => {
     setEditingVideo(video);
+    console.log(video, "EDDD");
     setFormData({
       subject: video.subject,
       video_url: video.video_url,
@@ -106,6 +122,7 @@ const Videos = () => {
       social_links_instagram: video.social_links?.instagram || "",
       social_links_linkedin: video.social_links?.linkedin || "",
       social_links_facebook: video.social_links?.facebook || "",
+      service_type: video?.service_type,
     });
     setShowForm(true);
   };
@@ -138,19 +155,35 @@ const Videos = () => {
   };
 
   const getYouTubeThumbnail = (url) => {
-    const videoId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/);
-    return videoId ? `https://img.youtube.com/vi/${videoId[1]}/maxresdefault.jpg` : null;
+    const videoId = url.match(
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/
+    );
+    return videoId
+      ? `https://img.youtube.com/vi/${videoId[1]}/maxresdefault.jpg`
+      : null;
   };
+  const [allServices, setallServices] = useState([]);
+  const fetchServices = async () => {
+    try {
+      const res = await SERVICES_TYPE_LIST_SERVICE_PROVIDER();
+      // console.log(res, "SERVICES_TYPE_LIST_SERVICE_PROVIDER");
+      setallServices(res?.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    fetchServices();
+  }, []);
 
   return (
     <>
       {/* Bootstrap CSS CDN */}
-      <link 
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" 
-        rel="stylesheet" 
-      />
-      
-      <div className="container-fluid py-4" style={{ backgroundColor: '#f8f9fa', minHeight: '100vh' }}>
+
+      <div
+        className="container-fluid py-4"
+        style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}
+      >
         <div className="container">
           <div className="card shadow-sm">
             {/* Header */}
@@ -169,7 +202,10 @@ const Videos = () => {
 
             {/* Video Form Modal */}
             {showForm && (
-              <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+              <div
+                className="modal show d-block"
+                style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+              >
                 <div className="modal-dialog modal-lg modal-dialog-scrollable">
                   <div className="modal-content">
                     <div className="modal-header">
@@ -182,7 +218,7 @@ const Videos = () => {
                         onClick={resetForm}
                       ></button>
                     </div>
-                    
+
                     <div className="modal-body">
                       <div className="mb-3">
                         <label className="form-label fw-semibold">
@@ -201,7 +237,8 @@ const Videos = () => {
 
                       <div className="mb-3">
                         <label className="form-label fw-semibold">
-                          YouTube Video URL <span className="text-danger">*</span>
+                          YouTube Video URL{" "}
+                          <span className="text-danger">*</span>
                         </label>
                         <input
                           type="url"
@@ -243,10 +280,29 @@ const Videos = () => {
                         </select>
                       </div>
 
+                      <div className="mb-3">
+                        <label className="form-label fw-semibold">
+                          Service Type
+                        </label>
+                        <select
+                          name="service_type"
+                          value={formData.service_type}
+                          onChange={handleInputChange}
+                          className="form-select"
+                        >
+                          <option value="">None</option>
+                          {allServices?.map((e) => (
+                            <option key={e} value={e}>
+                              {e}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
                       {/* Social Links */}
                       <div className="border-top pt-3">
                         <h6 className="fw-semibold mb-3">Social Links</h6>
-                        
+
                         <div className="row">
                           <div className="col-md-6 mb-3">
                             <label className="form-label">YouTube</label>
@@ -298,7 +354,7 @@ const Videos = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="modal-footer">
                       <button
                         type="button"
@@ -332,7 +388,9 @@ const Videos = () => {
                 </div>
               ) : videos.length === 0 ? (
                 <div className="text-center py-5">
-                  <p className="text-muted">No videos found. Create your first video!</p>
+                  <p className="text-muted">
+                    No videos found. Create your first video!
+                  </p>
                 </div>
               ) : (
                 <div className="row g-4">
@@ -342,10 +400,13 @@ const Videos = () => {
                         {/* Video Thumbnail */}
                         <div className="position-relative">
                           <img
-                            src={getYouTubeThumbnail(video.video_url) || '/api/placeholder/400/225'}
+                            src={
+                              getYouTubeThumbnail(video.video_url) ||
+                              "/api/placeholder/400/225"
+                            }
                             alt={video.subject}
                             className="card-img-top"
-                            style={{ height: '200px', objectFit: 'cover' }}
+                            style={{ height: "200px", objectFit: "cover" }}
                           />
                           <div className="position-absolute top-0 end-0 m-2">
                             {video.view_status === "1" ? (
@@ -362,22 +423,28 @@ const Videos = () => {
 
                         {/* Video Info */}
                         <div className="card-body d-flex flex-column">
-                          <h5 className="card-title text-truncate" title={video.subject}>
+                          <h5
+                            className="card-title text-truncate"
+                            title={video.subject}
+                          >
                             {video.subject}
                           </h5>
-                          
+
                           <div className="text-muted small mb-3">
                             <div>Video ID: {video.video_id}</div>
-                            <div>Target Area: {video.target_area_code?.join(", ") || "None"}</div>
+                            <div>
+                              Target Area:{" "}
+                              {video.target_area_code?.join(", ") || "None"}
+                            </div>
                             <div>Views: {video.video_watch_count || 0}</div>
                           </div>
 
                           {/* Social Links */}
                           <div className="d-flex gap-2 mb-3">
                             {video.social_links?.youtube && (
-                              <a 
-                                href={video.social_links.youtube} 
-                                target="_blank" 
+                              <a
+                                href={video.social_links.youtube}
+                                target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-danger text-decoration-none"
                               >
@@ -385,9 +452,9 @@ const Videos = () => {
                               </a>
                             )}
                             {video.social_links?.facebook && (
-                              <a 
-                                href={video.social_links.facebook} 
-                                target="_blank" 
+                              <a
+                                href={video.social_links.facebook}
+                                target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-primary text-decoration-none"
                               >
@@ -395,23 +462,23 @@ const Videos = () => {
                               </a>
                             )}
                             {video.social_links?.instagram && (
-                              <a 
-                                href={video.social_links.instagram} 
-                                target="_blank" 
+                              <a
+                                href={video.social_links.instagram}
+                                target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-decoration-none"
-                                style={{ color: '#E4405F' }}
+                                style={{ color: "#E4405F" }}
                               >
                                 <Instagram size={20} />
                               </a>
                             )}
                             {video.social_links?.linkedin && (
-                              <a 
-                                href={video.social_links.linkedin} 
-                                target="_blank" 
+                              <a
+                                href={video.social_links.linkedin}
+                                target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-decoration-none"
-                                style={{ color: '#0077B5' }}
+                                style={{ color: "#0077B5" }}
                               >
                                 <Linkedin size={20} />
                               </a>
