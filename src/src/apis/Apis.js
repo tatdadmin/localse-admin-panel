@@ -303,6 +303,12 @@ export const APP_UPDATE = (body) => {
   return fetchService("POST", `admin_panel/force-update-app-version`,body, {});
 };
 
+export const SEND_SUBSCIPTION_MESSAGE = (body) => {
+  return fetchService("POST", `admin_panel/send-whatsapp-buy-subscription-message`,body, {});
+};
+
+
+
 
 
 

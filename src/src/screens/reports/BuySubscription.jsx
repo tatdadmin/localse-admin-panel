@@ -4,6 +4,8 @@ import { Phone, MapPin, Send, CheckCircle, AlertCircle } from "lucide-react";
 import { API_BASE_URL } from "../../constant/path";
 import { useSelector } from "react-redux";
 import store from "../../redux/store";
+import { SEND_SUBSCIPTION_MESSAGE } from "../../apis/Apis";
+import { data } from "react-router-dom";
 
 const BuySubscription = () => {
   const [mobileNumber, setMobileNumber] = useState("");
@@ -76,7 +78,11 @@ const BuySubscription = () => {
       };
 
       // Simulate API call
-      await new Promise((res) => setTimeout(res, 1500));
+      // await new Promise((res) => setTimeout(res, 1500));
+      const res = await SEND_SUBSCIPTION_MESSAGE({
+        ...payload
+      })
+      console.log(res)
 
       // Uncomment this when ready for real call:
       // await axios.post('http://your-api-endpoint/campaign/send', payload, {
