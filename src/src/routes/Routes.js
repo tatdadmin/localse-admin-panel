@@ -6,6 +6,7 @@ import Login from "../screens/Login/Login";
 import Dashboard from "../screens/Dashboard/DashBoard";
 import RegisterFreeOnboardingBusiness from "../screens/Agent Panel/RegisterFreeOnboardingBusiness";
 import LocalSELandingPage from "../screens/Whatsapp/LocalSELandingPage";
+import BuySubscription from "../screens/reports/BuySubscription";
 
 const NavRoutes = () => {
   return (
@@ -24,6 +25,11 @@ const NavRoutes = () => {
           path="/RegisterFreeOnboardingBusiness"
           element={<PrivateRoute Component={RegisterFreeOnboardingBusiness} />}
         />
+         <Route
+          path="/subscription_campaign"
+          element={<PrivateRoute Component={BuySubscription} />}
+        />
+        
       </Routes>
     </Router>
   );

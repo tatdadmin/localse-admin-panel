@@ -1,24 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Phone, MapPin, Send, CheckCircle, AlertCircle } from "lucide-react";
+import { Phone, MapPin, Send, CheckCircle, AlertCircle, X } from "lucide-react";
 import { API_BASE_URL } from "../../constant/path";
 import { useSelector } from "react-redux";
 import store from "../../redux/store";
 import { SEND_SUBSCIPTION_MESSAGE } from "../../apis/Apis";
-import { data } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
+// import { data } from "react-router-dom";
 
 const BuySubscription = () => {
-  const [mobileNumber, setMobileNumber] = useState("");
-  const [radius, setRadius] = useState("");
-  const [videoUrl, setVideoUrl] = useState("");
-  const [language, setLanguage] = useState("");
+  const { search } = useLocation();
+  const params = new URLSearchParams(search);
+
+  const mobile = params.get('mobile');
+  const videoUrl_from_url = params.get('videoUrl');
+  const [mobileNumber, setMobileNumber] = useState(mobile || "");
+  const [radius, setRadius] = useState('5');
+  const [videoUrl, setVideoUrl] = useState(videoUrl_from_url || "");
+  const [language, setLanguage] = useState("english");
   const [businessData, setBusinessData] = useState({});
   const [targetNumbers, setTargetNumbers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
 
-  const jwt_token = store.getState().userAuth.jwt; // Replace with real token retrieval logic
+  const jwt_token = store.getState().userAuth.jwt;
+  
+  useEffect(() => {
+    if (mobile) {
+      setMobileNumber(mobile);
+    }
+    if (videoUrl_from_url) {
+      setVideoUrl(videoUrl_from_url);
+    }
+  }, [mobile, videoUrl_from_url]);
 
   const lookupServiceProvider = async () => {
     setLoading(true);
@@ -39,7 +54,7 @@ const BuySubscription = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${jwt_token}`, // Replace with real token
+            Authorization: `Bearer ${jwt_token}`,
           },
         }
       );
@@ -77,19 +92,12 @@ const BuySubscription = () => {
         target_mobile_numbers: targetNumbers,
       };
 
-      // Simulate API call
-      // await new Promise((res) => setTimeout(res, 1500));
       const res = await SEND_SUBSCIPTION_MESSAGE({
-        ...payload
-      })
-      console.log(res)
+        ...payload,
+      });
+      console.log(res);
 
-      // Uncomment this when ready for real call:
-      // await axios.post('http://your-api-endpoint/campaign/send', payload, {
-      //   headers: { Authorization: 'Bearer YOUR_TOKEN' }
-      // });
-
-      console.log("Campaign payload sent:", payload); // for debug
+      console.log("Campaign payload sent:", payload);
       setSuccess(true);
     } catch (error) {
       console.error(error);
@@ -101,18 +109,35 @@ const BuySubscription = () => {
 
   const reset = () => {
     setMobileNumber("");
-    setRadius("");
+    setRadius("2");
     setVideoUrl("");
-    setLanguage("");
+    setLanguage("english");
     setBusinessData({});
     setTargetNumbers([]);
     setErrors({});
     setSuccess(false);
   };
 
+  const handleRemove = (numberToRemove) => {
+    console.log(numberToRemove)
+    setTargetNumbers(prevNumbers => prevNumbers.filter(num => num !== numberToRemove));
+  };
+
   return (
     <div className="container py-5">
-      <h2 className="text-center mb-4">Campaign Creator</h2>
+      <style>{`
+         * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+        
+        body {
+          height: 100%;
+          overflow-y: auto;
+          font-family: 'Inter', sans-serif;`
+        }</style>
+      <h2 className="text-center mb-4 text-primary">Campaign Creator</h2>
 
       {!success && (
         <div className="card p-4 shadow">
@@ -206,11 +231,27 @@ const BuySubscription = () => {
                 style={{ maxHeight: 200, overflowY: "auto" }}
               >
                 <div className="row">
-                  {targetNumbers.map((num, idx) => (
-                    <div className="col-6 col-md-4 mb-2" key={idx}>
-                      <code className="bg-light px-2 py-1 rounded d-block">
-                        {num}
-                      </code>
+                  {targetNumbers.map((num, index) => (
+                    <div
+                      className="col-6 col-md-4 mb-2"
+                      key={`${num}-${index}`}
+                    >
+                      <div className="d-flex align-items-center bg-light px-2 py-1 rounded">
+                        <code className="flex-grow-1 bg-transparent">{num}</code>
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-outline-danger ms-2 p-1"
+                          onClick={() => handleRemove(num)}
+                          style={{ 
+                            border: 'none', 
+                            background: 'transparent',
+                            padding: '2px 4px',
+                            lineHeight: 1
+                          }}
+                        >
+                          <X size={14} />
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -234,7 +275,6 @@ const BuySubscription = () => {
                   value={language}
                   onChange={(e) => setLanguage(e.target.value)}
                 >
-                  <option value="">Select language</option>
                   <option value="english">English</option>
                   <option value="hindi">Hindi</option>
                 </select>

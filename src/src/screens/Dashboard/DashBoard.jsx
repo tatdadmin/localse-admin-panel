@@ -30,7 +30,13 @@ const MenuIcon = ({ onClick }) => (
   </div>
 );
 
-const SideBar = ({ onSelect, selectedComponent, isOpen, onClose, access = {} }) => {
+const SideBar = ({
+  onSelect,
+  selectedComponent,
+  isOpen,
+  onClose,
+  access = {},
+}) => {
   const sidebarStyle = {
     ...styles.sidebar,
     ...(window.innerWidth <= 768 && {
@@ -50,7 +56,10 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose, access = {} }) 
     { key: "free_onboarding_report", label: "Free OnBoarding Report" },
     { key: "agent_reports", label: "Agent Reports" },
     { key: "service_provider_clicks", label: "Service Provider Clicks" },
-    { key: "free_onboarding_hourly_reports", label: "Free Onboarding Hourly Reports" },
+    {
+      key: "free_onboarding_hourly_reports",
+      label: "Free Onboarding Hourly Reports",
+    },
     { key: "service_providers_map", label: "Service Providers Map" },
     { key: "registration_from_admin", label: "Registration From Admin" },
     { key: "campaign_reports", label: "Campaign Reports" },
@@ -59,7 +68,7 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose, access = {} }) 
     { key: "video_panel", label: "Video Panel" },
     { key: "master_admin", label: "Master Admin" },
     { key: "app_details", label: "App Update" },
-    { key: "buy_subscription", label: "Buy Subscription Campaign" },
+    // { key: "buy_subscription", label: "Buy Subscription Campaign" },
   ];
 
   return (
@@ -414,14 +423,16 @@ const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const user = useSelector((e) => e?.userAuth?.userAllData);
-  console.log(user,"userrr")
-  useEffect(()=>{
-const userAccess = Object.entries(user?.access)
+  console.log(user, "userrr");
+  useEffect(() => {
+    const userAccess = Object.entries(user?.access);
 
-const firstKeyWithValue1 = Object.keys(user?.access).find(key => user?.access[key] === "1");
-// console.log(firstKeyWithValue1)
-setSelectedComponent(firstKeyWithValue1)
-  },[])
+    const firstKeyWithValue1 = Object.keys(user?.access).find(
+      (key) => user?.access[key] === "1"
+    );
+    // console.log(firstKeyWithValue1)
+    setSelectedComponent(firstKeyWithValue1);
+  }, []);
 
   // Handle window resize
   useEffect(() => {
@@ -488,7 +499,7 @@ setSelectedComponent(firstKeyWithValue1)
   };
 
   // const user = useSelector((e) => e?.userAuth?.userAllData);
-  console.log(user?.access,"storedaatat")
+  console.log(user?.access, "storedaatat");
   const componentMap = {
     notice: <NoticeList onOpen={openModal} />,
     reports: <DateWiseCount />,
@@ -543,9 +554,15 @@ setSelectedComponent(firstKeyWithValue1)
             <InstallationReport />
           ) : selectedComponent == "video_panel" ? (
             <Videos />
-          ) : selectedComponent=="notification"?<NotificationList/>:
-          selectedComponent=="master_admin"?<MasterAdmin/>:
-          selectedComponent=="app_details"?<AppUpdate/>: selectedComponent=="buy_subscription"?<BuySubscription/>:(
+          ) : selectedComponent == "notification" ? (
+            <NotificationList />
+          ) : selectedComponent == "master_admin" ? (
+            <MasterAdmin />
+          ) : selectedComponent == "app_details" ? (
+            <AppUpdate />
+          ) : selectedComponent == "buy_subscription" ? (
+            <BuySubscription />
+          ) : (
             <></>
           )}
         </div>

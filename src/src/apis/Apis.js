@@ -309,6 +309,12 @@ export const SEND_SUBSCIPTION_MESSAGE = (body) => {
 
 
 
+export const UPLOAD_VIDEO = (body) => {
+  return fetchService("POST", `admin_panel/upload-buy-subscription-campaign-video`,body, {});
+};
+
+
+
 
 
 

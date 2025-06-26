@@ -11,6 +11,8 @@ import {
   Linkedin,
   X,
   Check,
+  Upload,
+  Video,
 } from "lucide-react";
 
 // Import your actual API functions
@@ -20,13 +22,16 @@ import {
   GET_ALL_VIDEOS,
   SERVICES_TYPE_LIST_SERVICE_PROVIDER,
   UPDATE_VIDEO,
+  UPLOAD_VIDEO,
 } from "../../apis/Apis";
+import { useNavigate } from "react-router-dom";
 
 const Videos = () => {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingVideo, setEditingVideo] = useState(null);
+  const [videoUploading, setVideoUploading] = useState(false);
   const [formData, setFormData] = useState({
     subject: "",
     video_url: "",
@@ -37,6 +42,8 @@ const Videos = () => {
     social_links_linkedin: "",
     social_links_facebook: "",
     service_type: "",
+    mobile_number_interviewer: "",
+    video_path: "",
   });
 
   const getAllVideos = async () => {
@@ -79,9 +86,86 @@ const Videos = () => {
     return youtubeRegex.test(url);
   };
 
+  const validateVideoFile = (file) => {
+    const maxSize = 15 * 1024 * 1024; // 15MB in bytes
+    const maxDuration = 54; // 54 seconds
+
+    if (file.size > maxSize) {
+      alert("Video size should be less than or equal to 15MB");
+      return false;
+    }
+
+    // Create video element to check duration
+    return new Promise((resolve) => {
+      const video = document.createElement('video');
+      video.preload = 'metadata';
+      
+      video.onloadedmetadata = () => {
+        window.URL.revokeObjectURL(video.src);
+        if (video.duration > maxDuration) {
+          alert("Video duration should be less than or equal to 54 seconds");
+          resolve(false);
+        } else {
+          resolve(true);
+        }
+      };
+      
+      video.onerror = () => {
+        alert("Invalid video file");
+        resolve(false);
+      };
+      
+      video.src = URL.createObjectURL(file);
+    });
+  };
+
+  const handleVideoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate video file
+    const isValid = await validateVideoFile(file);
+    if (!isValid) {
+      e.target.value = ''; // Clear the input
+      return;
+    }
+
+    try {
+      setVideoUploading(true);
+      
+      // Create FormData for video upload
+      const formDataForUpload = new FormData();
+      formDataForUpload.append('video', file);
+
+      const res = await UPLOAD_VIDEO(formDataForUpload);
+      
+      if (res.status_code === 200) {
+        // Update form data with the returned video URL
+        setFormData(prev => ({
+          ...prev,
+          video_path: res.data.video_url
+        }));
+        alert("Video uploaded successfully!");
+      } else {
+        alert("Failed to upload video. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error uploading video:", error);
+      alert("Failed to upload video. Please try again.");
+    } finally {
+      setVideoUploading(false);
+      e.target.value = ''; // Clear the input
+    }
+  };
+
   const handleSubmit = async () => {
     if (!validateYouTubeUrl(formData.video_url)) {
       alert("Please enter a valid YouTube URL");
+      return;
+    }
+
+    if (!formData.mobile_number_interviewer.trim()) {
+      alert("Please enter interviewer mobile number");
       return;
     }
 
@@ -123,6 +207,8 @@ const Videos = () => {
       social_links_linkedin: video.social_links?.linkedin || "",
       social_links_facebook: video.social_links?.facebook || "",
       service_type: video?.service_type,
+      mobile_number_interviewer: video?.mobile_number_interviewer || "",
+      video_path: video?.video_path || "",
     });
     setShowForm(true);
   };
@@ -149,6 +235,9 @@ const Videos = () => {
       social_links_instagram: "",
       social_links_linkedin: "",
       social_links_facebook: "",
+      service_type: "",
+      mobile_number_interviewer: "",
+      video_path: "",
     });
     setEditingVideo(null);
     setShowForm(false);
@@ -162,24 +251,25 @@ const Videos = () => {
       ? `https://img.youtube.com/vi/${videoId[1]}/maxresdefault.jpg`
       : null;
   };
+
   const [allServices, setallServices] = useState([]);
   const fetchServices = async () => {
     try {
       const res = await SERVICES_TYPE_LIST_SERVICE_PROVIDER();
-      // console.log(res, "SERVICES_TYPE_LIST_SERVICE_PROVIDER");
       setallServices(res?.data);
     } catch (err) {
       console.log(err);
     }
   };
+
   useEffect(() => {
     fetchServices();
   }, []);
 
+  const navigate = useNavigate();
+
   return (
     <>
-      {/* Bootstrap CSS CDN */}
-
       <div
         className="container-fluid py-4"
         style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}
@@ -190,13 +280,22 @@ const Videos = () => {
             <div className="card-header bg-white border-bottom">
               <div className="d-flex justify-content-between align-items-center">
                 <h1 className="h2 mb-0 text-dark fw-bold">Video Admin Panel</h1>
-                <button
-                  onClick={() => setShowForm(true)}
-                  className="btn btn-primary d-flex align-items-center gap-2"
-                >
-                  <Plus size={20} />
-                  Add New Video
-                </button>
+                <div className="d-flex gap-2">
+                  <button
+                    onClick={() => setShowForm(true)}
+                    className="btn btn-primary d-flex align-items-center gap-2"
+                  >
+                    <Plus size={20} />
+                    Add New Video
+                  </button>
+                  <button
+                    onClick={() => navigate("/subscription_campaign")}
+                    className="btn btn-primary d-flex align-items-center gap-2"
+                  >
+                    <Plus size={20} />
+                    Subscription Campaign
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -237,6 +336,21 @@ const Videos = () => {
 
                       <div className="mb-3">
                         <label className="form-label fw-semibold">
+                          Mobile Number (Interviewer) <span className="text-danger">*</span>
+                        </label>
+                        <input
+                          type="tel"
+                          name="mobile_number_interviewer"
+                          value={formData.mobile_number_interviewer}
+                          onChange={handleInputChange}
+                          required
+                          className="form-control"
+                          placeholder="Enter interviewer mobile number"
+                        />
+                      </div>
+
+                      <div className="mb-3">
+                        <label className="form-label fw-semibold">
                           YouTube Video URL{" "}
                           <span className="text-danger">*</span>
                         </label>
@@ -250,6 +364,57 @@ const Videos = () => {
                           placeholder="https://www.youtube.com/watch?v=..."
                         />
                       </div>
+
+                      {/* Video Upload Section */}
+                      <div className="mb-3">
+                        <label className="form-label fw-semibold">
+                          Upload Video
+                          <small className="text-muted ms-2">
+                            (Max: 54 seconds, 15MB)
+                          </small>
+                        </label>
+                        <div className="d-flex align-items-center gap-3">
+                          <input
+                            type="file"
+                            accept="video/*"
+                            onChange={handleVideoUpload}
+                            className="form-control"
+                            disabled={videoUploading}
+                          />
+                          {videoUploading && (
+                            <div className="d-flex align-items-center gap-2 text-primary">
+                              <div className="spinner-border spinner-border-sm" role="status">
+                                <span className="visually-hidden">Uploading...</span>
+                              </div>
+                              <small>Uploading...</small>
+                            </div>
+                          )}
+                        </div>
+                        <small className="form-text text-muted">
+                          <Video size={14} className="me-1" />
+                          Video duration should be ≤ 54 seconds and file size ≤ 15MB
+                        </small>
+                      </div>
+
+                      {/* Video Path (Disabled Field) */}
+                      {formData.video_path && (
+                        <div className="mb-3">
+                          <label className="form-label fw-semibold">
+                            Uploaded Video URL
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.video_path}
+                            disabled
+                            className="form-control"
+                            placeholder="Video URL will appear here after upload"
+                          />
+                          <small className="form-text text-success">
+                            <Check size={14} className="me-1" />
+                            Video uploaded successfully
+                          </small>
+                        </div>
+                      )}
 
                       <div className="mb-3">
                         <label className="form-label fw-semibold">
@@ -367,6 +532,7 @@ const Videos = () => {
                         type="button"
                         onClick={handleSubmit}
                         className="btn btn-primary d-flex align-items-center gap-2"
+                        disabled={videoUploading}
                       >
                         <Check size={18} />
                         {editingVideo ? "Update Video" : "Create Video"}
@@ -437,6 +603,9 @@ const Videos = () => {
                               {video.target_area_code?.join(", ") || "None"}
                             </div>
                             <div>Views: {video.video_watch_count || 0}</div>
+                            {video.mobile_number_interviewer && (
+                              <div>Mobile: {video.mobile_number_interviewer}</div>
+                            )}
                           </div>
 
                           {/* Social Links */}
@@ -487,6 +656,22 @@ const Videos = () => {
 
                           {/* Action Buttons */}
                           <div className="mt-auto d-flex justify-content-end gap-2">
+                          {/* video.mobile_number_interviewer */}
+                        
+                        {
+                          video.mobile_number_interviewer &&  <button
+                          onClick={() => {
+                            // navigate("/subscription_campaign")
+                            navigate(
+                              `/subscription_campaign?mobile=${encodeURIComponent(video.mobile_number_interviewer)}&videoUrl=${encodeURIComponent(video?.video_path)}`
+                            );
+                          }}
+                          className="btn btn-outline-primary btn-sm"
+                          title="Edit Video"
+                        >
+                          Send Whatsapp
+                        </button>
+                        } 
                             <button
                               onClick={() => handleEdit(video)}
                               className="btn btn-outline-primary btn-sm"
