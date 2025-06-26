@@ -75,7 +75,7 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose, access = {} }) 
       <div style={styles.menu}>
         {menuItems.map(({ key, label }) => {
           // Only show if access is granted
-          // if (access[key] !== "1") return null;
+          if (access[key] !== "1") return null;
 
           const isSelected = selectedComponent === key;
 
