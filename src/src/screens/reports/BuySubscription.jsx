@@ -17,7 +17,7 @@ const BuySubscription = () => {
   const [mobileNumber, setMobileNumber] = useState(mobile || "");
   const [radius, setRadius] = useState('5');
   const [videoUrl, setVideoUrl] = useState(videoUrl_from_url || "");
-  const [language, setLanguage] = useState("english");
+  const [language, setLanguage] = useState("hindi");
   const [businessData, setBusinessData] = useState({});
   const [targetNumbers, setTargetNumbers] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -109,9 +109,9 @@ const BuySubscription = () => {
 
   const reset = () => {
     setMobileNumber("");
-    setRadius("2");
+    setRadius("5");
     setVideoUrl("");
-    setLanguage("english");
+    setLanguage("hindi");
     setBusinessData({});
     setTargetNumbers([]);
     setErrors({});
@@ -275,8 +275,8 @@ const BuySubscription = () => {
                   value={language}
                   onChange={(e) => setLanguage(e.target.value)}
                 >
-                  <option value="english">English</option>
-                  <option value="hindi">Hindi</option>
+                  <option value="hindi" key={language} >Hindi</option>
+                  <option key={language} value="english">English</option>
                 </select>
               </div>
 
