@@ -19,6 +19,7 @@ import InstallationReport from "../reports/InstallationReport";
 import Videos from "../Videos/Videos";
 import MasterAdmin from "../reports/MasterAdmin";
 import AppUpdate from "../reports/AppUpdate";
+import BuySubscription from "../reports/BuySubscription";
 
 // Menu bar icon component
 const MenuIcon = ({ onClick }) => (
@@ -58,6 +59,7 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose, access = {} }) 
     { key: "video_panel", label: "Video Panel" },
     { key: "master_admin", label: "Master Admin" },
     { key: "app_details", label: "App Update" },
+    { key: "buy_subscription", label: "Buy Subscription Campaign" },
   ];
 
   return (
@@ -73,7 +75,7 @@ const SideBar = ({ onSelect, selectedComponent, isOpen, onClose, access = {} }) 
       <div style={styles.menu}>
         {menuItems.map(({ key, label }) => {
           // Only show if access is granted
-          if (access[key] !== "1") return null;
+          // if (access[key] !== "1") return null;
 
           const isSelected = selectedComponent === key;
 
@@ -543,7 +545,7 @@ setSelectedComponent(firstKeyWithValue1)
             <Videos />
           ) : selectedComponent=="notification"?<NotificationList/>:
           selectedComponent=="master_admin"?<MasterAdmin/>:
-          selectedComponent=="app_details"?<AppUpdate/>:(
+          selectedComponent=="app_details"?<AppUpdate/>: selectedComponent=="buy_subscription"?<BuySubscription/>:(
             <></>
           )}
         </div>
