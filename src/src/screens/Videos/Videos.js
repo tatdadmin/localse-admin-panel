@@ -659,7 +659,7 @@ const Videos = () => {
                           {/* video.mobile_number_interviewer */}
                         
                         {
-                          video.mobile_number_interviewer &&  <button
+                          video.mobile_number_interviewer && video?.video_path && <button
                           onClick={() => {
                             // navigate("/subscription_campaign")
                             navigate(
