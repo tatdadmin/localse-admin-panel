@@ -44,6 +44,7 @@ const Videos = () => {
     service_type: "",
     mobile_number_interviewer: "",
     video_path: "",
+    static_views:""
   });
 
   const getAllVideos = async () => {
@@ -209,6 +210,7 @@ const Videos = () => {
       service_type: video?.service_type,
       mobile_number_interviewer: video?.mobile_number_interviewer || "",
       video_path: video?.video_path || "",
+      static_views:video?.static_views
     });
     setShowForm(true);
   };
@@ -238,6 +240,7 @@ const Videos = () => {
       service_type: "",
       mobile_number_interviewer: "",
       video_path: "",
+      static_views:""
     });
     setEditingVideo(null);
     setShowForm(false);
@@ -365,6 +368,22 @@ const Videos = () => {
                         />
                       </div>
 
+
+                      <div className="mb-3">
+                        <label className="form-label fw-semibold">
+                        Static views
+                          <span className="text-danger">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="static_views"
+                          value={formData.static_views}
+                          onChange={handleInputChange}
+                          required
+                          className="form-control"
+                          // placeholder="https://www.youtube.com/watch?v=..."
+                        />
+                      </div>
                       {/* Video Upload Section */}
                       <div className="mb-3">
                         <label className="form-label fw-semibold">
@@ -603,6 +622,9 @@ const Videos = () => {
                               {video.target_area_code?.join(", ") || "None"}
                             </div>
                             <div>Views: {video.video_watch_count || 0}</div>
+                            <div>Static Views: {video.static_views || 0}</div>
+
+
                             {video.mobile_number_interviewer && (
                               <div>Mobile: {video.mobile_number_interviewer}</div>
                             )}
