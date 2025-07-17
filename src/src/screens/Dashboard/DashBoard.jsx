@@ -555,7 +555,7 @@ const Dashboard = () => {
           ) : selectedComponent == "video_panel" ? (
             <Videos />
           ) : selectedComponent == "notification" ? (
-            <NotificationList />
+            <NotificationList onOpen={openModal}  />
           ) : selectedComponent == "master_admin" ? (
             <MasterAdmin />
           ) : selectedComponent == "app_details" ? (
