@@ -24,26 +24,11 @@ const Business_app_installation_via_call = () => {
 
     return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
   }
+
   const getData = async () => {
     try {
       setLoading(true);
       const res = await GET_BUSINESS_APP_INSTALLATION_VIA_CALL();
-      // const res = {
-      //     status_code:200,
-      //     message:"data retrieved successfully",
-      //     data:{
-
-      //     service_provider_mobile_number:'sssssss',
-      //     business_name:"sadfasdf",
-      //     business_address:"asdasdfasdafds",
-      //     service_type:"asdafds",
-      //     b_rm_call_later:"jdjdjdjd",
-      //     service_provider_type:"",
-      //     registration_date:"",
-
-      //     }
-
-      //     }
       console.log(res);
 
       if (res.status_code === 200) {
@@ -107,7 +92,6 @@ const Business_app_installation_via_call = () => {
       alert("An error occurred. Please check the console.");
     }
   };
-  
 
   if (loading) {
     return (
@@ -121,7 +105,7 @@ const Business_app_installation_via_call = () => {
           justifyContent: "center",
           alignItems: "center",
           minHeight: "100vh",
-          fontSize: "1.2rem",
+          fontSize: "1rem",
         }}
       >
         <div className="d-flex justify-content-center">
@@ -149,7 +133,7 @@ const Business_app_installation_via_call = () => {
           justifyContent: "center",
           alignItems: "center",
           minHeight: "100vh",
-          fontSize: "1.2rem",
+          fontSize: "1rem",
         }}
       >
         <div className="container">
@@ -167,12 +151,12 @@ const Business_app_installation_via_call = () => {
         fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
         backgroundColor: "#f0f2f5",
         margin: 0,
-        padding: 0,
+        padding: "1rem",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        minHeight: "100vh",
-        fontSize: "1.2rem",
+        // minHeight: "100vh",
+        fontSize: "1rem",
       }}
     >
       <div
@@ -182,7 +166,7 @@ const Business_app_installation_via_call = () => {
           backgroundColor: "#fff",
           borderRadius: "8px",
           boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-          padding: "2.5rem",
+          padding: "1.5rem",
         }}
       >
         {/* Header */}
@@ -191,78 +175,71 @@ const Business_app_installation_via_call = () => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            marginBottom: "2.5rem",
+            marginBottom: "1.5rem",
           }}
         >
-          {/* <img src="https://play-lh.googleusercontent.com/_U5IxKacvFUxm3Bh8lRrJS3y04oPnYw3jJotA7lgVs71zFFX9jGehkjv767rUNm_PQ=w480-h960-rw" alt="Company Logo" style={{ width: '60px' }} /> */}
           <h1
             style={{
-              fontSize: "2rem",
+              fontSize: "1.5rem",
               color: "#333",
               margin: 0,
             }}
           >
             Manage Business App Installation
           </h1>
-          {/* <div style={{
-                        padding: '0.5rem 1rem',
-                        borderRadius: '8px',
-                        backgroundColor: '#19598c',
-                        color: '#fff',
-                        fontSize: '1.2rem',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        whiteSpace: 'nowrap',
-                        cursor: 'pointer'
-                    }}>
-                        Active
-                    </div> */}
         </div>
 
         {data && (
           <div>
             {/* Contact Info */}
-            <div style={{ marginBottom: "2rem" }}>
-              <p style={{ margin: "0.5rem 0", fontSize: "1.5rem" }}>
+            <div style={{ marginBottom: "1rem" }}>
+              <p style={{ margin: "0.2rem 0", fontSize: "1.2rem" }}>
                 <strong>Service Provider Mobile:</strong>{" "}
                 {data.service_provider_mobile_number || "N/A"}
               </p>
-              <p style={{ margin: "0.5rem 0", fontSize: "1.5rem" }}>
+              <p style={{ margin: "0.2rem 0", fontSize: "1.2rem" }}>
                 <strong>Business Name:</strong> {data.business_name || "N/A"}
               </p>
-              <p style={{ margin: "0.5rem 0", fontSize: "1.5rem" }}>
-                <strong>Service Type:</strong> {data.service_type || "N/A"}
-                {/* {data.service_provider_type || "N/A"} |{" "} */}
-                {/* {data.registration_date || "N/A"} */}
-              </p>
-            </div>
-
-            {/* Business Address */}
-            <div style={{ marginBottom: "2rem" }}>
-              <p style={{ margin: "0.5rem 0", fontSize: "1.5rem" }}>
-                <strong>Registration Date</strong>{" "}
+             
+              <p style={{ margin: "0.2rem 0", fontSize: "1.2rem" }}>
+                <strong>Registration Date:</strong>{" "}
                 {formatUTCDate(data.registration_date) || "N/A"}
               </p>
-              <p style={{ margin: "0.5rem 0", fontSize: "1.5rem" }}>
+             
+              
+              <p style={{ margin: "0.2rem 0", fontSize: "1.2rem" }}>
                 <strong>Business Address:</strong>{" "}
                 {data.business_address || "N/A"}
               </p>
 
               {data.b_rm_calling_status && (
-                <p style={{ margin: "0.5rem 0", fontSize: "1.5rem" }}>
+                <p style={{ margin: "0.2rem 0", fontSize: "1.2rem" }}>
                   <strong>RM Call Status:</strong>{" "}
                   {data.b_rm_calling_status || "N/A"}
                 </p>
               )}
-
+              {data.service_provider_type && (
+                <p style={{ margin: "0.2rem 0", fontSize: "1.2rem" }}>
+                  <strong>Service Provider Type:</strong>{" "}
+                  {data.service_provider_type || "N/A"}
+                </p>
+              )}
+                <p style={{ fontSize: "1.2rem" }}>
+                <strong>Service Type:</strong> {data.service_type || "N/A"}
+              </p>
+              
               {data.b_rm_calling_status == "CALL_LATER" && (
-                <p style={{ margin: "0.5rem 0", fontSize: "1.5rem" }}>
+                <p style={{ margin: "0.2rem 0", fontSize: "1.2rem" }}>
                   <strong>RM Call Later:</strong>{" "}
                   {formatUTCDate(data.b_rm_call_later) || "N/A"}
                 </p>
               )}
             </div>
+
+            {/* Business Address */}
+            {/* <div style={{ }}> */}
+              
+            {/* </div> */}
 
             {/* Status Update Section */}
             <div>
@@ -273,11 +250,11 @@ const Business_app_installation_via_call = () => {
                 required
                 style={{
                   width: "100%",
-                  padding: "1rem",
+                  padding: "0.7rem",
                   border: "1px solid #ddd",
                   borderRadius: "0.5rem",
                   fontSize: "1.2rem",
-                  marginBottom: "1.5rem",
+                  marginBottom: "1rem",
                 }}
               >
                 <option value="">Select</option>
@@ -286,14 +263,15 @@ const Business_app_installation_via_call = () => {
                 <option value="CALL_LATER">Call Later</option>
                 <option value="NOT_INTERSTED">Not Interested</option>
               </select>
+
               {status === "CALL_LATER" && (
-                <div style={{ marginBottom: "1.5rem" }}>
+                <div style={{ marginBottom: "1rem" }}>
                   <label
                     htmlFor="callLaterDateTime"
                     style={{
                       fontSize: "1.2rem",
                       display: "block",
-                      marginBottom: "0.5rem",
+                      marginBottom: "0.2rem",
                     }}
                   >
                     Select Call Later Date & Time:
@@ -304,10 +282,10 @@ const Business_app_installation_via_call = () => {
                     name="callLaterDateTime"
                     value={callLaterDateTime}
                     onChange={(e) => setCallLaterDateTime(e.target.value)}
-                    min={new Date().toISOString().slice(0, 16)} // disallow past date/time
+                    min={new Date().toISOString().slice(0, 16)}
                     style={{
                       width: "100%",
-                      padding: "1rem",
+                      padding: "0.7rem",
                       border: "1px solid #ddd",
                       borderRadius: "0.5rem",
                       fontSize: "1.2rem",
@@ -316,13 +294,13 @@ const Business_app_installation_via_call = () => {
                 </div>
               )}
 
-              <div style={{ marginBottom: "1.5rem" }}>
+              <div style={{ marginBottom: "1rem" }}>
                 <label
                   htmlFor="remarks"
                   style={{
                     fontSize: "1.2rem",
                     display: "block",
-                    marginBottom: "0.5rem",
+                    marginBottom: "0.2rem",
                   }}
                 >
                   Remarks:
@@ -335,7 +313,7 @@ const Business_app_installation_via_call = () => {
                   placeholder="Enter your remarks here"
                   style={{
                     width: "100%",
-                    padding: "1rem",
+                    padding: "0.7rem",
                     border: "1px solid #ddd",
                     borderRadius: "0.5rem",
                     fontSize: "1.2rem",
@@ -348,9 +326,9 @@ const Business_app_installation_via_call = () => {
                 type="button"
                 onClick={handleSubmit}
                 style={{
-                  marginTop: "1.5rem",
-                  padding: "1rem 2.5rem",
-                  fontSize: "1.5rem",
+                  marginTop: "1rem",
+                  padding: "0.8rem 2rem",
+                  fontSize: "1.3rem",
                   color: "#fff",
                   backgroundColor: "#19598c",
                   border: "none",
