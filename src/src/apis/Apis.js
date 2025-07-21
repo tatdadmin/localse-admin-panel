@@ -257,69 +257,110 @@ export const GET_BLOGS = () => {
 };
 
 export const CREATE_BLOG = (BODY) => {
-  return fetchService("POST", "blog/create-blog",BODY, {});
+  return fetchService("POST", "blog/create-blog", BODY, {});
 };
 
 export const DELETE_BLOG = (id) => {
-  return fetchService("DELETE", `blog/delete-blog-by-id/${id}`,{}, {});
+  return fetchService("DELETE", `blog/delete-blog-by-id/${id}`, {}, {});
 };
 
-export const UPDATE_BLOG = (id,BODY) => {
-  return fetchService("PUT", `blog/update-blog/${id}`,BODY, {});
+export const UPDATE_BLOG = (id, BODY) => {
+  return fetchService("PUT", `blog/update-blog/${id}`, BODY, {});
 };
-
 
 export const INSTALLATION_REPORTS = (BODY) => {
-  return fetchService("POST", `admin_panel/Person-onboarding-report`,BODY, {});
+  return fetchService("POST", `admin_panel/Person-onboarding-report`, BODY, {});
 };
 
 export const ADD_VIDEO_IN_ADMIN_PANEL = (BODY) => {
-  return fetchService("POST", `admin_panel/add-video-in-customer-page`,BODY, {});
+  return fetchService(
+    "POST",
+    `admin_panel/add-video-in-customer-page`,
+    BODY,
+    {}
+  );
 };
-
 
 export const GET_ALL_VIDEOS = () => {
-  return fetchService("GET", `admin_panel/get-all-video-in-customer-section`,{}, {});
+  return fetchService(
+    "GET",
+    `admin_panel/get-all-video-in-customer-section`,
+    {},
+    {}
+  );
 };
 
-
 export const UPDATE_VIDEO = (body) => {
-  console.log(body,"UPDATE_VIDEO")
-  return fetchService("POST", `admin_panel/add-video-in-customer-page`,body, {});
+  console.log(body, "UPDATE_VIDEO");
+  return fetchService(
+    "POST",
+    `admin_panel/add-video-in-customer-page`,
+    body,
+    {}
+  );
 };
 
 export const DELETE_VIDEO = (body) => {
-  return fetchService("POST", `admin_panel/delete-video-customer-section`,body, {});
+  return fetchService(
+    "POST",
+    `admin_panel/delete-video-customer-section`,
+    body,
+    {}
+  );
 };
 export const INSTALLATION_REPORTS_BY_USER = (body) => {
-  return fetchService("POST", `admin_panel/Person-onboarding-report-for-given-date`,body, {});
+  return fetchService(
+    "POST",
+    `admin_panel/Person-onboarding-report-for-given-date`,
+    body,
+    {}
+  );
 };
 
 export const CHANGE_SERVICE_PROVIDER_NUMBER = (body) => {
-  return fetchService("POST", `admin_panel/update-service-provider-mobile-number`,body, {});
+  return fetchService(
+    "POST",
+    `admin_panel/update-service-provider-mobile-number`,
+    body,
+    {}
+  );
 };
 
 export const APP_UPDATE = (body) => {
-  return fetchService("POST", `admin_panel/force-update-app-version`,body, {});
+  return fetchService("POST", `admin_panel/force-update-app-version`, body, {});
 };
 
 export const SEND_SUBSCIPTION_MESSAGE = (body) => {
-  return fetchService("POST", `admin_panel/send-whatsapp-buy-subscription-message`,body, {});
+  return fetchService(
+    "POST",
+    `admin_panel/send-whatsapp-buy-subscription-message`,
+    body,
+    {}
+  );
 };
-
-
 
 export const UPLOAD_VIDEO = (body) => {
-  return fetchService("POST", `admin_panel/upload-buy-subscription-campaign-video`,body, {});
+  return fetchService(
+    "POST",
+    `admin_panel/upload-buy-subscription-campaign-video`,
+    body,
+    {}
+  );
 };
 
-
-
-
-
-
-
-
-
-
-
+export const GET_BUSINESS_APP_INSTALLATION_VIA_CALL = () => {
+  return fetchService(
+    "GET",
+    `admin_panel/get-business-service-provider-for-interaction`,
+    {},
+    {}
+  );
+};
+export const SAVE_BUSINESS_APP_INSTALLATION_VIA_CALL = (BODY) => {
+  return fetchService(
+    "POST",
+    `admin_panel/handle-business-call-for-app-installation`,
+    BODY,
+    {}
+  );
+};

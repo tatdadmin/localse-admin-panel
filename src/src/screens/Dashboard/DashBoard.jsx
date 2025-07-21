@@ -20,6 +20,7 @@ import Videos from "../Videos/Videos";
 import MasterAdmin from "../reports/MasterAdmin";
 import AppUpdate from "../reports/AppUpdate";
 import BuySubscription from "../reports/BuySubscription";
+import Business_app_installation_via_call from "../business_app_installation_via_call";
 
 // Menu bar icon component
 const MenuIcon = ({ onClick }) => (
@@ -68,6 +69,8 @@ const SideBar = ({
     { key: "video_panel", label: "Video Panel" },
     { key: "master_admin", label: "Master Admin" },
     { key: "app_details", label: "App Update" },
+    { key: "business_app_installation_via_call", label: "Business App Installation Via Call" },
+    
     // { key: "buy_subscription", label: "Buy Subscription Campaign" },
   ];
 
@@ -562,7 +565,7 @@ const Dashboard = () => {
             <AppUpdate />
           ) : selectedComponent == "buy_subscription" ? (
             <BuySubscription />
-          ) : (
+          ) :selectedComponent=="business_app_installation_via_call"?<Business_app_installation_via_call/>: (
             <></>
           )}
         </div>
