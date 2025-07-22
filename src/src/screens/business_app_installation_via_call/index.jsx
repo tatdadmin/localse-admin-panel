@@ -261,7 +261,7 @@ const Business_app_installation_via_call = () => {
                 <option value="DISCUSSED">Discussed</option>
                 <option value="NOT_RESPONDING">Not Responding</option>
                 <option value="CALL_LATER">Call Later</option>
-                <option value="NOT_INTERSTED">Not Interested</option>
+                <option value="NOT_INTERESTED">Not Interested</option>
               </select>
 
               {status === "CALL_LATER" && (
