@@ -8,22 +8,31 @@ const EmployeeAccess = () => {
     const [selectedEmployee, setSelectedEmployee] = useState(null)
     const [showModal, setShowModal] = useState(false)
     const [showGiveAccessModal, setShowGiveAccessModal] = useState(false)
+    const [showTransferAccessModal, setShowTransferAccessModal] = useState(false)
     const [allTasks, setAllTasks] = useState([])
     const [taskOrders, setTaskOrders] = useState({})
+    const [existingAccess, setExistingAccess] = useState([]) // Store existing access data
+    const [transferToEmployee, setTransferToEmployee] = useState('') // For transfer access
     
     // Unique loading states
     const [loadingAccess, setLoadingAccess] = useState({}) // For individual "Get Access" buttons
     const [loadingGiveAccess, setLoadingGiveAccess] = useState({}) // For individual "Give Access" buttons
+    const [loadingTransferAccess, setLoadingTransferAccess] = useState({}) // For individual "Transfer Access" buttons
     const [loadingAllAccess, setLoadingAllAccess] = useState(false) // For fetching all tasks
     const [savingAccess, setSavingAccess] = useState(false) // For saving access
+    const [loadingExistingAccess, setLoadingExistingAccess] = useState(false) // For fetching existing access
+    const [transferringAccess, setTransferringAccess] = useState(false) // For transferring access
 
     // Check if any loading is active
     const isAnyLoading = () => {
         return loading || 
                Object.values(loadingAccess).some(Boolean) || 
                Object.values(loadingGiveAccess).some(Boolean) || 
+               Object.values(loadingTransferAccess).some(Boolean) ||
                loadingAllAccess || 
-               savingAccess
+               savingAccess ||
+               loadingExistingAccess ||
+               transferringAccess
     }
 
     const getData = async () => {
@@ -65,19 +74,37 @@ const EmployeeAccess = () => {
         }
     }
 
+    const getExistingAccess = async (email) => {
+        try {
+            setLoadingExistingAccess(true)
+            const res = await FETCH_ACCESS_BY_EMAIL({
+                employee_email: email
+            })
+            
+            if (res.status_code === 200) {
+                return res.data || []
+            }
+            return []
+        } catch (error) {
+            console.log(error)
+            return []
+        } finally {
+            setLoadingExistingAccess(false)
+        }
+    }
+
     const getAllAccess = async () => {
         try {
             setLoadingAllAccess(true)
             const res = await GET_ALL_EMPLOYEE_ACCESS()
             if (res.status_code === 200) {
-                setAllTasks(res.data)
-                setShowGiveAccessModal(true)
-                // Reset task orders
-                setTaskOrders({})
+                return res.data || []
             }
+            return []
         } catch (error) {
             console.log(error)
             alert('Error fetching available tasks')
+            return []
         } finally {
             setLoadingAllAccess(false)
         }
@@ -93,10 +120,46 @@ const EmployeeAccess = () => {
         setSelectedEmployee({ name, email })
         
         try {
-            await getAllAccess()
+            // First get existing access
+            const existingAccessData = await getExistingAccess(email)
+            setExistingAccess(existingAccessData)
+            
+            // Then get all available tasks
+            const allTasksData = await getAllAccess()
+            setAllTasks(allTasksData)
+            
+            // Pre-fill orders for existing tasks
+            const initialOrders = {}
+            existingAccessData.forEach(access => {
+                // Find matching task by task_name or task_url
+                const matchingTask = allTasksData.find(task => 
+                    task.task_name === access.task_name || task.task_url === access.task_url
+                )
+                if (matchingTask) {
+                    initialOrders[matchingTask._id] = access.order
+                }
+            })
+            
+            setTaskOrders(initialOrders)
+            setShowGiveAccessModal(true)
+            
+        } catch (error) {
+            console.log(error)
         } finally {
             setLoadingGiveAccess(prev => ({ ...prev, [email]: false }))
         }
+    }
+
+    const handleTransferAccess = async (email, name) => {
+        if (!email) {
+            alert('Employee email is not available')
+            return
+        }
+        
+        setLoadingTransferAccess(prev => ({ ...prev, [email]: true }))
+        setSelectedEmployee({ name, email })
+        setShowTransferAccessModal(true)
+        setLoadingTransferAccess(prev => ({ ...prev, [email]: false }))
     }
 
     const handleOrderChange = (taskId, order) => {
@@ -109,11 +172,33 @@ const EmployeeAccess = () => {
         }))
     }
 
+    const handleRemoveTask = (taskId) => {
+        setTaskOrders(prev => {
+            const newOrders = { ...prev }
+            delete newOrders[taskId]
+            return newOrders
+        })
+    }
+
     const closeGiveAccessModal = () => {
         setShowGiveAccessModal(false)
         setAllTasks([])
         setSelectedEmployee(null)
         setTaskOrders({})
+        setExistingAccess([])
+    }
+
+    const closeTransferAccessModal = () => {
+        setShowTransferAccessModal(false)
+        setSelectedEmployee(null)
+        setTransferToEmployee('')
+    }
+
+    // Check if task has existing access
+    const hasExistingAccess = (task) => {
+        return existingAccess.some(access => 
+            access.task_name === task.task_name || access.task_url === task.task_url
+        )
     }
 
     // Updated function to call the API with actual data
@@ -134,11 +219,50 @@ const EmployeeAccess = () => {
                 alert('Failed to assign access. Please try again.')
             }
         } catch (error) {
-            console.log("EERR",error)
+            console.log("EERR", error)
             alert(error.message)
             alert('Error occurred while assigning access')
         } finally {
             setSavingAccess(false)
+        }
+    }
+
+    const transferAccess = async () => {
+        if (!transferToEmployee) {
+            alert('Please select an employee to transfer access to')
+            return
+        }
+
+        if (transferToEmployee === selectedEmployee.email) {
+            alert('Cannot transfer access to the same employee')
+            return
+        }
+
+        try {
+            // console.log({
+            //     employee_email: selectedEmployee.email,
+            //     transfer_access_employee_email: transferToEmployee
+            // })
+            // return false
+            setTransferringAccess(true)
+            const res = await GIVE_ACCESS_FOR_EMPLOYEE({
+                transfer_access_employee_email: selectedEmployee.email,
+                employee_email: transferToEmployee
+            })
+            
+            if (res.status_code === 200) {
+                const transferToEmployeeName = employees.find(emp => emp.email === transferToEmployee)?.name || transferToEmployee
+                alert(`Successfully transferred access from ${selectedEmployee.name} to ${transferToEmployeeName}`)
+                closeTransferAccessModal()
+                getData() // Refresh the employee list
+            } else {
+                alert('Failed to transfer access. Please try again.')
+            }
+        } catch (error) {
+            console.log(error)
+            alert('Error occurred while transferring access')
+        } finally {
+            setTransferringAccess(false)
         }
     }
 
@@ -239,7 +363,7 @@ const EmployeeAccess = () => {
                                                             </button>
                                                             <button
                                                                 type="button"
-                                                                className="btn btn-success btn-sm"
+                                                                className="btn btn-success btn-sm me-2"
                                                                 onClick={() => handleGiveAccess(employee.email, employee.name)}
                                                                 disabled={!employee.email || isAnyLoading()}
                                                             >
@@ -248,7 +372,20 @@ const EmployeeAccess = () => {
                                                                 ) : (
                                                                     <i className="bi bi-plus-circle me-1"></i>
                                                                 )}
-                                                                Give Access
+                                                                Update Access
+                                                            </button>
+                                                            <button
+                                                                type="button"
+                                                                className="btn btn-warning btn-sm"
+                                                                onClick={() => handleTransferAccess(employee.email, employee.name)}
+                                                                disabled={!employee.email || isAnyLoading()}
+                                                            >
+                                                                {loadingTransferAccess[employee.email] ? (
+                                                                    <span className="spinner-border spinner-border-sm me-1" role="status"></span>
+                                                                ) : (
+                                                                    <i className="bi bi-arrow-left-right me-1"></i>
+                                                                )}
+                                                                Transfer Access
                                                             </button>
                                                         </div>
                                                     </td>
@@ -391,12 +528,22 @@ const EmployeeAccess = () => {
                                 <div className="mb-3">
                                     <div className="alert alert-info">
                                         <small>
-                                            <strong>Note:</strong> Assign order numbers to the tasks you want to give access to.
+                                            <strong>Note:</strong> Assign order numbers to the tasks you want to give access to. 
+                                            Tasks with existing access are pre-filled and highlighted.
                                         </small>
                                     </div>
                                 </div>
 
-                                {allTasks.length > 0 ? (
+                                {loadingExistingAccess || loadingAllAccess ? (
+                                    <div className="text-center py-4">
+                                        <div className="spinner-border text-primary" role="status">
+                                            <span className="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p className="mt-2">
+                                            {loadingExistingAccess ? 'Loading existing access...' : 'Loading available tasks...'}
+                                        </p>
+                                    </div>
+                                ) : allTasks.length > 0 ? (
                                     <div className="table-responsive">
                                         <table className="table table-striped">
                                             <thead className="table-dark">
@@ -405,44 +552,60 @@ const EmployeeAccess = () => {
                                                     <th>Task URL</th>
                                                     <th>Task Purpose</th>
                                                     <th>Order</th>
+                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {allTasks.map((task) => (
-                                                    <tr key={task._id}>
-                                                        <td>
-                                                            <strong>{task.task_name}</strong>
-                                                        </td>
-                                                        <td>
-                                                            <code className="text-primary">{task.task_url}</code>
-                                                        </td>
-                                                        <td>
-                                                            <small className="text-muted">{task.task_purpose}</small>
-                                                        </td>
-                                                        <td style={{ minWidth: '120px' }}>
-                                                            <input
-                                                                type="number"
-                                                                className={`form-control form-control-sm ${
-                                                                    taskOrders[task._id] ? 'is-valid' : ''
-                                                                }`}
-                                                                placeholder="Order"
-                                                                min="1"
-                                                                value={taskOrders[task._id] || ''}
-                                                                onChange={(e) => handleOrderChange(task._id, e.target.value)}
-                                                                disabled={isAnyLoading()}
-                                                            />
-                                                        </td>
-                                                    </tr>
-                                                ))}
+                                                {allTasks.map((task) => {
+                                                    const isExisting = hasExistingAccess(task)
+                                                    const hasOrder = taskOrders[task._id] !== undefined && taskOrders[task._id] !== ''
+                                                    
+                                                    return (
+                                                        <tr key={task._id} className={isExisting ? 'table-warning' : ''}>
+                                                            <td>
+                                                                <strong>{task.task_name}</strong>
+                                                                {/* {isExisting && (
+                                                                    <span className="badge bg-warning text-dark ms-2">Existing</span>
+                                                                )} */}
+                                                            </td>
+                                                            <td>
+                                                                <code className="text-primary">{task.task_url}</code>
+                                                            </td>
+                                                            <td>
+                                                                <small className="text-muted">{task.task_purpose}</small>
+                                                            </td>
+                                                            <td style={{ minWidth: '120px' }}>
+                                                                <input
+                                                                    type="number"
+                                                                    className={`form-control form-control-sm ${
+                                                                        hasOrder ? 'is-valid' : ''
+                                                                    }`}
+                                                                    placeholder="Order"
+                                                                    min="1"
+                                                                    value={taskOrders[task._id] || ''}
+                                                                    onChange={(e) => handleOrderChange(task._id, e.target.value)}
+                                                                    disabled={isAnyLoading()}
+                                                                />
+                                                            </td>
+                                                            <td style={{ minWidth: '80px' }}>
+                                                                {hasOrder && (
+                                                                    <button
+                                                                        type="button"
+                                                                        className="btn btn-outline-danger btn-sm"
+                                                                        onClick={() => handleRemoveTask(task._id)}
+                                                                        disabled={isAnyLoading()}
+                                                                        title="Remove task"
+                                                                    >
+                                                                        {/* <i className="bi bi-x-lg"></i> */}
+                                                                        X
+                                                                    </button>
+                                                                )}
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                })}
                                             </tbody>
                                         </table>
-                                    </div>
-                                ) : loadingAllAccess ? (
-                                    <div className="text-center py-4">
-                                        <div className="spinner-border text-primary" role="status">
-                                            <span className="visually-hidden">Loading tasks...</span>
-                                        </div>
-                                        <p className="mt-2">Loading available tasks...</p>
                                     </div>
                                 ) : (
                                     <div className="text-center py-4">
@@ -476,6 +639,115 @@ const EmployeeAccess = () => {
                                         <>
                                             <i className="bi bi-check-circle me-1"></i>
                                             Save Access
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Transfer Access Modal */}
+            {showTransferAccessModal && (
+                <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                    <div className="modal-dialog modal-lg">
+                        <div className="modal-content">
+                            <div className="modal-header bg-warning text-dark">
+                                <h5 className="modal-title">
+                                    <i className="bi bi-arrow-left-right me-2"></i>
+                                    Transfer Access from {selectedEmployee?.name}
+                                </h5>
+                                <button
+                                    type="button"
+                                    className="btn-close"
+                                    onClick={closeTransferAccessModal}
+                                    disabled={isAnyLoading()}
+                                ></button>
+                            </div>
+                            <div className="modal-body">
+                                {selectedEmployee && (
+                                    <div className="mb-4">
+                                        <div className="alert alert-info">
+                                            <h6 className="alert-heading">Transfer Source:</h6>
+                                            <p className="mb-1">
+                                                <strong>Name:</strong> {selectedEmployee.name}
+                                            </p>
+                                            <p className="mb-0">
+                                                <strong>Email:</strong> {selectedEmployee.email}
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+                                
+                                <div className="mb-3">
+                                    <div className="alert alert-warning">
+                                        <small>
+                                            <strong>Note:</strong> This will transfer all access permissions from {selectedEmployee?.name} to the selected employee. 
+                                            The original employee will lose their access after the transfer.
+                                        </small>
+                                    </div>
+                                </div>
+
+                                <div className="mb-4">
+                                    <label htmlFor="transferToSelect" className="form-label">
+                                        <strong>Select Employee to Transfer Access To:</strong>
+                                    </label>
+                                    <select
+                                        id="transferToSelect"
+                                        className="form-select"
+                                        value={transferToEmployee}
+                                        onChange={(e) => setTransferToEmployee(e.target.value)}
+                                        disabled={isAnyLoading()}
+                                    >
+                                        <option value="">-- Select Employee --</option>
+                                        {employees
+                                            .filter(emp => emp.email && emp.email !== selectedEmployee?.email)
+                                            .map((employee, index) => (
+                                                <option key={index} value={employee.email}>
+                                                    {employee.name} ({employee.email})
+                                                </option>
+                                            ))
+                                        }
+                                    </select>
+                                </div>
+
+                                {transferToEmployee && (
+                                    <div className="alert alert-success">
+                                        <h6 className="alert-heading">Transfer Destination:</h6>
+                                        <p className="mb-1">
+                                            <strong>Name:</strong> {employees.find(emp => emp.email === transferToEmployee)?.name}
+                                        </p>
+                                        <p className="mb-0">
+                                            <strong>Email:</strong> {transferToEmployee}
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                            <div className="modal-footer">
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary"
+                                    onClick={closeTransferAccessModal}
+                                    disabled={isAnyLoading()}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="button"
+                                    className="btn btn-warning"
+                                    onClick={transferAccess}
+                                    disabled={!transferToEmployee || isAnyLoading()}
+                                >
+                                    {transferringAccess ? (
+                                        <>
+                                            <span className="spinner-border spinner-border-sm me-1" role="status"></span>
+                                            Transferring...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <i className="bi bi-arrow-left-right me-1"></i>
+                                            Transfer Access
                                         </>
                                     )}
                                 </button>

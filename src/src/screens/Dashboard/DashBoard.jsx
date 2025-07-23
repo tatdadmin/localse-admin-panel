@@ -120,7 +120,7 @@ const SideBar = ({
           </button>
         )}
       </div>
-
+      
       <div style={styles.menu}>
         {filteredKeys.map((key) => {
           const label = labelMap[key];
