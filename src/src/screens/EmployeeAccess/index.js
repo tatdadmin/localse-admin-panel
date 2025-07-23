@@ -323,6 +323,7 @@ const EmployeeAccess = () => {
                                                         <td>
                                                             {new Date(access.createdAt).toLocaleDateString('en-IN', {
                                                                 year: 'numeric',
+                                                                timeZone: 'UTC',
                                                                 month: 'short',
                                                                 day: 'numeric',
                                                                 hour: '2-digit',

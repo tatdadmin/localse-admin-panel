@@ -59,6 +59,7 @@ const SideBar = ({
     }),
   };
 
+  // Full list of available menu items with their labels
   const menuItems = [
     { key: "notice", label: "Notice" },
     { key: "notification", label: "Notification" },
@@ -91,10 +92,24 @@ const SideBar = ({
       key: "employee_details",
       label: "Employee Acess",
     },
-
-    // { key: "buy_subscription", label: "Buy Subscription Campaign" },
+    {
+      key: "buy_subscription",
+      label: "Buy Subscription Campaign",
+    },
   ];
-console.log(access,"access from siderbar s")
+
+  // Create a lookup map for quick label retrieval
+  const labelMap = menuItems.reduce((acc, item) => {
+    acc[item.key] = item.label;
+    return acc;
+  }, {});
+
+  // Get access keys in the order they come, filter out ones with value != "1" or invalid keys
+  const filteredKeys = Object.keys(access).filter(
+    (key) => access[key] == "1" && labelMap[key]
+  );
+  console.log(filteredKeys,"FILTERC KEYS")
+
   return (
     <div style={sidebarStyle}>
       <div style={styles.sidebarHeader}>
@@ -105,12 +120,10 @@ console.log(access,"access from siderbar s")
           </button>
         )}
       </div>
-      <div style={styles.menu}>
-        {menuItems.map(({ key, label }) => {
-          // Only show if access is granted
-          // console.log(menuItems)
-          if (access[key] != "1") return null;
 
+      <div style={styles.menu}>
+        {filteredKeys.map((key) => {
+          const label = labelMap[key];
           const isSelected = selectedComponent === key;
 
           return (
@@ -138,12 +151,13 @@ console.log(access,"access from siderbar s")
   );
 };
 
+
 const Header = ({ toggleSidebar }) => {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
     dispatch(logoutUser());
-    persistor.purge(); 
+    persistor.purge();
   };
   const user = useSelector((e) => e?.userAuth?.userAllData);
   console.log(user, "ferwf");
@@ -452,13 +466,11 @@ const Dashboard = () => {
   // console.log(selectedComponent, "ReDUX");
   const user = useSelector((e) => e?.userAuth?.userAllData);
   // const userAccess = useSelector((e)=>e?.userAccessSlice)/
-// console.log(userAccess,"user ACCesss Slice")
+  // console.log(userAccess,"user ACCesss Slice")
   const dispatch = useDispatch();
   // console.log(user, "userrr");
   useEffect(() => {
     // const userAccess = Object.entries(user?.access);
-
-   
   }, []);
   // useEffect(() => {
   //   sessionStorage.setItem("appLoadedAt", Date.now().toString());
@@ -480,25 +492,27 @@ const Dashboard = () => {
   //     window.removeEventListener("beforeunload", handleBeforeUnload);
   //   };
   // }, [dispatch]);
-const [userAccess,setUserAccess]=useState({})
+  const [userAccess, setUserAccess] = useState({});
   const getAllAccess = async () => {
     try {
       const res = await GET_ALL_ACCESS();
       console.log(res.data, "ALL ACCESS");
       // dispatch(setUserAccess(res?.data))
-      setUserAccess(res?.data)
-      console.log(res?.data,"STaTE")
+      setUserAccess(res?.data);
+      console.log(res?.data, "STaTE");
       const firstKeyWithValue1 = Object.keys(res?.data).find(
         (key) => res?.data?.[key] == "1"
       );
-      console.log(firstKeyWithValue1,"First kry")
+      console.log(firstKeyWithValue1, "First kry");
       // setSelectedComponent(firstKeyWithValue1);
-      console.log(selectedComponent,"selectedcomponent")
+      console.log(selectedComponent, "selectedcomponent");
       // console.log("Jitendra",Object.keys(res?.data).some((e)=>e==selectedComponent))
-      if (!selectedComponent || !Object.keys(res?.data).includes(selectedComponent)) {
+      if (
+        !selectedComponent ||
+        !Object.keys(res?.data).includes(selectedComponent)
+      ) {
         dispatch(setSelectTab(firstKeyWithValue1));
       }
-
     } catch (error) {
       console.log(error);
     }
@@ -642,7 +656,9 @@ const [userAccess,setUserAccess]=useState({})
             <Business_app_installation_via_call />
           ) : selectedComponent == "master_report" ? (
             <MasterReport />
-          ) : selectedComponent == "employee_details"?<EmployeeAcess/>:(
+          ) : selectedComponent == "employee_details" ? (
+            <EmployeeAcess />
+          ) : (
             <></>
           )}
         </div>
