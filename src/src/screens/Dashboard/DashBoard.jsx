@@ -494,9 +494,8 @@ const [userAccess,setUserAccess]=useState({})
       console.log(firstKeyWithValue1,"First kry")
       // setSelectedComponent(firstKeyWithValue1);
       console.log(selectedComponent,"selectedcomponent")
-      console.log("Jitendra",Object.keys(res?.data).some((e)=>e!==selectedComponent))
-      if (selectedComponent == "" || Object.keys(res?.data).some((e)=>e!=selectedComponent)) {
-
+      // console.log("Jitendra",Object.keys(res?.data).some((e)=>e==selectedComponent))
+      if (!selectedComponent || !Object.keys(res?.data).includes(selectedComponent)) {
         dispatch(setSelectTab(firstKeyWithValue1));
       }
 
