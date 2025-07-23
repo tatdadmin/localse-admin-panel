@@ -83,30 +83,38 @@ const MasterReport = () => {
       driver_referrals: 'Driver Referrals'
     };
   
-    // Filter out unwanted keys
+    // Filter out valid keys and remove unwanted ones
     const filteredKeys = availableKeys.filter(
       key => columnMapping[key] && key !== 'start_date' && key !== 'end_date'
     );
   
-    // Prioritize 'installation_count'
     const prioritizedKeys = [];
+  
+    // Add the first available time-based column
+    const timeKeys = ['date', 'week', 'month', 'year'];
+    const timeKey = timeKeys.find(k => filteredKeys.includes(k));
+    if (timeKey) {
+      prioritizedKeys.push(timeKey);
+    }
+  
+    // Add 'installation_count' next
     if (filteredKeys.includes('installation_count')) {
       prioritizedKeys.push('installation_count');
     }
   
-    // Push remaining keys excluding 'installation_count'
+    // Add remaining keys excluding the already added ones
     filteredKeys.forEach(key => {
-      if (key !== 'installation_count') {
+      if (!prioritizedKeys.includes(key)) {
         prioritizedKeys.push(key);
       }
     });
   
-    // Return final columns with labels
     return prioritizedKeys.map(key => ({
       key,
       label: columnMapping[key]
     }));
   };
+  
   
 
   const renderTableHeaders = () => {
