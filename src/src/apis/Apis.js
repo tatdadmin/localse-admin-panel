@@ -364,3 +364,32 @@ export const SAVE_BUSINESS_APP_INSTALLATION_VIA_CALL = (BODY) => {
     {}
   );
 };
+
+export const GET_MASTER_ADMIN_DATA = (BODY) => {
+  return fetchService("POST", `admin_panel/get-master-report`, BODY, {});
+};
+
+export const GET_ALL_ACCESS = () => {
+  return fetchService("GET", `admin_panel/get-employee-access`, {}, {});
+};
+
+export const GET_ALL_EMPLOYEE = () => {
+  return fetchService("GET", `admin_panel/get-all-employee-details`, {}, {});
+};
+
+export const FETCH_ACCESS_BY_EMAIL = (BODY) => {
+  return fetchService(
+    "POST",
+    `admin_panel/get-employee-access-as-master`,
+    BODY,
+    {}
+  );
+};
+export const GET_ALL_EMPLOYEE_ACCESS = () => {
+  return fetchService("GET", `admin_panel/get-all-task`, {}, {});
+};
+
+
+export const GIVE_ACCESS_FOR_EMPLOYEE = (BODY) => {
+  return fetchService("POST", `admin_panel/assign-task-to-employee`,  BODY, {});
+};

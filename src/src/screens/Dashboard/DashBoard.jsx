@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/slices/userAuthSlice";
-import { ADD_NOTICE, ADD_NOTIFICATION, DELETE_NOTICE } from "../../apis/Apis";
+import {
+  ADD_NOTICE,
+  ADD_NOTIFICATION,
+  DELETE_NOTICE,
+  GET_ALL_ACCESS,
+} from "../../apis/Apis";
 import getNotices from "../../redux/apicalls/getNotices";
 import DateWiseCount from "../reports/DateWiseCount";
 import AddServices from "../services/Services";
@@ -21,6 +26,11 @@ import MasterAdmin from "../reports/MasterAdmin";
 import AppUpdate from "../reports/AppUpdate";
 import BuySubscription from "../reports/BuySubscription";
 import Business_app_installation_via_call from "../business_app_installation_via_call";
+import { setSelectTab } from "../../redux/slices/selectTabSlice";
+import MasterReport from "../Master Report";
+import { setUserAccess } from "../../redux/slices/userAccessSlice";
+import EmployeeAcess from "../EmployeeAccess";
+import { persistor } from "../../redux/store";
 
 // Menu bar icon component
 const MenuIcon = ({ onClick }) => (
@@ -69,11 +79,22 @@ const SideBar = ({
     { key: "video_panel", label: "Video Panel" },
     { key: "master_admin", label: "Master Admin" },
     { key: "app_details", label: "App Update" },
-    { key: "business_app_installation_via_call", label: "Business App Installation Via Call" },
-    
+    {
+      key: "business_app_installation_via_call",
+      label: "Business App Installation Via Call",
+    },
+    {
+      key: "master_report",
+      label: "Master Report",
+    },
+    {
+      key: "employee_details",
+      label: "Employee Acess",
+    },
+
     // { key: "buy_subscription", label: "Buy Subscription Campaign" },
   ];
-
+console.log(access,"access from siderbar s")
   return (
     <div style={sidebarStyle}>
       <div style={styles.sidebarHeader}>
@@ -87,7 +108,8 @@ const SideBar = ({
       <div style={styles.menu}>
         {menuItems.map(({ key, label }) => {
           // Only show if access is granted
-          if (access[key] !== "1") return null;
+          // console.log(menuItems)
+          if (access[key] != "1") return null;
 
           const isSelected = selectedComponent === key;
 
@@ -121,6 +143,7 @@ const Header = ({ toggleSidebar }) => {
 
   const handleLogout = () => {
     dispatch(logoutUser());
+    persistor.purge(); 
   };
   const user = useSelector((e) => e?.userAuth?.userAllData);
   console.log(user, "ferwf");
@@ -420,23 +443,74 @@ const Modal = ({ isOpen, onClose, type, onSubmit }) => {
 };
 
 const Dashboard = () => {
-  const [selectedComponent, setSelectedComponent] = useState(null);
+  // const [selectedComponent, setSelectedComponent] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalType, setModalType] = useState("notice");
+  const [modalType, setModalType] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const selectedComponent = useSelector((e) => e.selectTabSlice);
+  // console.log(selectedComponent, "ReDUX");
   const user = useSelector((e) => e?.userAuth?.userAllData);
-  console.log(user, "userrr");
+  // const userAccess = useSelector((e)=>e?.userAccessSlice)/
+// console.log(userAccess,"user ACCesss Slice")
+  const dispatch = useDispatch();
+  // console.log(user, "userrr");
   useEffect(() => {
-    const userAccess = Object.entries(user?.access);
+    // const userAccess = Object.entries(user?.access);
 
-    const firstKeyWithValue1 = Object.keys(user?.access).find(
-      (key) => user?.access[key] === "1"
-    );
-    // console.log(firstKeyWithValue1)
-    setSelectedComponent(firstKeyWithValue1);
+   
+  }, []);
+  // useEffect(() => {
+  //   sessionStorage.setItem("appLoadedAt", Date.now().toString());
+
+  //   const handleBeforeUnload = () => {
+  //     const loadTime = Number(sessionStorage.getItem("appLoadedAt") || 0);
+  //     const duration = Date.now() - loadTime;
+
+  //     // Heuristic: treat close vs refresh based on time spent
+  //     if (duration > 5000) {
+  //     dispatch(setSelectTab("notice"));
+
+  //     }
+  //   };
+
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
+
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //   };
+  // }, [dispatch]);
+const [userAccess,setUserAccess]=useState({})
+  const getAllAccess = async () => {
+    try {
+      const res = await GET_ALL_ACCESS();
+      console.log(res.data, "ALL ACCESS");
+      // dispatch(setUserAccess(res?.data))
+      setUserAccess(res?.data)
+      console.log(res?.data,"STaTE")
+      const firstKeyWithValue1 = Object.keys(res?.data).find(
+        (key) => res?.data?.[key] == "1"
+      );
+      console.log(firstKeyWithValue1,"First kry")
+      // setSelectedComponent(firstKeyWithValue1);
+      console.log(selectedComponent,"selectedcomponent")
+      console.log("Jitendra",Object.keys(res?.data).some((e)=>e!==selectedComponent))
+      if (selectedComponent == "" || Object.keys(res?.data).some((e)=>e!=selectedComponent)) {
+
+        dispatch(setSelectTab(firstKeyWithValue1));
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getAllAccess();
   }, []);
 
+  const setSelectedComponent = (e) => {
+    dispatch(setSelectTab(e));
+  };
   // Handle window resize
   useEffect(() => {
     const handleResize = () => {
@@ -461,7 +535,7 @@ const Dashboard = () => {
     setModalOpen(false);
   };
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const handleSubmit = async (data) => {
     try {
@@ -524,7 +598,7 @@ const Dashboard = () => {
         onSelect={setSelectedComponent}
         selectedComponent={selectedComponent}
         isOpen={sidebarOpen}
-        access={user?.access}
+        access={userAccess}
         onClose={() => setSidebarOpen(false)}
       />
       <Overlay isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -558,14 +632,18 @@ const Dashboard = () => {
           ) : selectedComponent == "video_panel" ? (
             <Videos />
           ) : selectedComponent == "notification" ? (
-            <NotificationList onOpen={openModal}  />
+            <NotificationList onOpen={openModal} />
           ) : selectedComponent == "master_admin" ? (
             <MasterAdmin />
           ) : selectedComponent == "app_details" ? (
             <AppUpdate />
           ) : selectedComponent == "buy_subscription" ? (
             <BuySubscription />
-          ) :selectedComponent=="business_app_installation_via_call"?<Business_app_installation_via_call/>: (
+          ) : selectedComponent == "business_app_installation_via_call" ? (
+            <Business_app_installation_via_call />
+          ) : selectedComponent == "master_report" ? (
+            <MasterReport />
+          ) : selectedComponent == "employee_details"?<EmployeeAcess/>:(
             <></>
           )}
         </div>

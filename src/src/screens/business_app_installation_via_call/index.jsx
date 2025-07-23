@@ -218,12 +218,12 @@ const Business_app_installation_via_call = () => {
                   {data.b_rm_calling_status || "N/A"}
                 </p>
               )}
-              {data.service_provider_type && (
+              {/* {data.service_provider_type && (
                 <p style={{ margin: "0.2rem 0", fontSize: "1.2rem" }}>
                   <strong>Service Provider Type:</strong>{" "}
                   {data.service_provider_type || "N/A"}
                 </p>
-              )}
+              )} */}
                 <p style={{ fontSize: "1.2rem" }}>
                 <strong>Service Type:</strong> {data.service_type || "N/A"}
               </p>

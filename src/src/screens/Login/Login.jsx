@@ -56,9 +56,9 @@ const Login = () => {
           // console.log("User login state set to true");
 
           navigate("/dashboard");
-          setTimeout(() => {
-            alert(res?.message);
-          }, 100);
+          // setTimeout(() => {
+          //   alert(res?.message);
+          // }, 100);
 
           // console.log("Navigating to /dashboard");
         } else {

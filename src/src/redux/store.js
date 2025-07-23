@@ -6,16 +6,21 @@ import persistReducer from "redux-persist/es/persistReducer";
 import storage from "redux-persist/lib/storage";
 import { persistStore } from "redux-persist";
 import NoticeSlice from "./slices/NoticeSlice";
+import selectTabSlice from "./slices/selectTabSlice";
+import userAccessSlice from './slices/userAuthSlice'
 const rootReducer = combineReducers({
   userAuth,
-  NoticeSlice
+  NoticeSlice,
+  selectTabSlice,
+  userAccessSlice,
+
 });
 
 const persistConfig = {
   key: "root",
   storage: storage,
-  whitelist: ["userAuth"],
-  blacklist:['NoticeSlice']
+  whitelist: ["userAuth","selectTabSlice"],
+  blacklist: ["NoticeSlice","userAccessSlice"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
