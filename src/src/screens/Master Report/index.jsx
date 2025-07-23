@@ -60,21 +60,16 @@ const MasterReport = () => {
 
   const getAvailableColumns = () => {
     if (data.length === 0) return [];
-    
-    // Get all available keys from the first data item
+  
     const sampleItem = data[0];
     const availableKeys = Object.keys(sampleItem);
-    
-    // Define column mapping with proper labels - excluding start_date and end_date
+  
     const columnMapping = {
-      // Date/Time columns
       date: 'Date',
       week: 'Week',
       month: 'Month',
       year: 'Year',
-      
-      // Data columns
-    //   application_count: 'Applications',
+      installation_count: 'Installation Count',
       registration_count: 'Registrations',
       registrations: 'Registrations',
       unique_clicks: 'Unique Clicks',
@@ -87,15 +82,32 @@ const MasterReport = () => {
       customer_referrals: 'Customer Referrals',
       driver_referrals: 'Driver Referrals'
     };
-    
-    // Filter only available columns and return with their labels (excluding start_date and end_date)
-    return availableKeys
-      .filter(key => columnMapping[key] && key !== 'start_date' && key !== 'end_date')
-      .map(key => ({
-        key,
-        label: columnMapping[key]
-      }));
+  
+    // Filter out unwanted keys
+    const filteredKeys = availableKeys.filter(
+      key => columnMapping[key] && key !== 'start_date' && key !== 'end_date'
+    );
+  
+    // Prioritize 'installation_count'
+    const prioritizedKeys = [];
+    if (filteredKeys.includes('installation_count')) {
+      prioritizedKeys.push('installation_count');
+    }
+  
+    // Push remaining keys excluding 'installation_count'
+    filteredKeys.forEach(key => {
+      if (key !== 'installation_count') {
+        prioritizedKeys.push(key);
+      }
+    });
+  
+    // Return final columns with labels
+    return prioritizedKeys.map(key => ({
+      key,
+      label: columnMapping[key]
+    }));
   };
+  
 
   const renderTableHeaders = () => {
     const availableColumns = getAvailableColumns();
