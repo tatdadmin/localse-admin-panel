@@ -31,6 +31,7 @@ import MasterReport from "../Master Report";
 import { setUserAccess } from "../../redux/slices/userAccessSlice";
 import EmployeeAcess from "../EmployeeAccess";
 import { persistor } from "../../redux/store";
+import DeveloperData from "../DeveloperData";
 
 // Menu bar icon component
 const MenuIcon = ({ onClick }) => (
@@ -95,6 +96,10 @@ const SideBar = ({
     {
       key: "buy_subscription",
       label: "Buy Subscription Campaign",
+    },
+    {
+      key: "d_data",
+      label: "Developer data",
     },
   ];
 
@@ -658,7 +663,7 @@ const Dashboard = () => {
             <MasterReport />
           ) : selectedComponent == "employee_details" ? (
             <EmployeeAcess />
-          ) : (
+          ): selectedComponent=="d_data"?<DeveloperData/>: (
             <></>
           )}
         </div>

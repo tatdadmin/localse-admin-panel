@@ -393,3 +393,11 @@ export const GET_ALL_EMPLOYEE_ACCESS = () => {
 export const GIVE_ACCESS_FOR_EMPLOYEE = (BODY) => {
   return fetchService("POST", `admin_panel/assign-task-to-employee`,  BODY, {});
 };
+
+
+export const FETCH_DATA_COLLECTION = () => {
+  return fetchService("GET", `admin_panel/d-data-get-table-collection`, {}, {});
+};
+export const EXECUTE_QUERY = (body) => {
+  return fetchService("POST", `admin_panel/d-data-execute-get-query`, body, {});
+};
