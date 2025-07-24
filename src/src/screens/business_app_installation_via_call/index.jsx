@@ -77,7 +77,7 @@ const Business_app_installation_via_call = () => {
       const res = await SAVE_BUSINESS_APP_INSTALLATION_VIA_CALL(payload);
   
       if (res?.status_code === 200) {
-        alert("Status updated successfully!");
+        // alert("Status updated successfully!");
         setRemarks("");
         setCallLaterDateTime("");
         setStatus("");
@@ -89,7 +89,7 @@ const Business_app_installation_via_call = () => {
       }
     } catch (err) {
       console.error("API Error:", err);
-      alert("An error occurred. Please check the console.");
+      alert(JSON.stringify(err), "An error occurred. Please check the console.");
     }
   };
 
