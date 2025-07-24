@@ -44,6 +44,7 @@ const Business_app_installation_via_call = () => {
       setLoading(false);
     }
   };
+  const [err, seterr] = useState("");
 
   useEffect(() => {
     getData();
@@ -58,24 +59,28 @@ const Business_app_installation_via_call = () => {
       alert("Please select a status");
       return;
     }
-  
+
     if (status === "CALL_LATER" && !callLaterDateTime) {
       alert("Please select a date and time for call later");
       return;
     }
-  
+
     try {
       const payload = {
         b_rm_calling_status: status,
-        service_provider_mobile_number: data?.service_provider_mobile_number || "",
+        service_provider_mobile_number:
+          data?.service_provider_mobile_number || "",
         b_rm_remarks: remarks.trim(),
-        b_rm_call_later: status === "CALL_LATER" ? new Date(callLaterDateTime).toISOString() : null,
+        b_rm_call_later:
+          status === "CALL_LATER"
+            ? new Date(callLaterDateTime).toISOString()
+            : null,
       };
-  
+
       console.log("Submitting payload:", payload);
-  
+
       const res = await SAVE_BUSINESS_APP_INSTALLATION_VIA_CALL(payload);
-  
+
       if (res?.status_code === 200) {
         // alert("Status updated successfully!");
         setRemarks("");
@@ -89,7 +94,8 @@ const Business_app_installation_via_call = () => {
       }
     } catch (err) {
       console.error("API Error:", err);
-      alert(JSON.stringify(err), "An error occurred. Please check the console.");
+      seterr(JSON.stringify(err));
+      // alert(JSON.stringify(err), "An error occurred. Please check the console.");
     }
   };
 
@@ -185,7 +191,8 @@ const Business_app_installation_via_call = () => {
               margin: 0,
             }}
           >
-            Manage Business App Installation
+            Manage Business App Installation{`\n`}
+            {err}
           </h1>
         </div>
 
@@ -200,13 +207,12 @@ const Business_app_installation_via_call = () => {
               <p style={{ margin: "0.2rem 0", fontSize: "1.2rem" }}>
                 <strong>Business Name:</strong> {data.business_name || "N/A"}
               </p>
-             
+
               <p style={{ margin: "0.2rem 0", fontSize: "1.2rem" }}>
                 <strong>Registration Date:</strong>{" "}
                 {formatUTCDate(data.registration_date) || "N/A"}
               </p>
-             
-              
+
               <p style={{ margin: "0.2rem 0", fontSize: "1.2rem" }}>
                 <strong>Business Address:</strong>{" "}
                 {data.business_address || "N/A"}
@@ -224,10 +230,10 @@ const Business_app_installation_via_call = () => {
                   {data.service_provider_type || "N/A"}
                 </p>
               )} */}
-                <p style={{ fontSize: "1.2rem" }}>
+              <p style={{ fontSize: "1.2rem" }}>
                 <strong>Service Type:</strong> {data.service_type || "N/A"}
               </p>
-              
+
               {data.b_rm_calling_status == "CALL_LATER" && (
                 <p style={{ margin: "0.2rem 0", fontSize: "1.2rem" }}>
                   <strong>RM Call Later:</strong>{" "}
@@ -238,7 +244,7 @@ const Business_app_installation_via_call = () => {
 
             {/* Business Address */}
             {/* <div style={{ }}> */}
-              
+
             {/* </div> */}
 
             {/* Status Update Section */}
