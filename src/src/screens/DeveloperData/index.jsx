@@ -218,7 +218,7 @@ const DeveloperData = () => {
               <th style={{ minWidth: '50px' }}>#</th>
               {headers.map((header, index) => (
                 <th key={index} style={{ minWidth: '120px', fontSize: '0.9rem' }}>
-                  {header.replace(/_/g, ' ').toUpperCase()}
+                  {header.replace(/_/g, ' ')}
                 </th>
               ))}
             </tr>

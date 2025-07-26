@@ -401,3 +401,6 @@ export const FETCH_DATA_COLLECTION = () => {
 export const EXECUTE_QUERY = (body) => {
   return fetchService("POST", `admin_panel/d-data-execute-get-query`, body, {});
 };
+export const CHANGE_SERVICE_PROVIDER_SERVICE_TYPE = (body) => {
+  return fetchService("POST", `admin_panel/change-service-type-of-service-provider`, body, {});
+};

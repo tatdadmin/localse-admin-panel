@@ -1,16 +1,29 @@
-import React, { useState } from 'react';
-import { CHANGE_SERVICE_PROVIDER_NUMBER } from "../../apis/Apis";
+import React, { useState } from "react";
+import {
+  CHANGE_SERVICE_PROVIDER_NUMBER,
+  CHANGE_SERVICE_PROVIDER_SERVICE_TYPE,
+} from "../../apis/Apis";
 
 const MasterAdmin = () => {
-  const [currentNumber, setCurrentNumber] = useState('');
-  const [newNumber, setNewNumber] = useState('');
+  // State for changing mobile number
+  const [currentNumber, setCurrentNumber] = useState("");
+  const [newNumber, setNewNumber] = useState("");
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // State for changing service type
+  const [serviceProviderMobile, setServiceProviderMobile] = useState("");
+  const [newServiceType, setNewServiceType] = useState("");
+  const [serviceTypeResponse, setServiceTypeResponse] = useState(null);
+  const [serviceTypeLoading, setServiceTypeLoading] = useState(false);
+  const [serviceTypeError, setServiceTypeError] = useState(null);
+
+
+
   const changeServiceProviderNumber = async () => {
     if (!currentNumber || !newNumber) {
-      setError('Both fields are required');
+      setError("Both fields are required");
       return;
     }
 
@@ -26,26 +39,64 @@ const MasterAdmin = () => {
       setResponse(res);
     } catch (error) {
       console.log(error);
-      setError(error.message || 'An error occurred while changing the service provider number');
+      setError(
+        error.message ||
+          "An error occurred while changing the service provider number"
+      );
     } finally {
       setLoading(false);
     }
   };
 
   const handleReset = () => {
-    setCurrentNumber('');
-    setNewNumber('');
+    setCurrentNumber("");
+    setNewNumber("");
     setResponse(null);
     setError(null);
+  };
+
+  const changeServiceProviderServiceType = async () => {
+    if (!serviceProviderMobile || !newServiceType) {
+      setServiceTypeError("Both mobile number and service type are required");
+      return;
+    }
+
+    setServiceTypeLoading(true);
+    setServiceTypeError(null);
+    setServiceTypeResponse(null);
+
+    try {
+      const res = await CHANGE_SERVICE_PROVIDER_SERVICE_TYPE({
+        service_provider_mobile_number: serviceProviderMobile,
+        new_service_type: newServiceType,
+      });
+      setServiceTypeResponse(res);
+    } catch (error) {
+      console.log(error);
+      setServiceTypeError(
+        error.message ||
+          "An error occurred while changing the service type"
+      );
+    } finally {
+      setServiceTypeLoading(false);
+    }
+  };
+
+  const handleServiceTypeReset = () => {
+    setServiceProviderMobile("");
+    setNewServiceType("");
+    setServiceTypeResponse(null);
+    setServiceTypeError(null);
   };
 
   return (
     <div className="container mt-4">
       <div className="row justify-content-center">
-        <div className="col-md-8">
-          <div className="card shadow">
+        <div className="col-md-10">
+          {/* Change Mobile Number Section */}
+          <div className="card shadow mb-4">
             <div className="card-header bg-primary text-white">
-              <h4 className="mb-0">Change Service Provider Number</h4>
+              <h4 className="mb-0">Change Service Provider Mobile Number</h4>
             </div>
             <div className="card-body">
               <div>
@@ -88,11 +139,15 @@ const MasterAdmin = () => {
                   >
                     {loading ? (
                       <>
-                        <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
                         Changing...
                       </>
                     ) : (
-                      'Change Number'
+                      "Change Number"
                     )}
                   </button>
                   <button
@@ -114,11 +169,110 @@ const MasterAdmin = () => {
 
               {response && (
                 <div className="mt-4">
-                  {/* <h5 className="text-success mb-3">API Response:</h5> */}
                   <div className="card bg-light">
                     <div className="card-body">
-                      <pre className="mb-0" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                      <pre
+                        className="mb-0"
+                        style={{
+                          whiteSpace: "pre-wrap",
+                          wordBreak: "break-word",
+                        }}
+                      >
                         {JSON.stringify(response.message, null, 2)}
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Change Service Type Section */}
+          <div className="card shadow">
+            <div className="card-header bg-success text-white">
+              <h4 className="mb-0">Change Service Provider Service Type</h4>
+            </div>
+            <div className="card-body">
+              <div>
+                <div className="mb-3">
+                  <label htmlFor="serviceProviderMobile" className="form-label">
+                    Service Provider Mobile Number
+                  </label>
+                  <input
+                    type="tel"
+                    className="form-control"
+                    id="serviceProviderMobile"
+                    value={serviceProviderMobile}
+                    onChange={(e) => setServiceProviderMobile(e.target.value)}
+                    placeholder="Enter service provider mobile number"
+                    disabled={serviceTypeLoading}
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="newServiceType" className="form-label">
+                    New Service Type
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="newServiceType"
+                    value={newServiceType}
+                    onChange={(e) => setNewServiceType(e.target.value)}
+                    placeholder="Enter new service type (e.g., Unisex Salon, Beauty Salon, etc.)"
+                    disabled={serviceTypeLoading}
+                  />
+                </div>
+
+                <div className="d-flex gap-2">
+                  <button
+                    type="button"
+                    className="btn btn-success"
+                    disabled={serviceTypeLoading || !serviceProviderMobile || !newServiceType}
+                    onClick={changeServiceProviderServiceType}
+                  >
+                    {serviceTypeLoading ? (
+                      <>
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        Changing...
+                      </>
+                    ) : (
+                      "Change Service Type"
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={handleServiceTypeReset}
+                    disabled={serviceTypeLoading}
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+
+              {serviceTypeError && (
+                <div className="alert alert-danger mt-3" role="alert">
+                  <strong>Error:</strong> {serviceTypeError}
+                </div>
+              )}
+
+              {serviceTypeResponse && (
+                <div className="mt-4">
+                  <div className="card bg-light">
+                    <div className="card-body">
+                      <pre
+                        className="mb-0"
+                        style={{
+                          whiteSpace: "pre-wrap",
+                          wordBreak: "break-word",
+                        }}
+                      >
+                        {JSON.stringify(serviceTypeResponse.message, null, 2)}
                       </pre>
                     </div>
                   </div>
@@ -128,12 +282,6 @@ const MasterAdmin = () => {
           </div>
         </div>
       </div>
-
-      {/* Bootstrap CSS CDN */}
-      {/* <link
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
-        rel="stylesheet"
-      /> */}
     </div>
   );
 };
