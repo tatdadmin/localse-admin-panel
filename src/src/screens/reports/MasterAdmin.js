@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   CHANGE_SERVICE_PROVIDER_NUMBER,
   CHANGE_SERVICE_PROVIDER_SERVICE_TYPE,
+  SERVICES_TYPE_LIST_SERVICE_PROVIDER,
 } from "../../apis/Apis";
 
 const MasterAdmin = () => {
@@ -19,7 +20,27 @@ const MasterAdmin = () => {
   const [serviceTypeLoading, setServiceTypeLoading] = useState(false);
   const [serviceTypeError, setServiceTypeError] = useState(null);
 
+  // State for services list
+  const [services, setServices] = useState([]);
+  const [servicesLoading, setServicesLoading] = useState(false);
 
+  useEffect(() => {
+    getServices();
+  }, []);
+
+  const getServices = async () => {
+    setServicesLoading(true);
+    try {
+      const res = await SERVICES_TYPE_LIST_SERVICE_PROVIDER();
+      console.log(res, "SERVICES_TYPE_LIST_SERVICE_PROVIDER");
+      setServices(res?.data || []);
+    } catch (err) {
+      console.log(err);
+      setServices([]);
+    } finally {
+      setServicesLoading(false);
+    }
+  };
 
   const changeServiceProviderNumber = async () => {
     if (!currentNumber || !newNumber) {
@@ -213,22 +234,35 @@ const MasterAdmin = () => {
                   <label htmlFor="newServiceType" className="form-label">
                     New Service Type
                   </label>
-                  <input
-                    type="text"
-                    className="form-control"
+                  <select
+                    className="form-select"
                     id="newServiceType"
                     value={newServiceType}
                     onChange={(e) => setNewServiceType(e.target.value)}
-                    placeholder="Enter new service type (e.g., Unisex Salon, Beauty Salon, etc.)"
-                    disabled={serviceTypeLoading}
-                  />
+                    disabled={serviceTypeLoading || servicesLoading}
+                  >
+                    <option value="">
+                      {servicesLoading ? "Loading services..." : "Select a service type"}
+                    </option>
+                    {services.map((service, index) => (
+                      <option key={service.id || index} value={service.name || service.service_type || service}>
+                        {service.name || service.service_type || service}
+                      </option>
+                    ))}
+                  </select>
+                  {servicesLoading && (
+                    <div className="mt-2">
+                      <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                      <small className="text-muted">Loading service types...</small>
+                    </div>
+                  )}
                 </div>
 
                 <div className="d-flex gap-2">
                   <button
                     type="button"
                     className="btn btn-success"
-                    disabled={serviceTypeLoading || !serviceProviderMobile || !newServiceType}
+                    disabled={serviceTypeLoading || servicesLoading || !serviceProviderMobile || !newServiceType}
                     onClick={changeServiceProviderServiceType}
                   >
                     {serviceTypeLoading ? (
@@ -251,6 +285,25 @@ const MasterAdmin = () => {
                     disabled={serviceTypeLoading}
                   >
                     Reset
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-outline-primary"
+                    onClick={getServices}
+                    disabled={servicesLoading}
+                  >
+                    {servicesLoading ? (
+                      <>
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        Refreshing...
+                      </>
+                    ) : (
+                      "Refresh Services"
+                    )}
                   </button>
                 </div>
               </div>
