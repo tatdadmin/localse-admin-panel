@@ -404,3 +404,13 @@ export const EXECUTE_QUERY = (body) => {
 export const CHANGE_SERVICE_PROVIDER_SERVICE_TYPE = (body) => {
   return fetchService("POST", `admin_panel/change-service-type-of-service-provider`, body, {});
 };
+
+export const GET_DATA_FOR_BUSINESS_APPLICATION = () => {
+  return fetchService("GET", `admin_panel/get-business-application-for-interaction`, {}, {});
+};
+export const HANDLE_CALLS_FOR_BUSINESS_APPLICATIONS = (BODY) => {
+  return fetchService("POST", `admin_panel/handle-business-call-for-free-application`,BODY, {});
+};
+
+
+

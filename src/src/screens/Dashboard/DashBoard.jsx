@@ -32,6 +32,7 @@ import { setUserAccess } from "../../redux/slices/userAccessSlice";
 import EmployeeAcess from "../EmployeeAccess";
 import { persistor } from "../../redux/store";
 import DeveloperData from "../DeveloperData";
+import BusinessUnpaidCalls from "../business_app_installation_via_call/BusinessUnpaidCalls";
 
 // Menu bar icon component
 const MenuIcon = ({ onClick }) => (
@@ -101,6 +102,10 @@ const SideBar = ({
       key: "d_data",
       label: "Developer data",
     },
+    {
+      key: "business_applications",
+      label: "Business Applications",
+    },
   ];
 
   // Create a lookup map for quick label retrieval
@@ -113,7 +118,7 @@ const SideBar = ({
   const filteredKeys = Object.keys(access).filter(
     (key) => access[key] == "1" && labelMap[key]
   );
-  console.log(filteredKeys,"FILTERC KEYS")
+  console.log(filteredKeys, "FILTERC KEYS");
 
   return (
     <div style={sidebarStyle}>
@@ -125,7 +130,7 @@ const SideBar = ({
           </button>
         )}
       </div>
-      
+
       <div style={styles.menu}>
         {filteredKeys.map((key) => {
           const label = labelMap[key];
@@ -155,7 +160,6 @@ const SideBar = ({
     </div>
   );
 };
-
 
 const Header = ({ toggleSidebar }) => {
   const dispatch = useDispatch();
@@ -663,7 +667,11 @@ const Dashboard = () => {
             <MasterReport />
           ) : selectedComponent == "employee_details" ? (
             <EmployeeAcess />
-          ): selectedComponent=="d_data"?<DeveloperData/>: (
+          ) : selectedComponent == "d_data" ? (
+            <DeveloperData />
+          ) : selectedComponent == "business_applications" ? (
+            <BusinessUnpaidCalls />
+          ) : (
             <></>
           )}
         </div>
