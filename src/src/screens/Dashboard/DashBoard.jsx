@@ -33,6 +33,7 @@ import EmployeeAcess from "../EmployeeAccess";
 import { persistor } from "../../redux/store";
 import DeveloperData from "../DeveloperData";
 import BusinessUnpaidCalls from "../business_app_installation_via_call/BusinessUnpaidCalls";
+import BusinessEnquirySupport from "../business_app_installation_via_call/BusinessEnquirySupport";
 
 // Menu bar icon component
 const MenuIcon = ({ onClick }) => (
@@ -105,6 +106,10 @@ const SideBar = ({
     {
       key: "business_applications",
       label: "Business Applications",
+    },
+    {
+      key: "business_enquiry_support",
+      label: "Business Enquiry Support",
     },
   ];
 
@@ -671,7 +676,7 @@ const Dashboard = () => {
             <DeveloperData />
           ) : selectedComponent == "business_applications" ? (
             <BusinessUnpaidCalls />
-          ) : (
+          ) :selectedComponent=="business_enquiry_support"?<BusinessEnquirySupport/>: (
             <></>
           )}
         </div>

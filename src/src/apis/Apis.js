@@ -411,6 +411,13 @@ export const GET_DATA_FOR_BUSINESS_APPLICATION = () => {
 export const HANDLE_CALLS_FOR_BUSINESS_APPLICATIONS = (BODY) => {
   return fetchService("POST", `admin_panel/handle-business-call-for-free-application`,BODY, {});
 };
+export const  GET_BUSINESS_ENQUIRY_SUPPORT_DATA = () => {
+  return fetchService("GET", `admin_panel/get-business-enquiry-support-for-interaction`,{}, {});
+};
+
+export const  UPDATE_BUSINESS_ENQUIRY_SUPPORT_DATA = (body) => {
+  return fetchService("POST", `admin_panel/handle-business-call-for-free-enquiry-support`,body, {});
+};
 
 
 
