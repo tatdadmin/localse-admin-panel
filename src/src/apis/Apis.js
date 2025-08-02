@@ -389,11 +389,9 @@ export const GET_ALL_EMPLOYEE_ACCESS = () => {
   return fetchService("GET", `admin_panel/get-all-task`, {}, {});
 };
 
-
 export const GIVE_ACCESS_FOR_EMPLOYEE = (BODY) => {
-  return fetchService("POST", `admin_panel/assign-task-to-employee`,  BODY, {});
+  return fetchService("POST", `admin_panel/assign-task-to-employee`, BODY, {});
 };
-
 
 export const FETCH_DATA_COLLECTION = () => {
   return fetchService("GET", `admin_panel/d-data-get-table-collection`, {}, {});
@@ -402,22 +400,78 @@ export const EXECUTE_QUERY = (body) => {
   return fetchService("POST", `admin_panel/d-data-execute-get-query`, body, {});
 };
 export const CHANGE_SERVICE_PROVIDER_SERVICE_TYPE = (body) => {
-  return fetchService("POST", `admin_panel/change-service-type-of-service-provider`, body, {});
+  return fetchService(
+    "POST",
+    `admin_panel/change-service-type-of-service-provider`,
+    body,
+    {}
+  );
 };
 
 export const GET_DATA_FOR_BUSINESS_APPLICATION = () => {
-  return fetchService("GET", `admin_panel/get-business-application-for-interaction`, {}, {});
+  return fetchService(
+    "GET",
+    `admin_panel/get-business-application-for-interaction`,
+    {},
+    {}
+  );
 };
 export const HANDLE_CALLS_FOR_BUSINESS_APPLICATIONS = (BODY) => {
-  return fetchService("POST", `admin_panel/handle-business-call-for-free-application`,BODY, {});
+  return fetchService(
+    "POST",
+    `admin_panel/handle-business-call-for-free-application`,
+    BODY,
+    {}
+  );
 };
-export const  GET_BUSINESS_ENQUIRY_SUPPORT_DATA = () => {
-  return fetchService("GET", `admin_panel/get-business-enquiry-support-for-interaction`,{}, {});
+export const GET_BUSINESS_ENQUIRY_SUPPORT_DATA = () => {
+  return fetchService(
+    "GET",
+    `admin_panel/get-business-enquiry-support-for-interaction`,
+    {},
+    {}
+  );
 };
 
-export const  UPDATE_BUSINESS_ENQUIRY_SUPPORT_DATA = (body) => {
-  return fetchService("POST", `admin_panel/handle-business-call-for-free-enquiry-support`,body, {});
+export const UPDATE_BUSINESS_ENQUIRY_SUPPORT_DATA = (body) => {
+  return fetchService(
+    "POST",
+    `admin_panel/handle-business-call-for-free-enquiry-support`,
+    body,
+    {}
+  );
 };
 
+export const GET_DATA_FOR_CALL_FOR_SUBSCRIPTION = () => {
+  return fetchService(
+    "GET",
+    `admin_panel/get-business-subscription-payments-for-interaction`,
+    {},
+    {}
+  );
+};
+export const UPDATE_DATA_FOR_CALL_FOR_SUBSCRIPTION = (BODY) => {
+  return fetchService(
+    "POST",
+    `admin_panel/handle-business-call-for-subscription-payments-received`,
+    BODY,
+    {}
+  );
+};
+export const GET_DATA_FOR_CALL_FOR_SUBSCRIPTION_RENEWAL = () => {
+  return fetchService(
+    "GET",
+    `admin_panel/get-business-business-providers-expired-subscription-for-interaction`,
+    {},
+    {}
+  );
+};
 
-
+export const UPDATE_DATA_FOR_CALL_FOR_SUBSCRIPTION_RENEWAL = (BODY) => {
+  return fetchService(
+    "POST",
+    `admin_panel/handle-business-call-for-business-providers-expired-subscription`,
+    BODY,
+    {}
+  );
+};

@@ -34,6 +34,8 @@ import { persistor } from "../../redux/store";
 import DeveloperData from "../DeveloperData";
 import BusinessUnpaidCalls from "../business_app_installation_via_call/BusinessUnpaidCalls";
 import BusinessEnquirySupport from "../business_app_installation_via_call/BusinessEnquirySupport";
+import BusinessCallForPaidSubscription from "../business_app_installation_via_call/BusinessCallForPaidSubscription";
+import BusinessCallForPaidSubscriptionRenewal from "../business_app_installation_via_call/BusinessCallForSubscriptionRenewal";
 
 // Menu bar icon component
 const MenuIcon = ({ onClick }) => (
@@ -110,6 +112,14 @@ const SideBar = ({
     {
       key: "business_enquiry_support",
       label: "Business Enquiry Support",
+    },
+    {
+      key: "business_call_for_paid_subscription",
+      label: "Business Call For Paid Subscription",
+    },
+    {
+      key: "business_call_for_subscription_renewal",
+      label: "Business Call For Subscription Renewal",
     },
   ];
 
@@ -676,7 +686,11 @@ const Dashboard = () => {
             <DeveloperData />
           ) : selectedComponent == "business_applications" ? (
             <BusinessUnpaidCalls />
-          ) :selectedComponent=="business_enquiry_support"?<BusinessEnquirySupport/>: (
+          ) : selectedComponent == "business_enquiry_support" ? (
+            <BusinessEnquirySupport />
+          ) : selectedComponent == "business_call_for_paid_subscription" ? (
+            <BusinessCallForPaidSubscription />
+          ) : selectedComponent =="business_call_for_subscription_renewal"?<BusinessCallForPaidSubscriptionRenewal/>:(
             <></>
           )}
         </div>
