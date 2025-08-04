@@ -36,6 +36,8 @@ import BusinessUnpaidCalls from "../business_app_installation_via_call/BusinessU
 import BusinessEnquirySupport from "../business_app_installation_via_call/BusinessEnquirySupport";
 import BusinessCallForPaidSubscription from "../business_app_installation_via_call/BusinessCallForPaidSubscription";
 import BusinessCallForPaidSubscriptionRenewal from "../business_app_installation_via_call/BusinessCallForSubscriptionRenewal";
+import BusinessCallForServiceProviderClicks from "../business_app_installation_via_call/BusinessCallForServiceProviderClicks";
+import BusinessCallForCustomerClicks from "../business_app_installation_via_call/BusinessCallsForCustomerClicks";
 
 // Menu bar icon component
 const MenuIcon = ({ onClick }) => (
@@ -120,6 +122,14 @@ const SideBar = ({
     {
       key: "business_call_for_subscription_renewal",
       label: "Business Call For Subscription Renewal",
+    },
+    {
+      key: "business_call_for_service_provider_clicks",
+      label: "Business Call For Service Provider Clicks",
+    },
+    {
+      key: "business_call_for_customer_clicks",
+      label: "Business Call For Customer Clicks",
     },
   ];
 
@@ -614,21 +624,21 @@ const Dashboard = () => {
 
   // const user = useSelector((e) => e?.userAuth?.userAllData);
   console.log(user?.access, "storedaatat");
-  const componentMap = {
-    notice: <NoticeList onOpen={openModal} />,
-    reports: <DateWiseCount />,
-    services: <AddServices />,
-    freeOnBoarding: <FreeOnBoarding />,
-    agentReports: <AgentReports />,
-    serviceProviderClicks: <ServiceProviderClicks />,
-    FreeOnboardingHourlyReport: <HourlyFreeOnboardReport />,
-    serviceProvidersMap: <ServiceProvidersMap />,
-    RegistrationFromAdmin: <RegistrationFromAdmin />,
-    Campaign_reports: <Campaign_reports />,
-    BlogPanel: <BlogPanel />,
-    installationReport: <InstallationReport />,
-    VideoPanel: <Videos />,
-  };
+  // const componentMap = {
+  //   notice: <NoticeList onOpen={openModal} />,
+  //   reports: <DateWiseCount />,
+  //   services: <AddServices />,
+  //   freeOnBoarding: <FreeOnBoarding />,
+  //   agentReports: <AgentReports />,
+  //   serviceProviderClicks: <ServiceProviderClicks />,
+  //   FreeOnboardingHourlyReport: <HourlyFreeOnboardReport />,
+  //   serviceProvidersMap: <ServiceProvidersMap />,
+  //   RegistrationFromAdmin: <RegistrationFromAdmin />,
+  //   Campaign_reports: <Campaign_reports />,
+  //   BlogPanel: <BlogPanel />,
+  //   installationReport: <InstallationReport />,
+  //   VideoPanel: <Videos />,
+  // };
   return (
     <div style={styles.container}>
       <SideBar
@@ -690,7 +700,12 @@ const Dashboard = () => {
             <BusinessEnquirySupport />
           ) : selectedComponent == "business_call_for_paid_subscription" ? (
             <BusinessCallForPaidSubscription />
-          ) : selectedComponent =="business_call_for_subscription_renewal"?<BusinessCallForPaidSubscriptionRenewal/>:(
+          ) : selectedComponent == "business_call_for_subscription_renewal" ? (
+            <BusinessCallForPaidSubscriptionRenewal />
+          ) : selectedComponent ==
+            "business_call_for_service_provider_clicks" ? (
+            <BusinessCallForServiceProviderClicks />
+          ) : selectedComponent == "business_call_for_customer_clicks"?<BusinessCallForCustomerClicks/>:(
             <></>
           )}
         </div>

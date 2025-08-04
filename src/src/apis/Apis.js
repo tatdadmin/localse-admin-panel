@@ -475,3 +475,35 @@ export const UPDATE_DATA_FOR_CALL_FOR_SUBSCRIPTION_RENEWAL = (BODY) => {
     {}
   );
 };
+export const GET_CALLING_DATA_FOR_SERVICE_PROVIDERS_CLICKS = () => {
+  return fetchService(
+    "GET",
+    `admin_panel/get-business-business-providers-got-clicks-for-interaction`,
+    {},
+    {}
+  );
+};
+export const UPDATE_CALLING_DATA_FOR_SERVICE_PROVIDERS_CLICKS = (BODY) => {
+  return fetchService(
+    "POST",
+    `admin_panel/handle-business-call-for-business-providers-got-clicks`,
+    BODY,
+    {}
+  );
+};
+export const GET_CALLING_DATA_FOR_CUSTOMRES_CLICKS = () => {
+  return fetchService(
+    "GET",
+    `admin_panel/get-customer-who-made-clicks-for-interaction`,
+    {},
+    {}
+  );
+};
+export const UPDATE_CALLING_DATA_FOR_CUSTOMRES_CLICKS = (BODY) => {
+  return fetchService(
+    "POST",
+    `admin_panel/handle-business-call-for-customer-who-made-clicks`,
+    BODY,
+    {}
+  );
+};
