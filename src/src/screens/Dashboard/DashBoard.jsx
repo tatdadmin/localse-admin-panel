@@ -38,6 +38,7 @@ import BusinessCallForPaidSubscription from "../business_app_installation_via_ca
 import BusinessCallForPaidSubscriptionRenewal from "../business_app_installation_via_call/BusinessCallForSubscriptionRenewal";
 import BusinessCallForServiceProviderClicks from "../business_app_installation_via_call/BusinessCallForServiceProviderClicks";
 import BusinessCallForCustomerClicks from "../business_app_installation_via_call/BusinessCallsForCustomerClicks";
+import ServiceProviderBlockList from "../Service provider blocklist management";
 
 // Menu bar icon component
 const MenuIcon = ({ onClick }) => (
@@ -131,6 +132,10 @@ const SideBar = ({
       key: "business_call_for_customer_clicks",
       label: "Business Call For Customer Clicks",
     },
+    {
+      key: "service_provider_blacklist",
+      label: "Service Provider BlackList",
+    }, 
   ];
 
   // Create a lookup map for quick label retrieval
@@ -705,7 +710,11 @@ const Dashboard = () => {
           ) : selectedComponent ==
             "business_call_for_service_provider_clicks" ? (
             <BusinessCallForServiceProviderClicks />
-          ) : selectedComponent == "business_call_for_customer_clicks"?<BusinessCallForCustomerClicks/>:(
+          ) : selectedComponent == "business_call_for_customer_clicks" ? (
+            <BusinessCallForCustomerClicks />
+          ) : selectedComponent == "service_provider_blacklist" ? (
+            <ServiceProviderBlockList />
+          ) : (
             <></>
           )}
         </div>

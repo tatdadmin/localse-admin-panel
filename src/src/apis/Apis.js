@@ -507,3 +507,36 @@ export const UPDATE_CALLING_DATA_FOR_CUSTOMRES_CLICKS = (BODY) => {
     {}
   );
 };
+export const FETCH_SERVICE_PROVIDER_BLACKLIST = () => {
+  return fetchService(
+    "GET",
+    `admin_panel/service-provider-blacklist-data`,
+    {},
+    {}
+  );
+};
+export const FETCH_SERVICE_PROVIDER_BY_MOBILENUMBER = (BODY) => {
+  return fetchService(
+    "POST",
+    `admin_panel/get-service-provider-detail`,
+    BODY,
+    {}
+  );
+};
+export const ADD_SERVICE_PROVIDER_TO_BLACKLIST = (BODY) => {
+  return fetchService(
+    "POST",
+    `admin_panel/service-provider-blacklist`,
+    BODY,
+    {}
+  );
+};
+
+export const REMOVE_FROM_BLOCKLIST = (BODY) => {
+  return fetchService(
+    "POST",
+    `admin_panel/remove-service-provider-blacklist`,
+    BODY,
+    {}
+  );
+};
